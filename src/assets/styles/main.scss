@@ -1,0 +1,31 @@
+// External dependencies
+@import '~bootstrap/scss/bootstrap';
+@import '~bootswatch/dist/darkly/bootstrap.min';
+@import './layout';
+
+span.button {
+  border: 1px solid #444;
+  width: 1.2rem;
+  background: #eee;
+  color: #444;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.NumEntry {
+  padding: 0.01rem;
+  input[type=text] {
+    width: 4rem;
+  }
+  label {
+    text-align: left;
+    margin-right: 0.5rem;
+    min-width: 4rem;
+  }
+}
+
+.FormCalc {
+  fieldset {
+    margin-bottom: 1rem;
+  }
+}
