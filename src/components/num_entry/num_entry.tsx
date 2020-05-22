@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { updateNumEntry } from '../../state/actions/num_entry_actions';
 
 
-import { NumEntryProps, NumEntryState } from './num_entry.types';
+import { NumEntryProps, NumEntryState } from 'NumEntry';
 
 class NumEntryBase extends React.Component<NumEntryProps, NumEntryState> {
   constructor(props: NumEntryProps) {
