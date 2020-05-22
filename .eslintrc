@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "./node_modules/react-redux-typescript-scripts/eslint.js",
+    "./node_modules/react-redux-typescript-scripts/eslint-prettier.js" // optional
+  ],
+  "rules": {
+    // you can further customize options here
+  }
+}
