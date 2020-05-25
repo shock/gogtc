@@ -4,9 +4,11 @@ declare module 'FormCalc' {
     value: string;
   }
 
+  export type KeyedNumEntry = {
+    [key: string]: NumEntry
+  }
+
   export type FormCalc = {
-    numEntries: {
-      [key: string]: NumEntry
-    }
+    numEntries: KeyedNumEntry
   }
 }

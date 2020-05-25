@@ -1,9 +1,10 @@
 import { RootState } from 'typesafe-actions';
-import * as React from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
 import * as selectors from '../selectors';
 import * as actions from '../actions';
+import { Component } from 'react';
 
 const mapStateToProps = (state: RootState) => ({
   formCalc: selectors.getNumEntries(state.formCalc)
@@ -27,7 +28,7 @@ export interface NumEntryState {
   percentage: boolean;
 }
 
-class NumEntryBase extends React.Component<Props, null> {
+class NumEntryBase extends Component<Props, NumEntryState> {
   constructor(props: Props) {
     super(props);
 
@@ -46,18 +47,18 @@ class NumEntryBase extends React.Component<Props, null> {
   }
 
   handleDecrement(event: React.MouseEvent) {
-    this.updateValue(this.normalizeValue(this.props.value)-1);
+    this.props.decNumEntry(this.props.id);
   }
 
   handleIncrement(event: React.MouseEvent) {
-    this.updateValue(this.normalizeValue(this.props.value)+1);
+    this.props.incNumEntry(this.props.id);
   }
 
   normalizeValue(value: any): number {
     let val = parseFloat(value);
-    // if (this.state && this.state.percentage) {
+    if (this.state && this.state.percentage) {
 
-    // }
+    }
     if( isNaN(val) ) { val = 0; }
     if( val < 0 ) { val = 0; }
     return val;

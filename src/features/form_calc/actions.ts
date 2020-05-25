@@ -10,8 +10,9 @@ export const decNumEntry = createAction('DEC_NUM_ENTRY', (id: string) => ({
   id: id,
 }))<NumEntry>();
 
-export const updateNumEntry = createAction('DEC_NUM_ENTRY', (id: string, value: string) => ({
+export const updateNumEntry = createAction('UPDATE_NUM_ENTRY', (id: string, value: string) => ({
   id: id,
+  value: value
 }))<NumEntry>();
 
 // export const loadTodosAsync = createAsyncAction(

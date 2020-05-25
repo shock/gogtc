@@ -6,30 +6,30 @@ import * as selectors from '../selectors';
 import * as actions from '../actions';
 
 import { NumEntryView } from './num_entry_view';
+import { FormCalcState } from '../reducer';
 
-const mapStateToProps = (state: RootState) => {
-  return {
-    isLoading: state.todos.isLoadingTodos,
-    numEntries: selectors.getNumEntries(state.formCalc),
-  }
-};
+const mapStateToProps = (state: RootState) => ({
+  formCalc: selectors.getNumEntries(state.formCalc)
+});
+
 const dispatchProps = {
-  removeTodo: actions.incNumEntry,
 };
 
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
-function TodoList({ isLoading, todos = [], removeTodo }: Props) {
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
+class NumEntryWrapperBase extends React.Component<Props> {
 
-  return (
-      <NumEntryView />
-  );
+  render() {
+    return (
+      <NumEntryView key={'1'} id={'1'} value={this.props.formCalc['1'].value} label={'label'} />
+    );
+
+  }
 }
 
-export default connect(
+const NumEntryWrapper =  connect(
   mapStateToProps,
   dispatchProps
-)(TodoList);
+)(NumEntryWrapperBase);
+
+export { NumEntryWrapper };

@@ -1,2 +1,2 @@
-import { FormCalcState } from 'FormCalc';
-export const getNumEntries = (state: FormCalcState) => (state.numEntries);
+import { FormCalcState } from './reducer';
+export const getNumEntries = (state: FormCalcState) => (state.formCalc.numEntries);

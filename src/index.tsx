@@ -12,8 +12,9 @@ import { Provider } from 'react-redux';
 // import './assets/styles/main.scss';
 import Home from './routes/home';
 import store from './store';
+import './assets/styles/main.scss';
 
-import { NumEntry } from './features/num_entry';
+import { NumEntryWrapper } from './features/form_calc/components/num_entry_wrapper';
 
 const styles: React.CSSProperties = {
   fontFamily: 'sans-serif',
@@ -24,7 +25,7 @@ const Root = () => (
   <div style={styles}>
     <Provider store={store}>
       {/* <NumEntry key={'1'} id={'1'} value={'1'} label={'test'} /> */}
-      <Home />
+      <NumEntryWrapper />
     </Provider>
   </div>
 );
