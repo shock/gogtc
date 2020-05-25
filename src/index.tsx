@@ -13,6 +13,8 @@ import { Provider } from 'react-redux';
 import Home from './routes/home';
 import store from './store';
 
+import { NumEntry } from './features/num_entry';
+
 const styles: React.CSSProperties = {
   fontFamily: 'sans-serif',
   textAlign: 'center',
@@ -21,6 +23,7 @@ const styles: React.CSSProperties = {
 const Root = () => (
   <div style={styles}>
     <Provider store={store}>
+      {/* <NumEntry key={'1'} id={'1'} value={'1'} label={'test'} /> */}
       <Home />
     </Provider>
   </div>

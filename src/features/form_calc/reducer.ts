@@ -1,16 +1,18 @@
 import { NumEntry } from 'FormCalc';
-import { FormCalcState } from 'FormCalc';
+import { FormCalc } from 'FormCalc';
 import { combineReducers } from 'redux';
 import { createReducer } from 'typesafe-actions';
 
 import { incNumEntry, decNumEntry, updateNumEntry } from './actions';
 
-const initialState:FormCalcState = {};
+const initialState:FormCalc = {
+  numEntries: {}
+};
 
-export const numEntries = createReducer(initialState)
+const formCalc = createReducer(initialState)
   .handleAction(incNumEntry, (state, action) => {
     const id = action.payload.id;
-    const numEntry = state[id];
+    const numEntry = state.numEntries[id];
     let val = parseInt(numEntry.value);
     val = val + 1;
     numEntry.value = '' + val;
@@ -21,7 +23,7 @@ export const numEntries = createReducer(initialState)
   })
   .handleAction(decNumEntry, (state, action) => {
     const id = action.payload.id;
-    const numEntry = state[id];
+    const numEntry = state.numEntries[id];
     let val = parseInt(numEntry.value);
     val = val + 1;
     numEntry.value = '' + val;
@@ -32,7 +34,8 @@ export const numEntries = createReducer(initialState)
   })
 
 const formCalcReducer = combineReducers({
-  numEntries
+  formCalc
 });
 
 export default formCalcReducer;
+export type FormCalcState = ReturnType<typeof formCalcReducer>;
