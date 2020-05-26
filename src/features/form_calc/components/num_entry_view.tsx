@@ -47,10 +47,12 @@ class NumEntryBase extends Component<Props, NumEntryState> {
   }
 
   handleDecrement(event: React.MouseEvent) {
+    event.preventDefault();
     this.props.decNumEntry(this.props.id);
   }
 
   handleIncrement(event: React.MouseEvent) {
+    event.preventDefault();
     this.props.incNumEntry(this.props.id);
   }
 
