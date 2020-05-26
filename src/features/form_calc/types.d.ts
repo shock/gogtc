@@ -2,6 +2,7 @@ declare module 'FormCalc' {
   export type NumEntry = {
     id: string;
     value: string;
+    label: string;
   }
 
   export type KeyedNumEntry = {

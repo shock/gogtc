@@ -3,7 +3,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import * as selectors from '../selectors';
-
+import { initialState } from '../reducer';
 import { NumEntryView } from './num_entry_view';
 
 const mapStateToProps = (state: RootState) => ({
@@ -17,11 +17,21 @@ type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
 class NumEntryWrapperBase extends React.Component<Props> {
 
-  render() {
-    return (
-      <NumEntryView key={'1'} id={'1'} value={this.props.formCalc['1'].value} label={'label'} />
-    );
+  buildNumEntries() {
+    const ids = Object.keys(initialState.numEntries);
+    return ids.map( (id:string) => {
+      const ne = initialState.numEntries[id];
+      return <NumEntryView
+        key={ne.id}
+        id={id}
+        value={this.props.formCalc[id].value}
+        label={ne.label}
+      />
+    });
+  }
 
+  render() {
+    return this.buildNumEntries();
   }
 }
 

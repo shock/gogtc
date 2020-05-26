@@ -1,14 +1,26 @@
-import { NumEntry, KeyedNumEntry, FormCalc } from 'FormCalc';
+import { KeyedNumEntry, FormCalc } from 'FormCalc';
 import { combineReducers } from 'redux';
 import { createReducer } from 'typesafe-actions';
 
-import { updateNumEntry } from './actions';
+import { updateNumEntry, resetState } from './actions';
+import store from '../../store';
 
-const initialState:FormCalc = {
+export const initialState:FormCalc = {
   numEntries: {
     '1' : {
       id: '1',
-      value: '1'
+      value: '1',
+      label: 'Infantry'
+    },
+    '2' : {
+      id: '2',
+      value: '1',
+      label: 'Cavalry'
+    },
+    '3' : {
+      id: '3',
+      value: '1',
+      label: 'Distance'
     }
   }
 };
@@ -16,10 +28,9 @@ const initialState:FormCalc = {
 const formCalc = createReducer(initialState)
   .handleAction(updateNumEntry, (state, action) => {
     const id = action.payload.id;
-    const numEntry:NumEntry = {
-      id: id,
-      value: action.payload.value
-    }
+
+    const numEntry = state.numEntries[id];
+    numEntry.value = action.payload.value;
     const update:KeyedNumEntry = {};
     update[id] = numEntry;
     const returnState =  {
@@ -28,6 +39,11 @@ const formCalc = createReducer(initialState)
     };
     return returnState;
   })
+  .handleAction(resetState, (state, action) => {
+    return {
+      ...action.payload
+    }
+  });
 
 const formCalcReducer = combineReducers({
   formCalc
@@ -35,3 +51,27 @@ const formCalcReducer = combineReducers({
 
 export default formCalcReducer;
 export type FormCalcState = ReturnType<typeof formCalcReducer>;
+
+// const newState:FormCalc = {
+//   numEntries: {
+//     '1' : {
+//       id: '1',
+//       value: '1',
+//       label: 'Infantry'
+//     },
+//     '2' : {
+//       id: '2',
+//       value: '1',
+//       label: 'Cavalry'
+//     },
+//     '3' : {
+//       id: '3',
+//       value: '1',
+//       label: 'Distance'
+//     }
+//   }
+// };
+
+// setTimeout( () => {
+//   store.dispatch(resetState(newState));
+// }, 1000);
