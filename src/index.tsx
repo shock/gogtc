@@ -13,7 +13,6 @@ import Home from './routes/home';
 import store from './store';
 import './assets/styles/main.scss';
 
-
 const Root = () => (
   <React.StrictMode>
     <Provider store={store}>

@@ -1,10 +1,10 @@
 import { RootState } from 'typesafe-actions';
 import React from 'react';
 import { connect } from 'react-redux';
-
 import * as selectors from '../selectors';
 import * as actions from '../actions';
 import { Component } from 'react';
+import $ from 'jquery';
 
 const mapStateToProps = (state: RootState) => ({
   formCalc: selectors.getNumEntries(state.formCalc)
@@ -29,6 +29,9 @@ export interface NumEntryState {
 }
 
 class NumEntryBase extends Component<Props, NumEntryState> {
+
+  mouseTimer: null;
+
   constructor(props: Props) {
     super(props);
 
@@ -36,6 +39,8 @@ class NumEntryBase extends Component<Props, NumEntryState> {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDecrement = this.handleDecrement.bind(this);
     this.handleIncrement = this.handleIncrement.bind(this);
+    this.handleMouseDown = this.handleMouseDown.bind(this);
+    this.handleMouseUp = this.handleMouseUp.bind(this);
   }
 
   componentDidMount() {
@@ -54,6 +59,25 @@ class NumEntryBase extends Component<Props, NumEntryState> {
   handleIncrement(event: React.MouseEvent) {
     event.preventDefault();
     this.props.incNumEntry(this.props.id);
+  }
+
+  handleMouseDown(event: React.MouseEvent) {
+    event.preventDefault();
+    let target = $(event.target);
+    switch (target.attr('type')) {
+      case 'inc':
+        alert('inc down');
+        break;
+      case 'dec':
+        alert('dec down');
+        break;
+    }
+    // this.props.incNumEntry(this.props.id);
+  }
+
+  handleMouseUp(event: React.MouseEvent) {
+    event.preventDefault();
+    // this.props.incNumEntry(this.props.id);
   }
 
   normalizeValue(value: any): number {
@@ -80,7 +104,7 @@ class NumEntryBase extends Component<Props, NumEntryState> {
     return (
       <div className="NumEntry">
         <label>{this.props.label}</label>
-        <span className="button" onClick={this.handleDecrement}>-</span>
+        <span className="button" onClick={this.handleDecrement} onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp}>-</span>
         <input type="text" value={this.props.value} onChange={this.handleChange} />
         <span className="button" onClick={this.handleIncrement}>+</span>
       </div>
