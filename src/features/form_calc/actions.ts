@@ -1,6 +1,5 @@
 import { NumEntry } from 'FormCalc';
-import cuid from 'cuid';
-import { createAction, createAsyncAction } from 'typesafe-actions';
+import { createAction } from 'typesafe-actions';
 
 export const incNumEntry = createAction('INC_NUM_ENTRY', (id: string) => ({
   id: id,

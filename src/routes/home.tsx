@@ -1,10 +1,9 @@
 import * as React from 'react';
 
-import TodosView from '../features/todos/components/TodosView';
+import { Layout } from '../components/layout';
+import { NumEntryWrapper } from '../features/form_calc/components/num_entry_wrapper';
 
-export default () => (
-  <main>
-    <h2>Welcome to "typesafe-actions" reference project implementation!</h2>
-    <TodosView />
-  </main>
-);
+export default () =>
+<Layout title="GOG Troop Calculator">
+  <NumEntryWrapper />
+</Layout>

@@ -9,25 +9,17 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 
-// import './assets/styles/main.scss';
 import Home from './routes/home';
 import store from './store';
 import './assets/styles/main.scss';
 
-import { NumEntryWrapper } from './features/form_calc/components/num_entry_wrapper';
-
-const styles: React.CSSProperties = {
-  fontFamily: 'sans-serif',
-  textAlign: 'center',
-};
 
 const Root = () => (
-  <div style={styles}>
+  <React.StrictMode>
     <Provider store={store}>
-      {/* <NumEntry key={'1'} id={'1'} value={'1'} label={'test'} /> */}
-      <NumEntryWrapper />
+      <Home />
     </Provider>
-  </div>
+  </React.StrictMode>
 );
 
 render(<Root />, document.getElementById('root'));

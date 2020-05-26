@@ -3,10 +3,8 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import * as selectors from '../selectors';
-import * as actions from '../actions';
 
 import { NumEntryView } from './num_entry_view';
-import { FormCalcState } from '../reducer';
 
 const mapStateToProps = (state: RootState) => ({
   formCalc: selectors.getNumEntries(state.formCalc)

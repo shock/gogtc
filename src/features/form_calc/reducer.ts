@@ -42,7 +42,7 @@ const formCalc = createReducer(initialState)
   })
   .handleAction(updateNumEntry, (state, action) => {
     const id = action.payload.id;
-    const numEntry = {
+    const numEntry:NumEntry = {
       id: id,
       value: action.payload.value
     }
