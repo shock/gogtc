@@ -1,14 +1,6 @@
 import { NumEntry } from 'FormCalc';
 import { createAction } from 'typesafe-actions';
 
-export const incNumEntry = createAction('INC_NUM_ENTRY', (id: string) => ({
-  id: id,
-}))<NumEntry>();
-
-export const decNumEntry = createAction('DEC_NUM_ENTRY', (id: string) => ({
-  id: id,
-}))<NumEntry>();
-
 export const updateNumEntry = createAction('UPDATE_NUM_ENTRY', (id: string, value: string) => ({
   id: id,
   value: value

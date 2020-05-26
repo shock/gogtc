@@ -11,8 +11,6 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const dispatchProps = {
-  incNumEntry: actions.incNumEntry,
-  decNumEntry: actions.decNumEntry,
   updateNumEntry: actions.updateNumEntry,
 };
 
@@ -95,13 +93,13 @@ class NumEntryBase extends Component<Props, NumEntryState> {
     switch (target.data('type')) {
       case 'dec':
         this.direction = 'dec';
+        this.decrementValue();
         this.resetTimer();
-        this.props.decNumEntry(this.props.id);
         break;
       case 'inc':
         this.direction = 'inc';
+        this.incrementValue();
         this.resetTimer();
-        this.props.incNumEntry(this.props.id);
         break;
     }
   }
@@ -119,6 +117,14 @@ class NumEntryBase extends Component<Props, NumEntryState> {
     if( isNaN(val) ) { val = 0; }
     if( val < 0 ) { val = 0; }
     return parseInt(''+val);
+  }
+
+  decrementValue() {
+    this.props.updateNumEntry(this.props.id, ''+(this.normalizeValue(parseInt(this.props.value)-1)));
+  }
+
+  incrementValue() {
+    this.props.updateNumEntry(this.props.id, ''+(this.normalizeValue(parseInt(this.props.value)+1)));
   }
 
   updateValue(value: any) {
