@@ -3,26 +3,9 @@ import { combineReducers } from 'redux';
 import { createReducer } from 'typesafe-actions';
 
 import { updateNumEntry, resetState } from './actions';
-import store from '../../store';
 
-export const initialState:FormCalc = {
-  numEntries: {
-    '1' : {
-      id: '1',
-      value: '1',
-      label: 'Infantry'
-    },
-    '2' : {
-      id: '2',
-      value: '1',
-      label: 'Cavalry'
-    },
-    '3' : {
-      id: '3',
-      value: '1',
-      label: 'Distance'
-    }
-  }
+const initialState:FormCalc = {
+  numEntries: {}
 };
 
 const formCalc = createReducer(initialState)
@@ -51,27 +34,3 @@ const formCalcReducer = combineReducers({
 
 export default formCalcReducer;
 export type FormCalcState = ReturnType<typeof formCalcReducer>;
-
-// const newState:FormCalc = {
-//   numEntries: {
-//     '1' : {
-//       id: '1',
-//       value: '1',
-//       label: 'Infantry'
-//     },
-//     '2' : {
-//       id: '2',
-//       value: '1',
-//       label: 'Cavalry'
-//     },
-//     '3' : {
-//       id: '3',
-//       value: '1',
-//       label: 'Distance'
-//     }
-//   }
-// };
-
-// setTimeout( () => {
-//   store.dispatch(resetState(newState));
-// }, 1000);
