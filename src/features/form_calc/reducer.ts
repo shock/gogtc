@@ -1,4 +1,4 @@
-import { KeyedNumEntry, FormCalc } from 'FormCalc';
+import { KeyedNumEntry, FormCalc } from './types';
 import { combineReducers } from 'redux';
 import { createReducer } from 'typesafe-actions';
 

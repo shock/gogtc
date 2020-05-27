@@ -48,6 +48,12 @@
       "./node_modules/react-redux-typescript-scripts/eslint-prettier.js"
     ]
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!src/**/*.d.ts"
+    ]
+  },
   "browserslist": {
     "production": [
       ">0.2%",

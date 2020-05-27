@@ -1,6 +1,5 @@
-import { NumEntry } from 'FormCalc';
+import { NumEntry, FormCalc } from './types';
 import { createAction } from 'typesafe-actions';
-import { FormCalc } from 'FormCalc';
 
 export const updateNumEntry = createAction('UPDATE_NUM_ENTRY', (id: string, value: string) => ({
   id: id,

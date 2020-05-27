@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 import * as selectors from '../selectors';
 import { NumEntryView } from './NumEntryView';
-import { FormCalc } from 'FormCalc';
+import { FormCalc } from '../types';
 
 const mapStateToProps = (state: RootState) => ({
   formCalc: selectors.getNumEntries(state.formCalc)
@@ -45,13 +45,7 @@ type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 class FormCalcViewBase extends React.Component<Props> {
 
   componentDidMount() {
-
     this.props.resetState(initialState);
-
-    const testIt = () => {
-    };
-
-    setTimeout(testIt, 100);
   }
 
   buildNumEntries() {
