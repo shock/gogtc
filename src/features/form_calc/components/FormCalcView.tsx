@@ -42,7 +42,7 @@ const initialState:FormCalc = {
 
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
 
-class NumEntryWrapperBase extends React.Component<Props> {
+class FormCalcViewBase extends React.Component<Props> {
 
   componentDidMount() {
 
@@ -72,9 +72,9 @@ class NumEntryWrapperBase extends React.Component<Props> {
   }
 }
 
-const NumEntryWrapper =  connect(
+const FormCalcView =  connect(
   mapStateToProps,
   dispatchProps
-)(NumEntryWrapperBase);
+)(FormCalcViewBase);
 
-export { NumEntryWrapper };
+export { FormCalcView };
