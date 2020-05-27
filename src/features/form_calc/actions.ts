@@ -1,13 +1,13 @@
-import { NumEntry, FormCalc } from './types';
+import { NumEntry, NumEntryDictionary } from './types';
 import { createAction } from 'typesafe-actions';
 
 export const updateNumEntry = createAction('UPDATE_NUM_ENTRY', (id: string, value: string) => ({
   id: id,
   value: value
 }))<NumEntry>();
-export const resetState = createAction('RESET_STATE', (state:FormCalc) => ({
+export const resetState = createAction('RESET_STATE', (state:NumEntryDictionary) => ({
   ...state
-}))<FormCalc>();
+}))<NumEntryDictionary>();
 
 // export const loadTodosAsync = createAsyncAction(
 //   'LOAD_TODOS_REQUEST',

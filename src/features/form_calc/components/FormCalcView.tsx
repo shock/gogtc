@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 import * as selectors from '../selectors';
 import { NumEntryView } from './NumEntryView';
-import { FormCalc } from '../types';
+import { NumEntryDictionary } from '../types';
 
 const mapStateToProps = (state: RootState) => ({
   formCalc: selectors.getNumEntries(state.formCalc)
@@ -15,7 +15,7 @@ const dispatchProps = {
   resetState: actions.resetState
 };
 
-const initialState:FormCalc = {
+const initialState:NumEntryDictionary = {
   numEntries: {
     'march_cap' : {
       id: 'march_cap',

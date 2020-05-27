@@ -1,10 +1,10 @@
-import { KeyedNumEntry, FormCalc } from './types';
+import { KeyedNumEntry, NumEntryDictionary } from './types';
 import { combineReducers } from 'redux';
 import { createReducer } from 'typesafe-actions';
 
 import { updateNumEntry, resetState } from './actions';
 
-const initialState:FormCalc = {
+const initialState:NumEntryDictionary = {
   numEntries: {}
 };
 

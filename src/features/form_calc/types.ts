@@ -1,3 +1,5 @@
+// Redux Types
+
 export type NumEntry = {
   id: string;
   value: string;
@@ -8,9 +10,11 @@ export type KeyedNumEntry = {
   [key: string]: NumEntry
 }
 
-export type FormCalc = {
+export type NumEntryDictionary = {
   numEntries: KeyedNumEntry
 }
+
+// Model Types
 
 // https://spin.atomicobject.com/2018/11/05/using-an-int-type-in-typescript/
 export type Int = number & { __int__: void };
@@ -61,5 +65,15 @@ export class TierDef {
   constructor(tierNum:TierNum, troopDefs: TroopDef[]) {
     this.tierNum = tierNum;
     this.troopDefs = troopDefs;
+  }
+}
+
+export class FormCalc {
+  name: string;
+  tierDefs: TierDef[];
+
+  constructor(name:string, tierDefs:TierDef[]) {
+    this.name = name;
+    this.tierDefs = tierDefs;
   }
 }
