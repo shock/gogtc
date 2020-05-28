@@ -5,5 +5,5 @@ import { FormCalcView } from '../features/form_calc/components/FormCalcView';
 
 export default () =>
 <Layout title="GOG Troop Calculator">
-  <FormCalcView />
+  <FormCalcView name={'fc1'} />
 </Layout>

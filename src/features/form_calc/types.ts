@@ -43,6 +43,7 @@ export enum TroopType {
 }
 
 export class TroopDef {
+  formCalc: FormCalc | null = null;
   type: TroopType;
   tierNum: TierNum;
   count: Int;
@@ -54,26 +55,43 @@ export class TroopDef {
   }
 
   id():string {
-    return `${this.tierNum}.${this.type}`;
+    if ( !this.formCalc )
+      throw new Error('attribute formCalc is null');
+    return `${this.formCalc.name}:${this.tierNum}:${this.type}`;
   }
 }
 
 export class TierDef {
+  formCalc: FormCalc | null = null;
   tierNum: TierNum;
-  troopDefs: TroopDef[];
+  troopDefs: TroopDef[] = [];
 
-  constructor(tierNum:TierNum, troopDefs: TroopDef[]) {
+  constructor(tierNum:TierNum) {
     this.tierNum = tierNum;
+  }
+
+  addTroopDef(troopDef: TroopDef) {
+    this.troopDefs.push(troopDef);
+  }
+
+  setTroopDefs(troopDefs: TroopDef[]) {
     this.troopDefs = troopDefs;
   }
 }
 
 export class FormCalc {
   name: string;
-  tierDefs: TierDef[];
+  tierDefs: TierDef[] = [];
 
-  constructor(name:string, tierDefs:TierDef[]) {
+  constructor(name:string) {
     this.name = name;
+  }
+
+  addTierDefs(tierDefs: TierDef[]) {
     this.tierDefs = tierDefs;
+  }
+
+  setTierDefs(tierDef: TierDef) {
+    this.tierDefs.push(tierDef);
   }
 }

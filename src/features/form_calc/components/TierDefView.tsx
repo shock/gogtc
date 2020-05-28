@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 import * as selectors from '../selectors';
 import { NumEntryView } from './NumEntryView';
-import { TierDef } from '../types';
+import { TroopDefView } from './TroopDefView';
+import { MTierDef, MFormCalc } from '../models';
 
 const mapStateToProps = (state: RootState) => ({
   formCalc: selectors.getNumEntries(state.formCalc)
@@ -14,10 +15,13 @@ const mapStateToProps = (state: RootState) => ({
 const dispatchProps = {
 };
 
-type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & TierDef;
+type TierDefViewProps = {
+  tierDef: MTierDef
+}
+
+type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & TierDefViewProps;
 
 class TierDefViewBase extends React.Component<Props> {
-
 
   componentDidMount() {
   }
@@ -33,6 +37,17 @@ class TierDefViewBase extends React.Component<Props> {
         label={ne.label}
       />
     });
+  }
+
+  buildTroopDefViews() {
+    return this.props.tierDef.troopDefs.map( (troopDef) => (
+      <TroopDefView tierNum={troopDef.tierNum} type={troopDef.type} />
+    ));
+    return [];
+  }
+
+  render() {
+    return this.buildTierDefViews();
   }
 
   render() {
