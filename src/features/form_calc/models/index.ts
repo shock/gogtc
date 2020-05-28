@@ -22,18 +22,25 @@ function buildTroopDefs(tierDef:MTierDef):MTroopDef[] {
   return troopDefs;
 }
 
-function buildWithTroopDefs(tierNum:TierNum):MFormCalc {
-  const formCalc = new MFormCalc('test');
+function buildTierDefWithTroopDefs(tierNum:TierNum, formCalc:MFormCalc):MTierDef {
   let tierDef = new MTierDef(tierNum);
   tierDef.troopDefs = buildTroopDefs(tierDef);
   tierDef.formCalc = formCalc;
-  formCalc.tierDefs = [tierDef];
-  return formCalc;
+  return tierDef;
 }
 
+function buildFormCalc(name:string) {
+  const formCalc = new MFormCalc(name);
+  let tierDefs:MTierDef[] = [];
+  for (const tierNum in TierNum) {
+    tierDefs.push(buildTierDefWithTroopDefs(tierNum as TierNum, formCalc));
+  }
+  formCalc.tierDefs = tierDefs;
+  return formCalc;
+}
 export const Library = {
   formCalcModels: {
-    test: buildWithTroopDefs(TierNum.T12)
+    test: buildFormCalc('test')
   }
 };
 

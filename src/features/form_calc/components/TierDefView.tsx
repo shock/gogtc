@@ -1,7 +1,7 @@
 import { RootState } from 'typesafe-actions';
 import * as React from 'react';
 import { connect } from 'react-redux';
-
+import { Row, Col } from 'react-bootstrap';
 import * as selectors from '../selectors';
 import { NumEntryView } from './NumEntryView';
 import { TroopDefView } from './TroopDefView';
@@ -40,23 +40,25 @@ class TierDefViewBase extends React.Component<Props> {
 
   buildTroopDefViews() {
     return this.props.tierDef.troopDefs.map( (troopDef) => (
-      <TroopDefView troopDef={troopDef} />
+      <Col>
+        <TroopDefView troopDef={troopDef} />
+      </Col>
     ));
   }
 
   render() {
     return (
-      <div className="TierDefView">
-        <fieldset>
-          <label>Tier {this.props.tierDef.tierNum}</label>
-          {this.buildTroopDefViews()}
-        </fieldset>
-      </div>
+      <Row className="TierDefView">
+        <Col>
+          <label>{this.props.tierDef.tierNum}</label>
+        </Col>
+        {this.buildTroopDefViews()}
+      </Row>
     )
   }
 }
 
-const TierDefView =  connect(
+const TierDefView = connect(
   mapStateToProps,
   dispatchProps
 )(TierDefViewBase);

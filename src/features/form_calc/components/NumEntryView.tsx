@@ -28,8 +28,8 @@ export interface NumEntryState {
 
 class NumEntryBase extends Component<Props, NumEntryState> {
   readonly initialTimeout = 700;
-  readonly timerWindow = 50;
-  readonly accelerationFactor = 1.03;
+  readonly timerWindow = 20;
+  readonly accelerationFactor = 1.04;
 
   mouseTimer: ReturnType<typeof setTimeout> | null;
   acceleration: number;
