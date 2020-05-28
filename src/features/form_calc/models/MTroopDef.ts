@@ -1,11 +1,8 @@
-import { NumEntry } from '../types';
-import { MFormCalc } from './MFormCalc';
-import { MFormCalc } from './MFormCalc';
+import { Int, NumEntry, TroopType } from '../types';
+import { MTierDef } from '.';
 
-type TroopDefParams = ConstructorParameters<typeof TroopDef>;
-
-export class TroopDef {
-  tierDef: TierDef | null = null;
+class MTroopDef {
+  tierDef: MTierDef | null = null;
   type: TroopType;
   count: Int;
 
@@ -18,15 +15,6 @@ export class TroopDef {
     if ( !this.tierDef )
       throw new Error('attribute tierDef is null');
     return `${this.tierDef.id()}:${this.type}`;
-  }
-}
-
-class MTroopDef extends TroopDef {
-  formCalc: MFormCalc;
-
-  constructor(formCalc: MFormCalc, ...args:TroopDefParams ) {
-    super(...args);
-    this.formCalc = formCalc;
   }
 
   getNumEntry():NumEntry {

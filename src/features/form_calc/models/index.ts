@@ -1,14 +1,39 @@
-import { MFormCalc } from './MFormCalc';
-import { MTierDef } from './MTierDef';
-import { MTroopDef } from './MTroopDef';
-import { TierNum } from '../types';
+import { MFormCalc, MTierDef, MTroopDef } from '.';
+import { TierNum, TroopType, Int } from '../types';
 
-let fc1 = new MFormCalc('fc1');
-let tierDef = new MTierDef(fc1, TierNum.T12)
+function buildTroopDefs(tierDef:MTierDef):MTroopDef[] {
+  const troopDefs =  [
+    new MTroopDef(
+      TroopType.Infantry,
+      1000 as Int,
+    ),
+    new MTroopDef(
+      TroopType.Cavalry,
+      2000 as Int,
+    ),
+    new MTroopDef(
+      TroopType.Distance,
+      3000 as Int,
+    ),
+  ];
+  troopDefs.forEach( (troopDef) => {
+    troopDef.tierDef = tierDef;
+  });
+  return troopDefs;
+}
+
+function buildWithTroopDefs(tierNum:TierNum):MFormCalc {
+  const formCalc = new MFormCalc('test');
+  let tierDef = new MTierDef(tierNum);
+  tierDef.troopDefs = buildTroopDefs(tierDef);
+  tierDef.formCalc = formCalc;
+  formCalc.tierDefs = [tierDef];
+  return formCalc;
+}
 
 export const Library = {
   formCalcModels: {
-    'fc1': fc1
+    test: buildWithTroopDefs(TierNum.T12)
   }
 };
 

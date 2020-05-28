@@ -1,8 +1,6 @@
 import { RootState } from 'typesafe-actions';
 import * as React from 'react';
 import { connect } from 'react-redux';
-
-import * as actions from '../actions';
 import * as selectors from '../selectors';
 import { NumEntryView } from './NumEntryView';
 import { MTroopDef } from '../models';
@@ -32,6 +30,7 @@ class TroopDefViewBase extends React.Component<Props> {
 
   render() {
     const ned = this.numEntryData();
+    if( !ned ) return <div/>;
     return (
       <NumEntryView
         key={ned.id}

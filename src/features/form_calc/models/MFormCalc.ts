@@ -1,9 +1,8 @@
-import { KeyedNumEntry, NumEntry } from '../types';
 import { MTierDef } from '.';
+import { KeyedNumEntry } from '../types';
 
-type FormCalcParams = ConstructorParameters<typeof FormCalc>;
 
-export class FormCalc {
+class MFormCalc {
   name: string;
   tierDefs: MTierDef[] = [];
 
@@ -22,7 +21,14 @@ export class FormCalc {
   id():string {
     return this.name;
   }
-}class MFormCalc extends FormCalc {
+
+  getNumEntries() {
+    let numEntries:KeyedNumEntry = {};
+    this.tierDefs.forEach((tierDef) => {
+      numEntries = Object.assign({}, numEntries, tierDef.getNumEntries());
+    });
+    return numEntries;
+  }
 };
 
 export { MFormCalc };

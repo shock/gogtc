@@ -4,9 +4,7 @@ import { connect } from 'react-redux';
 
 import * as actions from '../actions';
 import * as selectors from '../selectors';
-import { NumEntryView } from './NumEntryView';
 import { TierDefView } from './TierDefView';
-import { NumEntryDictionary } from '../types';
 import { MFormCalc } from '../models/MFormCalc';
 import { Library } from '../models';
 
@@ -22,42 +20,20 @@ interface FormCalcViewProps {
   name: string;
 }
 
-const initialState:NumEntryDictionary = {
-  numEntries: {
-    'march_cap' : {
-      id: 'march_cap',
-      value: '393870',
-      label: 'March Cap'
-    },
-    'Infantry' : {
-      id: 'Infantry',
-      value: '1',
-      label: 'Infantry'
-    },
-    'Cavalry' : {
-      id: 'Cavalry',
-      value: '1',
-      label: 'Cavalry'
-    },
-    'Distance' : {
-      id: 'Distance',
-      value: '1',
-      label: 'Distance'
-    }
-  }
-};
-
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & FormCalcViewProps;
 
 class FormCalcViewBase extends React.Component<Props> {
-  formCalcModel:MFormCalc | null;
+  formCalcModel:MFormCalc;
 
   constructor(props: Props) {
     super(props);
-    this.formCalcModel = Library.formCalcModels.fc1;
+    this.formCalcModel = Library.formCalcModels.test;
   }
 
   componentDidMount() {
+    const initialState = {
+      numEntries: this.formCalcModel.getNumEntries()
+    }
     this.props.resetState(initialState);
   }
 
