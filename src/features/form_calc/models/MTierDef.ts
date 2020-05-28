@@ -1,14 +1,27 @@
-import { KeyedNumEntry, NumEntry, TierDef } from '../types';
-import { MFormCalc } from './MFormCalc';
+import { KeyedNumEntry, NumEntry, TierNum } from '../types';
+import { MFormCalc, MTroopDef } from '.';
 
-type TierDefParams = ConstructorParameters<typeof TierDef>;
+class MTierDef {
+  formCalc: MFormCalc | null = null;
+  tierNum: TierNum;
+  troopDefs: MTroopDef[] = [];
 
-class MTierDef extends TierDef {
-  formCalc: MFormCalc;
+  constructor(tierNum:TierNum) {
+    this.tierNum = tierNum;
+  }
 
-  constructor(formCalc: MFormCalc, ...args:TierDefParams ) {
-    super(...args);
-    this.formCalc = formCalc;
+  addTroopDef(troopDef: MTroopDef) {
+    this.troopDefs.push(troopDef);
+  }
+
+  setTroopDefs(troopDefs: MTroopDef[]) {
+    this.troopDefs = troopDefs;
+  }
+
+  id():string {
+    if ( !this.formCalc )
+      throw new Error('attribute formCalc is null');
+    return `${this.formCalc.id()}:${this.tierNum}`;
   }
 
   getNumEntries():KeyedNumEntry {
