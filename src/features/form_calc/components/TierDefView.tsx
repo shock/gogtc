@@ -52,7 +52,7 @@ class TierDefViewBase extends React.Component<Props> {
 
   render() {
     let classNames = ['TierDefView'];
-    const cycle = this.props.index%2==1 ? 'odd' : 'even';
+    const cycle = this.props.index%2===1 ? 'odd' : 'even';
     classNames.push(cycle);
     return (
       <Row className={classNames.join(' ')}>
