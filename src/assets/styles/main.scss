@@ -3,6 +3,10 @@
 @import '~bootswatch/dist/darkly/bootstrap.min';
 @import './layout';
 
+.nobr {
+  white-space: nowrap;
+}
+
 span.button {
   border: 1px solid #444;
   width: 1.2rem;
@@ -19,12 +23,19 @@ span.button {
 .NumEntry {
   padding: 0.01rem;
   input[type=text] {
-    width: 6rem;
+    width: 4.5rem;
   }
   label {
     text-align: left;
     margin-right: 0.5rem;
     min-width: 4rem;
+  }
+}
+
+.TierDefView {
+  padding: 1rem 0;
+  &.even {
+    background-color: rgba(255,255,255,0.08)
   }
 }
 

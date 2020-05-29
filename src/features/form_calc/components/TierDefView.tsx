@@ -16,11 +16,15 @@ const dispatchProps = {
 
 type TierDefViewProps = {
   tierDef: MTierDef
+  index: number
 }
 
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & TierDefViewProps;
 
 class TierDefViewBase extends React.Component<Props> {
+  static defaultProps = {
+    index: 0
+  }
 
   componentDidMount() {
   }
@@ -47,8 +51,11 @@ class TierDefViewBase extends React.Component<Props> {
   }
 
   render() {
+    let classNames = ['TierDefView'];
+    const cycle = this.props.index%2==1 ? 'odd' : 'even';
+    classNames.push(cycle);
     return (
-      <Row className="TierDefView">
+      <Row className={classNames.join(' ')}>
         <Col>
           <label>{this.props.tierDef.tierNum}</label>
         </Col>

@@ -56,9 +56,9 @@ class FormCalcViewBase extends React.Component<Props> {
 
   buildTierDefViews() {
     if (this.formCalcModel) {
-      return this.formCalcModel.tierDefs.map( (tierDef) => (
-        <TierDefView tierDef={tierDef} />
-      ));
+      return this.formCalcModel.tierDefs.map( (tierDef, index) => {
+        return <TierDefView tierDef={tierDef} index={index}/>
+      });
     }
     return [];
   }

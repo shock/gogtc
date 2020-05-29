@@ -18,6 +18,8 @@ export interface NumEntryProps {
   id: string;
   value: string;
   label: string;
+  minVal: number;
+  maxVal: number;
 }
 
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & NumEntryProps;
@@ -27,6 +29,12 @@ export interface NumEntryState {
 }
 
 class NumEntryBase extends Component<Props, NumEntryState> {
+
+  static defaultProps = {
+    minVal: 0,
+    maxVal: 999999
+  }
+
   readonly initialTimeout = 700;
   readonly timerWindow = 20;
   readonly accelerationFactor = 1.04;
@@ -65,7 +73,7 @@ class NumEntryBase extends Component<Props, NumEntryState> {
   }
 
   timerHandler() {
-    let newValue = parseInt(this.props.value);
+    let newValue = this.normalizeValue(this.props.value);
     this.acceleration *= this.accelerationFactor;
     switch(this.direction) {
       case 'dec':
@@ -110,13 +118,17 @@ class NumEntryBase extends Component<Props, NumEntryState> {
   }
 
   normalizeValue(value: any): number {
-    let val = parseFloat(value);
+    let strVal = ''+value;
+    strVal = strVal.replace(/[^0-9\.]/g, '');
+
+    let numVal = parseFloat(strVal);
     if (this.state && this.state.percentage) {
 
     }
-    if( isNaN(val) ) { val = 0; }
-    if( val < 0 ) { val = 0; }
-    return parseInt(''+val);
+    if( isNaN(numVal) ) { numVal = 0; }
+    if( numVal < this.props.minVal ) { numVal = this.props.minVal; }
+    if( numVal > this.props.maxVal ) { numVal = this.props.maxVal; }
+    return parseInt(''+numVal);
   }
 
   decrementValue() {
@@ -131,17 +143,26 @@ class NumEntryBase extends Component<Props, NumEntryState> {
     this.props.updateNumEntry(this.props.id, ''+this.normalizeValue(value));
   }
 
+  formattedVal() {
+    const numVal = parseFloat(this.props.value)
+    const strVal = numVal.toLocaleString();
+    return strVal;
+  }
+
   render() {
     return (
       <div className="NumEntry">
         <label>{this.props.label}</label>
-        <span className="button" data-type='dec'
-          onMouseDown={this.handleMouseDown}
-          onMouseUp={this.handleMouseUp}>-</span>
-        <input type="text" value={this.props.value} onChange={this.handleChange} />
-        <span className="button" data-type='inc'
-          onMouseDown={this.handleMouseDown}
-          onMouseUp={this.handleMouseUp}>-</span>
+        <div className='nobr'>
+          <span className="button" data-type='dec'
+            onMouseDown={this.handleMouseDown}
+            onMouseUp={this.handleMouseUp}>-</span>
+          <input type="text" value={this.formattedVal()} onChange={this.handleChange} />
+          <span className="button" data-type='inc'
+            onMouseDown={this.handleMouseDown}
+            onMouseUp={this.handleMouseUp}>-</span>
+
+        </div>
       </div>
 
     );

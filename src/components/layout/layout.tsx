@@ -34,10 +34,8 @@ const Layout: FunctionComponent<LayoutProps> = ({ title, paragraph, children }) 
             </Navbar>
           </Col>
           <Col md={12}>
-            <Jumbotron>
-              <h2>{title}</h2>
-              <p>{paragraph}</p>
-            </Jumbotron>
+            <h2>{title}</h2>
+            <p>{paragraph}</p>
           </Col>
         </Row>
         <Row>
