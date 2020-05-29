@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as selectors from '../selectors';
 import { NumEntryView } from './NumEntryView';
 import { MTroopDef } from '../models';
+import { NumEntry } from '../types';
 
 const mapStateToProps = (state: RootState) => ({
   numEntries: selectors.getNumEntries(state.formCalc)
@@ -28,6 +29,10 @@ class TroopDefViewBase extends React.Component<Props> {
     return this.props.numEntries[this.props.troopDef.id()];
   }
 
+  label(ned:NumEntry) {
+    return `${this.props.troopDef?.tierDef?.tierNum} ${ned.label}`.trim();
+  }
+
   render() {
     const ned = this.numEntryData();
     if( !ned ) return <div/>;
@@ -36,7 +41,7 @@ class TroopDefViewBase extends React.Component<Props> {
         key={ned.id}
         id={ned.id}
         value={ned.value}
-        label={ned.label}
+        label={this.label(ned)}
       />
     )
   }
