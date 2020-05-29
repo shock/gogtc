@@ -22,9 +22,6 @@ type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & TroopDe
 
 class TroopDefViewBase extends React.Component<Props> {
 
-  componentDidMount() {
-  }
-
   numEntryData() {
     return this.props.numEntries[this.props.troopDef.id()];
   }

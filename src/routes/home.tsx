@@ -1,9 +1,9 @@
 import * as React from 'react';
 
 import { Layout } from '../components/layout';
-import { FormCalcView } from '../features/form_calc/components/FormCalcView';
+import { FormCalcSelector } from '../features/form_calc/components/FormCalcSelector';
 
 export default () =>
 <Layout title="GOG Troop Calculator">
-  <FormCalcView name={'fc1'} />
+  <FormCalcSelector name={'fc1'} />
 </Layout>

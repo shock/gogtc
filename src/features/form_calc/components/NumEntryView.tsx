@@ -160,7 +160,6 @@ class NumEntryBase extends Component<Props, NumEntryState> {
           <span className="button" data-type='inc'
             onMouseDown={this.handleMouseDown}
             onMouseUp={this.handleMouseUp}>-</span>
-
         </div>
       </div>
 

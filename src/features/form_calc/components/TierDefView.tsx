@@ -25,9 +25,6 @@ class TierDefViewBase extends React.Component<Props> {
     index: 0
   }
 
-  componentDidMount() {
-  }
-
   buildTroopDefViews() {
     return this.props.tierDef.troopDefs.map( (troopDef) => (
       <Col>

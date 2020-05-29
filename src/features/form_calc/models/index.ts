@@ -38,10 +38,16 @@ function buildFormCalc(name:string) {
   formCalc.tierDefs = tierDefs;
   return formCalc;
 }
-export const Library = {
+
+export type FormCalcDictionary = {
+  [key: string]: MFormCalc
+}
+
+export const TestLibrary = {
   formCalcModels: {
-    test: buildFormCalc('test')
-  }
+    test: buildFormCalc('test'),
+    fc1: buildFormCalc('fc1')
+  } as FormCalcDictionary
 };
 
 export * from './MTierDef';
