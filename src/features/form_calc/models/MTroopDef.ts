@@ -1,7 +1,7 @@
 import { Int, NumEntry, TroopType } from '../types';
 import { MTierDef } from '.';
 
-class MTroopDef {
+export class MTroopDef {
   tierDef: MTierDef | null = null;
   type: TroopType;
   count: Int;
@@ -25,5 +25,3 @@ class MTroopDef {
     }
   };
 };
-
-export { MTroopDef };

@@ -1,5 +1,5 @@
-import { MTierDef } from '.';
-import { KeyedNumEntry } from '../types';
+import { MTierDef, MTroopDef } from '.';
+import { KeyedNumEntry, TierNum, TroopType } from '../types';
 
 
 class MFormCalc {
@@ -20,6 +20,23 @@ class MFormCalc {
 
   id():string {
     return this.name;
+  }
+
+  findTierDef( tierNum: TierNum ) {
+
+    const selected = this.tierDefs.find( tierDef => tierDef.tierNum === tierNum );
+    if( selected === undefined )
+      throw new Error(`could not find MTierDef with tierNum ==${tierNum}`)
+    return selected;
+  }
+
+  updateTroopDef( id: string, troopDefUpdate:MTroopDef) {
+    const idParts = id.split(':');
+    const tierNum = idParts[0] as TierNum;
+    const troopType = idParts[1] as TroopType;
+    const tierDef = this.findTierDef(tierNum);
+    const troopDef = tierDef.findTroopDef( troopType );
+    troopDef.updateFromAction(troopDefUpdate);
   }
 
   getNumEntries() {

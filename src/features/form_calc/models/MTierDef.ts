@@ -1,4 +1,4 @@
-import { KeyedNumEntry, NumEntry, TierNum } from '../types';
+import { KeyedNumEntry, NumEntry, TierNum, TroopType } from '../types';
 import { MFormCalc, MTroopDef } from '.';
 
 class MTierDef {
@@ -22,6 +22,14 @@ class MTierDef {
     if ( !this.formCalc )
       throw new Error('attribute formCalc is null');
     return `${this.formCalc.id()}:${this.tierNum}`;
+  }
+
+  findTroopDef( troopType: TroopType ) {
+
+    const selected = this.troopDefs.find( troopDef => troopDef.type === troopType );
+    if( selected === undefined )
+      throw new Error(`could not find MTroopDef with type ==${troopType}`)
+    return selected;
   }
 
   getNumEntries():KeyedNumEntry {
