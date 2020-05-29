@@ -1,6 +1,7 @@
 import { RootState } from 'typesafe-actions';
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { Row, Col } from 'react-bootstrap';
 
 import * as actions from '../actions';
 import * as selectors from '../selectors';
@@ -9,7 +10,7 @@ import { MFormCalc } from '../models/MFormCalc';
 import { Library } from '../models';
 
 const mapStateToProps = (state: RootState) => ({
-  formCalc: selectors.getNumEntries(state.formCalc)
+  fcStore: selectors.getNumEntries(state.formCalc)
 });
 
 const dispatchProps = {
@@ -41,19 +42,6 @@ class FormCalcViewBase extends React.Component<Props> {
     return this.formCalcModel;
   }
 
-  // buildNumEntries() {
-  //   const ids = Object.keys(this.props.formCalc);
-  //   return ids.map( (id:string) => {
-  //     const ne = this.props.formCalc[id];
-  //     return <NumEntryView
-  //       key={ne.id}
-  //       id={id}
-  //       value={this.props.formCalc[id].value}
-  //       label={ne.label}
-  //     />
-  //   });
-  // }
-
   buildTierDefViews() {
     if (this.formCalcModel) {
       return this.formCalcModel.tierDefs.map( (tierDef, index) => {
@@ -64,7 +52,14 @@ class FormCalcViewBase extends React.Component<Props> {
   }
 
   render() {
-    return this.buildTierDefViews();
+    return (
+      <Row>
+        <Col>
+          {this.buildTierDefViews()}
+        </Col>
+      </Row>
+
+    );
   }
 }
 

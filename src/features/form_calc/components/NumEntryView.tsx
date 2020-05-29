@@ -7,7 +7,6 @@ import { Component } from 'react';
 import $ from 'jquery';
 
 const mapStateToProps = (state: RootState) => ({
-  formCalc: selectors.getNumEntries(state.formCalc)
 });
 
 const dispatchProps = {
