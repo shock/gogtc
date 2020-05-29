@@ -1,6 +1,6 @@
 import { Int, TierNum, TroopType, NumEntry, KeyedNumEntry } from '../../types';
 import { MFormCalc, MTroopDef, MTierDef } from '..';
-import { buildTierWithTroopDefs } from '../test_helper';
+import { buildTierWithTroopDefs, buildFormCalcWithTiers } from '../test_helper';
 
 describe( 'MTierDef', () => {
 
@@ -37,6 +37,33 @@ describe( 'MTierDef', () => {
       }
       const numEntries = instance.getNumEntries();
       expect(numEntries).toEqual(testNumEntries);
+    });
+  });
+
+  describe('findTroopDef()', () => {
+    describe('with no troopDefs', () => {
+      it('should throw an Error', () => {
+        const tierDef = new MTierDef(TierNum.T12);
+        expect(
+          () => {tierDef.findTroopDef(TroopType.Infantry)}
+        ).toThrow(Error);
+      });
+    });
+    describe('with troopDefs', () => {
+      describe('with valid TierNum', () => {
+        it('should find the tierDef ', () => {
+          const tierDef = buildTierWithTroopDefs(TierNum.T12);
+          tierDef.findTroopDef(TroopType.Infantry);
+        });
+      });
+      describe('with invalid TierNum', () => {
+        it('should throw an Error', () => {
+          const tierDef = buildTierWithTroopDefs(TierNum.T12);
+          expect(
+            () => {tierDef.findTroopDef(TroopType.Artillery)}
+          ).toThrow(Error);
+        });
+      });
     });
   });
 

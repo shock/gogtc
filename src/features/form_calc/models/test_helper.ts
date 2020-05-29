@@ -41,3 +41,13 @@ export function buildTierWithTroopDefs(tierNum:TierNum, formCalc:MFormCalc = new
   tierDef.formCalc = formCalc;
   return tierDef;
 }
+
+export function buildFormCalcWithTiers(name:string = 'test') {
+  const formCalc = new MFormCalc(name);
+  const tierDefs = [
+    buildTierWithTroopDefs(TierNum.T12, formCalc),
+    buildTierWithTroopDefs(TierNum.T11, formCalc)
+  ];
+  formCalc.tierDefs = tierDefs;
+  return formCalc;
+}

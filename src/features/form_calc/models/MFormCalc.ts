@@ -36,7 +36,7 @@ class MFormCalc {
     const troopType = idParts[1] as TroopType;
     const tierDef = this.findTierDef(tierNum);
     const troopDef = tierDef.findTroopDef( troopType );
-    troopDef.updateFromAction(troopDefUpdate);
+    // troopDef.updateFromAction(troopDefUpdate);
   }
 
   getNumEntries() {
