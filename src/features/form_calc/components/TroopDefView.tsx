@@ -27,19 +27,22 @@ class TroopDefViewBase extends React.Component<Props> {
   }
 
   label(ned:NumEntry) {
-    return `${this.props.troopDef?.tierDef?.tierNum} ${ned.label}`.trim();
+    // return `${this.props.troopDef?.tierDef?.tierNum} ${ned.label}`.trim();
+    return `${ned.label}`.trim();
   }
 
   render() {
     const ned = this.numEntryData();
     if( !ned ) return <div/>;
     return (
-      <NumEntryView
-        key={ned.id}
-        id={ned.id}
-        value={ned.value}
-        label={this.label(ned)}
-      />
+      <div className="TroopDefView">
+        <NumEntryView
+          key={ned.id}
+          id={ned.id}
+          value={ned.value}
+          label={this.label(ned)}
+        />
+      </div>
     )
   }
 }

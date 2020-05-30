@@ -39,10 +39,12 @@ class TierDefViewBase extends React.Component<Props> {
     classNames.push(cycle);
     return (
       <Row className={classNames.join(' ')}>
-        <Col>
-          <label>{this.props.tierDef.tierNum}</label>
+        <Col sm={2}>
+          <label className="tierLabel">{this.props.tierDef.tierNum}</label>
         </Col>
+        <Col>
         {this.buildTroopDefViews()}
+        </Col>
       </Row>
     )
   }

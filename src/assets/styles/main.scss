@@ -7,6 +7,10 @@
   white-space: nowrap;
 }
 
+.inline {
+  display: inline-block;
+}
+
 span.button {
   border: 1px solid #444;
   width: 1.2rem;
@@ -32,10 +36,31 @@ span.button {
   }
 }
 
+$inputColor:  rgb(67, 193, 243);
+
+.TroopDefView {
+  .NumEntry {
+    input {
+      &.Infantry {
+        background-color: adjust-color($inputColor, $lightness: +10%);
+      }
+      &.Cavalry {
+        background-color: adjust-color($inputColor, $lightness: +20%);
+      }
+      &.Distance {
+        background-color: adjust-color($inputColor, $lightness: +30%);
+      }
+    }
+  }
+}
+
 .TierDefView {
   padding: 1rem 0;
   &.even {
     background-color: rgba(255,255,255,0.08)
+  }
+  label.tierLabel {
+    font-size: 4em;
   }
 }
 

@@ -150,13 +150,13 @@ class NumEntryBase extends Component<Props, NumEntryState> {
 
   render() {
     return (
-      <div className="NumEntry">
+      <div className="NumEntry nobr">
         <label>{this.props.label}</label>
-        <div className='nobr'>
+        <div className='nobr inline'>
           <span className="button" data-type='dec'
             onMouseDown={this.handleMouseDown}
             onMouseUp={this.handleMouseUp}>-</span>
-          <input type="text" value={this.formattedVal()} onChange={this.handleChange} />
+          <input type="text" className={this.props.label.split(' ').slice(-1)[0]} value={this.formattedVal()} onChange={this.handleChange} />
           <span className="button" data-type='inc'
             onMouseDown={this.handleMouseDown}
             onMouseUp={this.handleMouseUp}>-</span>
