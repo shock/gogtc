@@ -39,10 +39,10 @@ class FormCalcViewBase extends React.Component<Props> {
   }
 
   resetReduxState() {
-    const initialState = {
+    const state = {
       numEntries: this.props.formCalcModel.getNumEntries()
     }
-    this.props.resetState(initialState);
+    this.props.resetState(state);
   }
 
   hasModel() {

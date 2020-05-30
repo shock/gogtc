@@ -17,6 +17,10 @@ export class MTroopDef {
     return `${this.tierDef.id()}:${this.type}`;
   }
 
+  setCount(value: any) {
+    this.count = parseInt(''+value) as Int;
+  }
+
   getNumEntry():NumEntry {
     return {
       id: this.id(),

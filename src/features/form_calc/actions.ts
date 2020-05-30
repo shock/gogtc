@@ -5,6 +5,7 @@ export const updateNumEntry = createAction('UPDATE_NUM_ENTRY', (id: string, valu
   id: id,
   value: value
 }))<NumEntry>();
+
 export const resetState = createAction('RESET_STATE', (state:NumEntryDictionary) => ({
   ...state
 }))<NumEntryDictionary>();

@@ -37,7 +37,7 @@ class TroopDefViewBase extends React.Component<Props> {
     if( !ned ) return <div/>;
     return (
       <div className="TroopDefView">
-        <PercEntryView
+        <NumEntryView
           key={ned.id}
           id={ned.id}
           value={ned.value}

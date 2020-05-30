@@ -1,12 +1,18 @@
-import { MTierDef, MTroopDef } from '.';
-import { KeyedNumEntry, TierNum, TroopType } from '../types';
+import { ActionType, getType } from 'typesafe-actions';
+import { MTierDef} from '.';
+import { IdParser } from './IdParser';
+import { KeyedNumEntry, TierNum, TroopType, Int } from '../types';
+import * as formCalcActions from '../actions';
+import { updateNumEntry } from '../actions';
+export type FormCalcAction = ActionType<typeof formCalcActions>;
 
 
-class MFormCalc {
+class MFormCalc extends IdParser {
   name: string;
   tierDefs: MTierDef[] = [];
 
   constructor(name:string) {
+    super();
     this.name = name;
   }
 
@@ -30,13 +36,20 @@ class MFormCalc {
     return selected;
   }
 
-  updateTroopDef( id: string, troopDefUpdate:MTroopDef) {
-    const idParts = id.split(':');
-    const tierNum = idParts[0] as TierNum;
-    const troopType = idParts[1] as TroopType;
-    const tierDef = this.findTierDef(tierNum);
-    const troopDef = tierDef.findTroopDef( troopType );
-    // troopDef.updateFromAction(troopDefUpdate);
+  handleAction( action:FormCalcAction ) {
+    switch (action.type) {
+      case getType(updateNumEntry):
+        const idParts = action.payload.id.split(':');
+        const tierNum = this.getTierNum(action.payload.id);
+        const troopType = this.getTroopType(action.payload.id);
+        const tierDef = this.findTierDef(tierNum);
+        const troopDef = tierDef.findTroopDef(troopType);
+        troopDef.setCount(action.payload.value);
+    }
+    const state = {
+      numEntries: this.getNumEntries()
+    }
+    return state;
   }
 
   getNumEntries() {

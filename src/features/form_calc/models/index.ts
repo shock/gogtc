@@ -52,4 +52,4 @@ export const TestLibrary = {
 
 export * from './MTierDef';
 export * from './MTroopDef';
-export * from './MFormCalc'
+export * from './MFormCalc';
