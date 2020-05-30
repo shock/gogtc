@@ -51,6 +51,11 @@ $inputColor:  rgb(67, 193, 243);
         background-color: adjust-color($inputColor, $lightness: +30%);
       }
     }
+    span.floatPercent {
+      position: relative;
+      left: -1.1em;
+      color: black;
+    }
   }
 }
 

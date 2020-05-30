@@ -64,6 +64,25 @@ class PercEntryBase extends NumEntryBase {
     return `${strVal}%`;
   }
 
+  render() {
+    return (
+      <div className="NumEntry nobr">
+        <label>{this.props.label}</label>
+        <div className='nobr inline'>
+          <span className="button" data-type='dec'
+            onMouseDown={this.handleMouseDown}
+            onMouseUp={this.handleMouseUp}>-</span>
+          <input type="text" className={this.props.label.split(' ').slice(-1)[0]} value={this.formattedVal()} onChange={this.handleChange} />
+          <span className="floatPercent">%</span>
+          <span className="button" data-type='inc'
+            onMouseDown={this.handleMouseDown}
+            onMouseUp={this.handleMouseUp}>-</span>
+        </div>
+      </div>
+
+    );
+  }
+
 }
 
 const PercEntryView = connect(mapStateToProps, dispatchProps)(PercEntryBase);
