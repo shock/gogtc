@@ -4,6 +4,7 @@ import { IdParser } from './IdParser';
 import { KeyedNumEntry, TierNum, TroopType, Int } from '../types';
 import * as formCalcActions from '../actions';
 import { updateNumEntry } from '../actions';
+import { FCState } from '../reducer';
 export type FormCalcAction = ActionType<typeof formCalcActions>;
 
 
@@ -36,7 +37,7 @@ class MFormCalc extends IdParser {
     return selected;
   }
 
-  handleAction( action:FormCalcAction ) {
+  handleAction( state:FCState, action:FormCalcAction ) {
     switch (action.type) {
       case getType(updateNumEntry):
         const idParts = action.payload.id.split(':');
@@ -46,10 +47,10 @@ class MFormCalc extends IdParser {
         const troopDef = tierDef.findTroopDef(troopType);
         troopDef.setCount(action.payload.value);
     }
-    const state = {
+    return {
+      ...state,
       numEntries: this.getNumEntries()
     }
-    return state;
   }
 
   getNumEntries() {

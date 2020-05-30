@@ -1,5 +1,6 @@
 import { MFormCalc, MTierDef, MTroopDef } from '.';
 import { TierNum, TroopType, Int } from '../types';
+import { FormCalcState } from '../reducer';
 
 function buildTroopDefs(tierDef:MTierDef):MTroopDef[] {
   const troopDefs =  [
@@ -40,14 +41,22 @@ function buildFormCalc(name:string) {
 }
 
 export type FormCalcDictionary = {
-  [key: string]: MFormCalc
+  formCalcs: {[key: string]: MFormCalc}
 }
 
-export const TestLibrary = {
-  formCalcModels: {
+export type TierDefDictionary = {
+  tierDefs: {[key: string]: MTierDef}
+}
+
+export type TroopDefDictionary = {
+  troopDefs: {[key: string]: MTroopDef}
+}
+
+export const TestLibrary:FormCalcDictionary = {
+  formCalcs: {
     test: buildFormCalc('test'),
     fc1: buildFormCalc('fc1')
-  } as FormCalcDictionary
+  }
 };
 
 export * from './MTierDef';

@@ -8,7 +8,7 @@ import { MTroopDef } from '../models';
 import { NumEntry } from '../types';
 
 const mapStateToProps = (state: RootState) => ({
-  numEntries: selectors.getNumEntries(state.formCalc)
+  troopDefs: selectors.getNumEntries(state.formCalc)
 });
 
 const dispatchProps = {
@@ -23,25 +23,25 @@ type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & TroopDe
 
 class TroopDefViewBase extends React.Component<Props> {
 
-  numEntryData() {
-    return this.props.numEntries[this.props.troopDef.id()];
+  data() {
+    return this.props.troopDefs[this.props.troopDef.id()];
   }
 
-  label(ned:NumEntry) {
-    // return `${this.props.troopDef?.tierDef?.tierNum} ${ned.label}`.trim();
-    return `${ned.label}`.trim();
+  label(troopDef:NumEntry) {
+    // return `${this.props.troopDef?.tierDef?.tierNum} ${troopDef.label}`.trim();
+    return `${troopDef.label}`.trim();
   }
 
   render() {
-    const ned = this.numEntryData();
-    if( !ned ) return <div/>;
+    const troopDef = this.data();
+    if( !troopDef ) return <div/>;
     return (
       <div className="TroopDefView">
         <NumEntryView
-          key={ned.id}
-          id={ned.id}
-          value={ned.value}
-          label={this.label(ned)}
+          key={troopDef.id}
+          id={troopDef.id}
+          value={troopDef.value}
+          label={this.label(troopDef)}
         />
       </div>
     )

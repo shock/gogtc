@@ -30,7 +30,7 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      formCalcModel: TestLibrary.formCalcModels[this.props.name],
+      formCalcModel: TestLibrary.formCalcs[this.props.name],
       formName: ''
     }
     this.handleNameChange = this.handleNameChange.bind(this);
@@ -45,7 +45,7 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
 
   handleNameSubmit(event: any) {
     event.preventDefault();
-    const formCalcModel = TestLibrary.formCalcModels[this.state.formName];
+    const formCalcModel = TestLibrary.formCalcs[this.state.formName];
     if( !formCalcModel )
       alert(`Couldn't find model with name: '${this.state.formName}'`);
     this.setState({
