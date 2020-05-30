@@ -5,10 +5,16 @@ export class MTroopDef {
   tierDef: MTierDef | null = null;
   type: TroopType;
   count: Int;
+  percent: number;
+  percentLocked: boolean;
+  countLocked: boolean;
 
   constructor(type:TroopType, count:Int) {
     this.type = type;
     this.count = count;
+    this.percent = 0;
+    this.percentLocked = false;
+    this.countLocked = false;
   }
 
   id():string {
