@@ -70,7 +70,7 @@ export class NumEntryBase extends Component<Props, NumEntryState> {
   }
 
   timerHandler() {
-    let newValue = this.normalizeValue(this.props.value);
+    let newValue = parseFloat(this.normalizeValue(this.props.value));
     this.acceleration *= this.accelerationFactor;
     switch(this.direction) {
       case 'dec':
@@ -114,15 +114,15 @@ export class NumEntryBase extends Component<Props, NumEntryState> {
     this.cancelTimer();
   }
 
-  normalizeValue(value: any): number {
+  normalizeValue(value: any): string {
     let strVal = ''+value;
-    strVal = strVal.replace(/[^0-9\.]/g, '');
+    strVal = strVal.replace(/[^0-9.]/g, '');
 
-    let numVal = parseFloat(strVal);
+    let numVal = parseInt(strVal);
     if( isNaN(numVal) ) { numVal = 0; }
     if( numVal < this.props.minVal ) { numVal = this.props.minVal; }
     if( numVal > this.props.maxVal ) { numVal = this.props.maxVal; }
-    return parseInt(''+numVal);
+    return ''+numVal;
   }
 
   decrementValue() {
@@ -138,9 +138,10 @@ export class NumEntryBase extends Component<Props, NumEntryState> {
   }
 
   formattedVal() {
-    const numVal = parseFloat(this.props.value)
-    const strVal = numVal.toLocaleString();
-    return strVal;
+    // const numVal = parseFloat(this.props.value)
+    // const strVal = numVal.toLocaleString();
+    // return strVal;
+    return this.props.value;
   }
 
   render() {
