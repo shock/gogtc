@@ -1,7 +1,6 @@
 import React from 'react';
 import { RootState } from 'typesafe-actions';
 import { connect } from 'react-redux';
-import * as selectors from '../selectors';
 import * as actions from '../actions';
 import { NumEntryBase, NumEntryProps } from './NumEntryView';
 
@@ -25,10 +24,6 @@ class PercEntryBase extends NumEntryBase {
   static defaultProps = {
     minVal: 0,
     maxVal: 100
-  }
-
-  constructor(props: Props) {
-    super(props);
   }
 
   componentDidMount() {
@@ -69,23 +64,6 @@ class PercEntryBase extends NumEntryBase {
     return `${strVal}%`;
   }
 
-  render() {
-    return (
-      <div className="NumEntry nobr">
-        <label>{this.props.label}</label>
-        <div className='nobr inline'>
-          <span className="button" data-type='dec'
-            onMouseDown={this.handleMouseDown}
-            onMouseUp={this.handleMouseUp}>-</span>
-          <input type="text" className={this.props.label.split(' ').slice(-1)[0]} value={this.formattedVal()} onChange={this.handleChange} />
-          <span className="button" data-type='inc'
-            onMouseDown={this.handleMouseDown}
-            onMouseUp={this.handleMouseUp}>-</span>
-        </div>
-      </div>
-
-    );
-  }
 }
 
 const PercEntryView = connect(mapStateToProps, dispatchProps)(PercEntryBase);

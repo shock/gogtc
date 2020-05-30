@@ -1,7 +1,6 @@
 import { RootState } from 'typesafe-actions';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as selectors from '../selectors';
 import * as actions from '../actions';
 import $ from 'jquery';
 
@@ -50,6 +49,7 @@ export class NumEntryBase extends Component<Props, NumEntryState> {
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
     this.timerHandler = this.timerHandler.bind(this);
+    this.updateValue(this.props.value);
   }
 
   cancelTimer() {

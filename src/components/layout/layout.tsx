@@ -1,9 +1,7 @@
 import React, { FunctionComponent } from 'react'; // importing FunctionComponent
 import { LayoutProps } from './layout.types';
 import { Container, Row, Col, Navbar, Nav, NavDropdown, Form, FormControl,
-  Button, Jumbotron } from 'react-bootstrap';
-
-const html = false;
+  Button } from 'react-bootstrap';
 
 const Layout: FunctionComponent<LayoutProps> = ({ title, paragraph, children }) => {
   return (

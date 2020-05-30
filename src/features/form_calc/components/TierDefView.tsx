@@ -2,8 +2,6 @@ import { RootState } from 'typesafe-actions';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
-import * as selectors from '../selectors';
-import { NumEntryView } from './NumEntryView';
 import { TroopDefView } from './TroopDefView';
 import { MTierDef } from '../models';
 
@@ -26,9 +24,9 @@ class TierDefViewBase extends React.Component<Props> {
   }
 
   buildTroopDefViews() {
-    return this.props.tierDef.troopDefs.map( (troopDef) => (
+    return this.props.tierDef.troopDefs.map( (troopDef, index) => (
       <Col>
-        <TroopDefView troopDef={troopDef} />
+        <TroopDefView key={index} troopDef={troopDef} />
       </Col>
     ));
   }

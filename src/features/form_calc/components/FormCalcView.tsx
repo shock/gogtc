@@ -24,16 +24,16 @@ type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & FormCal
 
 class FormCalcViewBase extends React.Component<Props> {
 
-  constructor(props: Props) {
-    super(props);
-  }
+  // constructor(props: Props) {
+  //   super(props);
+  // }
 
   componentDidMount() {
     this.resetReduxState();
   }
 
   componentDidUpdate(prevProps:Props) {
-    if( prevProps.formCalcModel != this.props.formCalcModel && this.hasModel()) {
+    if( prevProps.formCalcModel !== this.props.formCalcModel && this.hasModel()) {
       this.resetReduxState();
     }
   }
