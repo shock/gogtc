@@ -1,4 +1,5 @@
-import { KeyedNumEntry, NumEntry, TierNum, TroopType } from '../types';
+import { NumEntry, TierNum, TroopType } from '../types';
+import { KeyedNumEntry } from '.';
 import { MFormCalc, MTroopDef } from '.';
 
 class MTierDef {

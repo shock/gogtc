@@ -1,4 +1,5 @@
-import { NumEntry, NumEntryDictionary } from './types';
+import { NumEntry } from './types';
+import { NumEntryDictionary } from './models';
 import { createAction } from 'typesafe-actions';
 
 export const updateNumEntry = createAction('UPDATE_NUM_ENTRY', (id: string, value: string) => ({

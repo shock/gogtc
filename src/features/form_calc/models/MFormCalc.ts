@@ -1,10 +1,10 @@
 import { ActionType, getType } from 'typesafe-actions';
 import { MTierDef} from '.';
 import { IdParser } from './IdParser';
-import { KeyedNumEntry, TierNum, TroopType, Int } from '../types';
+import { TierNum } from '../types';
 import * as formCalcActions from '../actions';
 import { updateNumEntry } from '../actions';
-import { FCState } from '../reducer';
+import { FCState, BlankFCState, KeyedNumEntry } from '.';
 export type FormCalcAction = ActionType<typeof formCalcActions>;
 
 
@@ -40,7 +40,6 @@ class MFormCalc extends IdParser {
   handleAction( state:FCState, action:FormCalcAction ) {
     switch (action.type) {
       case getType(updateNumEntry):
-        const idParts = action.payload.id.split(':');
         const tierNum = this.getTierNum(action.payload.id);
         const troopType = this.getTroopType(action.payload.id);
         const tierDef = this.findTierDef(tierNum);
@@ -59,6 +58,14 @@ class MFormCalc extends IdParser {
       numEntries = Object.assign({}, numEntries, tierDef.getNumEntries());
     });
     return numEntries;
+  }
+
+  getState(state:FCState = BlankFCState) {
+    const numEntries = this.getNumEntries();
+    return {
+      ...state,
+      numEntries: numEntries
+    };
   }
 };
 

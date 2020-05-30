@@ -1,6 +1,5 @@
 import { MFormCalc, MTierDef, MTroopDef } from '.';
-import { TierNum, TroopType, Int } from '../types';
-import { FormCalcState } from '../reducer';
+import { TierNum, TroopType, Int, NumEntry } from '../types';
 
 function buildTroopDefs(tierDef:MTierDef):MTroopDef[] {
   const troopDefs =  [
@@ -50,6 +49,23 @@ export type TierDefDictionary = {
 
 export type TroopDefDictionary = {
   troopDefs: {[key: string]: MTroopDef}
+}
+
+export type KeyedNumEntry = {
+  [key: string]: NumEntry
+}
+
+export type NumEntryDictionary = {
+  numEntries: KeyedNumEntry
+}
+
+export type FCState = NumEntryDictionary & FormCalcDictionary & TierDefDictionary & TroopDefDictionary;
+
+export const BlankFCState:FCState = {
+  numEntries: {},
+  formCalcs: {},
+  tierDefs: {},
+  troopDefs: {}
 }
 
 export const TestLibrary:FormCalcDictionary = {

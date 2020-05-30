@@ -6,14 +6,6 @@ export type NumEntry = {
   label: string;
 }
 
-export type KeyedNumEntry = {
-  [key: string]: NumEntry
-}
-
-export type NumEntryDictionary = {
-  numEntries: KeyedNumEntry
-}
-
 // Model Types
 
 // https://spin.atomicobject.com/2018/11/05/using-an-int-type-in-typescript/

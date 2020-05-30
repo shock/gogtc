@@ -22,12 +22,12 @@ import { TierNum, TroopType } from "../types";
     const troopDefId = `${formCalcName}:${tierNum}:${troopType}`;
 
 */
+
+export const getFormCalcName = (id:string) => ( id.split(':')[0] );
+
+
 export class IdParser {
-
-  constructor() {
-  }
-
-  getFormCalcName(id: string) { return id.split(':')[0]; }
+  getFormCalcName(id: string) { return getFormCalcName(id) }
   getTierNum(id: string) { return id.split(':')[1] as TierNum; }
   getTroopType(id: string) { return id.split(':')[2] as TroopType; }
 }

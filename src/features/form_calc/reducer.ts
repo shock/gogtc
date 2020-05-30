@@ -1,25 +1,15 @@
-import { KeyedNumEntry, NumEntryDictionary } from './types';
 import { combineReducers } from 'redux';
 import { createReducer } from 'typesafe-actions';
-import { FormCalcDictionary, TierDefDictionary, TroopDefDictionary } from './models';
 
 import { updateNumEntry, resetState } from './actions';
-import { TestLibrary, MFormCalc } from './models';
+import { TestLibrary, MFormCalc, BlankFCState } from './models';
+import { getFormCalcName } from './models/IdParser';
 
-export type FCState = NumEntryDictionary & FormCalcDictionary & TierDefDictionary & TroopDefDictionary;
-
-const numEntryState:FCState = {
-  numEntries: {},
-  formCalcs: {},
-  tierDefs: {},
-  troopDefs: {}
-};
-
-const formCalc = createReducer(numEntryState)
+const formCalc = createReducer(BlankFCState)
   .handleAction(updateNumEntry, (state, action) => {
     const id = action.payload.id;
 
-    const formationName = new MFormCalc('dummy').getFormCalcName(id);
+    const formationName = getFormCalcName(id);
     const formCalcModel = TestLibrary.formCalcs[formationName];
     if( !(formCalcModel instanceof MFormCalc) )
       throw new Error(`Can't find formation with name: ${formationName}`);
