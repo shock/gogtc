@@ -3,6 +3,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import * as selectors from '../selectors';
 import { NumEntryView } from './NumEntryView';
+import { PercEntryView } from './PercEntryView';
 import { MTroopDef } from '../models';
 import { NumEntry } from '../types';
 
@@ -36,7 +37,7 @@ class TroopDefViewBase extends React.Component<Props> {
     if( !ned ) return <div/>;
     return (
       <div className="TroopDefView">
-        <NumEntryView
+        <PercEntryView
           key={ned.id}
           id={ned.id}
           value={ned.value}

@@ -1,9 +1,8 @@
 import { RootState } from 'typesafe-actions';
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as selectors from '../selectors';
 import * as actions from '../actions';
-import { Component } from 'react';
 import $ from 'jquery';
 
 const mapStateToProps = (state: RootState) => ({
@@ -24,10 +23,9 @@ export interface NumEntryProps {
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & NumEntryProps;
 
 export interface NumEntryState {
-  percentage: boolean;
 }
 
-class NumEntryBase extends Component<Props, NumEntryState> {
+export class NumEntryBase extends Component<Props, NumEntryState> {
 
   static defaultProps = {
     minVal: 0,
@@ -121,9 +119,6 @@ class NumEntryBase extends Component<Props, NumEntryState> {
     strVal = strVal.replace(/[^0-9\.]/g, '');
 
     let numVal = parseFloat(strVal);
-    if (this.state && this.state.percentage) {
-
-    }
     if( isNaN(numVal) ) { numVal = 0; }
     if( numVal < this.props.minVal ) { numVal = this.props.minVal; }
     if( numVal > this.props.maxVal ) { numVal = this.props.maxVal; }
