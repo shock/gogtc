@@ -29,19 +29,20 @@ class FormCalcViewBase extends React.Component<Props> {
   }
 
   componentDidMount() {
-    const initialState = {
-      numEntries: this.props.formCalcModel.getNumEntries()
-    }
-    this.props.resetState(initialState);
+    this.resetReduxState();
   }
 
   componentDidUpdate(prevProps:Props) {
     if( prevProps.formCalcModel != this.props.formCalcModel && this.hasModel()) {
-      const initialState = {
-        numEntries: this.props.formCalcModel.getNumEntries()
-      }
-      this.props.resetState(initialState);
+      this.resetReduxState();
     }
+  }
+
+  resetReduxState() {
+    const initialState = {
+      numEntries: this.props.formCalcModel.getNumEntries()
+    }
+    this.props.resetState(initialState);
   }
 
   hasModel() {
@@ -61,12 +62,18 @@ class FormCalcViewBase extends React.Component<Props> {
 
   render() {
     return (
-      <Row>
-        <Col>
-          {this.buildTierDefViews()}
-        </Col>
-      </Row>
-
+      <React.Fragment>
+        <Row>
+          <Col>
+            <h3>{this.props.formCalcModel?.name}</h3>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            {this.buildTierDefViews()}
+          </Col>
+        </Row>
+      </React.Fragment>
     );
   }
 }
