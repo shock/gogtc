@@ -59,7 +59,7 @@ class PercEntryBase extends NumEntryBase {
   }
 
   formattedVal() {
-    const numVal = parseFloat(this.props.value);
+    const numVal = parseFloat(this.props.value).toFixed(2);
     const strVal = numVal.toLocaleString();
     return `${strVal}%`;
   }
