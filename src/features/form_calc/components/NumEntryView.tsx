@@ -8,6 +8,7 @@ export interface NumEntryProps {
   id: string;
   value: string;
   label: string;
+  type: string;
   minVal: number;
   maxVal: number;
   updateAction: actions.UpdateIdValueAction;
@@ -20,7 +21,8 @@ export class NumEntryView extends Component<NumEntryProps, NumEntryState> {
 
   static defaultProps = {
     minVal: 0,
-    maxVal: 999999
+    maxVal: 999999,
+    type: ''
   }
 
   readonly initialTimeout = 700;
@@ -138,21 +140,32 @@ export class NumEntryView extends Component<NumEntryProps, NumEntryState> {
     return this.props.value;
   }
 
-  render() {
-    return (
-      <div className="NumEntry">
+  renderWithInsert(insert:any, className='') {
+    let label:any = null;
+    if( this.props.label !== '' ) {
+      label = (
         <label>{this.props.label}</label>
+      )
+    }
+    return (
+      <div className={`NumEntry ${className}`}>
+        {label}
         <div className='nobr inline relative'>
           <span className="button" data-type='dec'
             onMouseDown={this.handleMouseDown}
-            onMouseUp={this.handleMouseUp}>-</span>
-          <input type="text" className={this.props.label.split(' ').slice(-1)[0]} value={this.formattedVal()} onChange={this.handleChange} />
+            onMouseUp={this.handleMouseUp}>–</span>
+          <input type="text" className={this.props.type} value={this.formattedVal()} onChange={this.handleChange} />
+          {insert}
           <span className="button" data-type='inc'
             onMouseDown={this.handleMouseDown}
-            onMouseUp={this.handleMouseUp}>-</span>
+            onMouseUp={this.handleMouseUp}>+</span>
         </div>
       </div>
 
     );
+  }
+
+  render() {
+    return this.renderWithInsert(null);
   }
 }

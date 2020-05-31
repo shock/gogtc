@@ -39,17 +39,17 @@ class TroopDefViewBase extends React.Component<Props> {
     return (
       <div className="TroopDefView">
         <PercEntryView
-          // key={troopDef.id()}
           id={troopDef.id()+':percent'}
           value={''+troopDef.percent}
           label={this.label(troopDef)}
+          type={troopDef.type}
           updateAction={this.props.updateTroopPercent}
         />
         <NumEntryView
-          // key={troopDef.id()}
           id={troopDef.id()+':count'}
           value={''+troopDef.count}
-          label={this.label(troopDef)}
+          label={''}
+          type={troopDef.type}
           updateAction={this.props.updateTroopCount}
         />
       </div>

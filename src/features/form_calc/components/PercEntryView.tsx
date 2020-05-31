@@ -8,7 +8,8 @@ export class PercEntryView extends NumEntryView {
 
   static defaultProps = {
     minVal: 0,
-    maxVal: 100
+    maxVal: 100,
+    type: ''
   }
 
   componentDidMount() {
@@ -46,11 +47,6 @@ export class PercEntryView extends NumEntryView {
     return strVal;
   }
 
-  handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const target = event.target;
-    this.updateValue(target.value);
-  }
-
   decrementValue() {
     this.props.updateAction(this.props.id, ''+(this.normalizeValue(parseFloat(this.props.value)-0.1)));
   }
@@ -71,22 +67,7 @@ export class PercEntryView extends NumEntryView {
   }
 
   render() {
-    return (
-      <div className="NumEntry PercEntry">
-        <label>{this.props.label}</label>
-        <div className='nobr inline relative'>
-          <span className="button" data-type='dec'
-            onMouseDown={this.handleMouseDown}
-            onMouseUp={this.handleMouseUp}>-</span>
-          <input type="text" className={this.props.label.split(' ').slice(-1)[0]} value={this.formattedVal()} onChange={this.handleChange} />
-          <span className="floatPercent">%</span>
-          <span className="button" data-type='inc'
-            onMouseDown={this.handleMouseDown}
-            onMouseUp={this.handleMouseUp}>-</span>
-        </div>
-      </div>
-
-    );
+    return this.renderWithInsert(<span className="floatPercent">%</span>, 'PercEntry');
   }
 
 }
