@@ -140,7 +140,7 @@ export class NumEntryView extends Component<NumEntryProps, NumEntryState> {
 
   render() {
     return (
-      <div className="NumEntry nobr">
+      <div className="NumEntry">
         <label>{this.props.label}</label>
         <div className='nobr inline relative'>
           <span className="button" data-type='dec'

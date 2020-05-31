@@ -4,11 +4,16 @@ import { connect } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
 
 import * as actions from '../actions';
+import * as selectors from '../selectors';
 import { TroopDefView } from './TroopDefView';
 import { NumEntryView } from './NumEntryView';
 import { MTierDef } from '../models';
 
 const mapStateToProps = (state: RootState) => ({
+  // this has to be here to trigger re-rendering even though the props
+  // used to render are passed from the parent.
+  // TODO: figure out the right way to trigger re-rendering
+  tierDefs: selectors.getTierDefs(state.formCalc)
 });
 
 const dispatchProps = {

@@ -72,7 +72,7 @@ export class PercEntryView extends NumEntryView {
 
   render() {
     return (
-      <div className="NumEntry PercEntry nobr">
+      <div className="NumEntry PercEntry">
         <label>{this.props.label}</label>
         <div className='nobr inline relative'>
           <span className="button" data-type='dec'
