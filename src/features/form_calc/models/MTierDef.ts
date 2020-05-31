@@ -1,5 +1,4 @@
-import { NumEntry, TierNum, TroopType } from '../types';
-import { KeyedNumEntry } from '.';
+import { TierNum, TroopType } from '../types';
 import { MFormCalc, MTroopDef } from '.';
 
 class MTierDef {
@@ -32,19 +31,6 @@ class MTierDef {
       throw new Error(`could not find MTroopDef with type ==${troopType}`)
     return selected;
   }
-
-  getNumEntries():KeyedNumEntry {
-    let numEntries:KeyedNumEntry = {};
-    this.troopDefs.forEach( (troopDef) => {
-      let numEntry:NumEntry = {
-        id: troopDef.id(),
-        value: troopDef.count.toString(),
-        label: troopDef.type
-      }
-      numEntries[numEntry.id] = numEntry;
-    });
-    return numEntries;
-  };
 };
 
 export { MTierDef };

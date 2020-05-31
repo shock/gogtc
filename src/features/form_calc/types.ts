@@ -1,11 +1,5 @@
 // Redux Types
 
-export type NumEntry = {
-  id: string;
-  value: string;
-  label: string;
-}
-
 export type IdValue = {
   id: string,
   value: string

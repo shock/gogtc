@@ -1,9 +1,9 @@
 import { ActionType, getType } from 'typesafe-actions';
-import { MTierDef, MTroopDef } from '.';
+import { MTierDef, MTroopDef, TierDefDictionary } from '.';
 import { IdParser } from './IdParser';
 import { TierNum, TroopType } from '../types';
 import * as Actions from '../actions';
-import { FCState, BlankFCState, KeyedNumEntry, TroopDefDictionary } from '.';
+import { FCState, BlankFCState, TroopDefDictionary } from '.';
 export type FormCalcAction = ActionType<typeof Actions>;
 
 
@@ -49,6 +49,16 @@ class MFormCalc extends IdParser {
     return tdd;
   }
 
+  getTierDefs():TierDefDictionary {
+    const tdd = {
+      tierDefs: {}
+    } as TierDefDictionary;
+    this.tierDefs.forEach( (tierDef) => {
+      tdd.tierDefs[tierDef.id()] = tierDef;
+    });
+    return tdd;
+  }
+
   handleAction( state:FCState, action:FormCalcAction ) {
     let tierNum:TierNum;
     let troopType:TroopType;
@@ -67,17 +77,10 @@ class MFormCalc extends IdParser {
     return this.getState();
   }
 
-  getNumEntries() {
-    let numEntries:KeyedNumEntry = {};
-    this.tierDefs.forEach((tierDef) => {
-      numEntries = Object.assign({}, numEntries, tierDef.getNumEntries());
-    });
-    return numEntries;
-  }
-
   getState(state:FCState = BlankFCState) {
     const returnState = {
       ...state,
+      ...this.getTierDefs(),
       ...this.getTroopDefs()
     }
     return returnState;

@@ -5,7 +5,6 @@ import * as selectors from '../selectors';
 import { NumEntryView } from './NumEntryView';
 import { PercEntryView } from './PercEntryView';
 import { MTroopDef } from '../models';
-import { NumEntry } from '../types';
 
 const mapStateToProps = (state: RootState) => ({
   troopDefs: selectors.getTroopDefs(state.formCalc)

@@ -1,4 +1,4 @@
-import { Int, NumEntry, TroopType } from '../types';
+import { Int, TroopType } from '../types';
 import { MTierDef } from '.';
 
 export class MTroopDef {
@@ -27,11 +27,4 @@ export class MTroopDef {
     this.count = parseInt(''+value) as Int;
   }
 
-  getNumEntry():NumEntry {
-    return {
-      id: this.id(),
-      value: this.count.toString(),
-      label: this.type
-    }
-  };
 };

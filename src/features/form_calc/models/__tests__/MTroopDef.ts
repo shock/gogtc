@@ -16,17 +16,4 @@ describe( 'MTroopDef', () => {
     });
   });
 
-  describe('getNumEntry()', () => {
-    it('should return an appropriate instance of NumEntry', () => {
-      let instance = buildTroopDef(TroopType.Infantry, 1000 as Int);
-      const testNumEntry:NumEntry = {
-        "id": "test:T12:Infantry",
-        "label": "Infantry",
-        "value": "1000",
-      }
-      const numEntry = instance.getNumEntry();
-      expect(numEntry).toEqual(testNumEntry);
-    });
-  });
-
 });

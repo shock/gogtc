@@ -1,15 +1,15 @@
-import { NumEntry, IdValue } from './types';
-import { NumEntryDictionary } from './models';
+import { IdValue } from './types';
 import { createAction } from 'typesafe-actions';
+import { FCState } from './models';
 
 export const updateTroopCount = createAction('UPDATE_TROOP_COUNT', (id: string, value: string) => ({
   id: id,
   value: value
 }))<IdValue>();
 
-export const resetState = createAction('RESET_STATE', (state:NumEntryDictionary) => ({
+export const resetState = createAction('RESET_STATE', (state:FCState) => ({
   ...state
-}))<NumEntryDictionary>();
+}))<FCState>();
 
 // export const loadTodosAsync = createAsyncAction(
 //   'LOAD_TODOS_REQUEST',

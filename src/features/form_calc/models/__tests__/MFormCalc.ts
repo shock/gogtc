@@ -1,5 +1,5 @@
 import { TierNum } from '../../types';
-import { MFormCalc, MTierDef, MTroopDef, KeyedNumEntry } from '..';
+import { MFormCalc, MTierDef, MTroopDef, FCState, BlankFCState } from '..';
 import { buildTierWithTroopDefs, buildFormCalcWithTiers } from '../test_helper';
 
 describe( 'MTierDef', () => {
@@ -15,30 +15,17 @@ describe( 'MTierDef', () => {
     });
   });
 
-  describe('getNumEntries()', () => {
-    it('should return num entries for the troop defs', () => {
+  describe('getState()', () => {
+    it('should return the appropriate state', () => {
       const formCalc = new MFormCalc('test');
       let tierDef = buildTierWithTroopDefs(TierNum.T12, formCalc);
       formCalc.tierDefs = [tierDef];
-      const testNumEntries:KeyedNumEntry = {
-        "test:T12:Cavalry":  {
-          "id": "test:T12:Cavalry",
-          "label": "Cavalry",
-          "value": "2000",
-        },
-        "test:T12:Distance":  {
-          "id": "test:T12:Distance",
-          "label": "Distance",
-          "value": "3000",
-        },
-        "test:T12:Infantry":  {
-          "id": "test:T12:Infantry",
-          "label": "Infantry",
-          "value": "1000",
-        }
-      }
-      const numEntries = formCalc.getNumEntries();
-      expect(numEntries).toEqual(testNumEntries);
+      const testState:FCState = BlankFCState;
+      const state = formCalc.getState();
+      expect(Object.values(state.troopDefs).length).toBe(3);
+      expect(Object.values(state.tierDefs).length).toBe(1);
+      expect(state.tierDefs[tierDef.id()]).toBe(tierDef);
+      expect(state.troopDefs[tierDef.troopDefs[0].id()]).toBe(tierDef.troopDefs[0]);
     });
   });
 
