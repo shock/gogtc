@@ -82,6 +82,7 @@ class MFormCalc extends IdParser {
             tierDef.updatePercent(parseFloat(action.payload.value));
             break;
         }
+        break;
       case getType(actions.updateTroopCount) :
       case getType(actions.updateTroopPercent) :
         tierNum = this.getTierNum(action.payload.id);

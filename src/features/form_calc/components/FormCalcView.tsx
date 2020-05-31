@@ -4,13 +4,11 @@ import { connect } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
 
 import * as actions from '../actions';
-import * as selectors from '../selectors';
 import { TierDefView } from './TierDefView';
 import { NumEntryView } from './NumEntryView';
 import { MFormCalc } from '../models/MFormCalc';
 
 const mapStateToProps = (state: RootState) => ({
-  formCalcs: selectors.getFormCalcs(state.formCalc)
 });
 
 const dispatchProps = {
