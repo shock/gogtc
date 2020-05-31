@@ -1,4 +1,4 @@
-import { Int, TroopType } from '../types';
+import { Int, toInt, TroopType } from '../types';
 import { MTierDef } from '.';
 
 export class MTroopDef {
@@ -24,7 +24,7 @@ export class MTroopDef {
   }
 
   setCount(value: any) {
-    this.count = parseInt(''+value) as Int;
+    this.count = toInt(value);
   }
 
   setPercent(value: any) {

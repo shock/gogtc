@@ -1,5 +1,5 @@
 import { MTierDef, MTroopDef, MFormCalc } from '.';
-import { TroopType, TierNum, Int } from '../types';
+import { TroopType, TierNum, Int, toInt } from '../types';
 import formCalcReducer from '../reducer';
 
 export function buildTierDef(tierNum:TierNum, formCalc:MFormCalc = new MFormCalc('test')) {
@@ -18,17 +18,17 @@ export function buildTroopDefs(tierDef:MTierDef):MTroopDef[] {
   const troopDefs =  [
     buildTroopDef(
       TroopType.Infantry,
-      1000 as Int,
+      toInt(1000),
       tierDef
     ),
     buildTroopDef(
       TroopType.Cavalry,
-      2000 as Int,
+      toInt(2000),
       tierDef
     ),
     buildTroopDef(
       TroopType.Distance,
-      3000 as Int,
+      toInt(3000),
       tierDef
     ),
   ];
