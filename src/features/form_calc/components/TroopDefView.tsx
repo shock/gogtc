@@ -2,6 +2,7 @@ import { RootState } from 'typesafe-actions';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import * as selectors from '../selectors';
+import * as actions from '../actions';
 import { NumEntryView } from './NumEntryView';
 import { PercEntryView } from './PercEntryView';
 import { MTroopDef } from '../models';
@@ -11,6 +12,7 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const dispatchProps = {
+  updateTroopCount: actions.updateTroopCount
 };
 
 type TroopDefViewProps = {
@@ -27,7 +29,6 @@ class TroopDefViewBase extends React.Component<Props> {
   }
 
   label(troopDef:MTroopDef) {
-    // return `${this.props.troopDef?.tierDef?.tierNum} ${troopDef.label}`.trim();
     return `${troopDef.type}`.trim();
   }
 
@@ -41,6 +42,7 @@ class TroopDefViewBase extends React.Component<Props> {
           id={troopDef.id()}
           value={''+troopDef.count}
           label={this.label(troopDef)}
+          updateAction={this.props.updateTroopCount}
         />
       </div>
     )

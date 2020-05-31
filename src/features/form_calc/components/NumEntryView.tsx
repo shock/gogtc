@@ -8,7 +8,6 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const dispatchProps = {
-  updateAction: actions.updateTroopCount,
 };
 
 export interface NumEntryProps {
@@ -17,6 +16,7 @@ export interface NumEntryProps {
   label: string;
   minVal: number;
   maxVal: number;
+  updateAction: actions.UpdateIdValueAction;
 }
 
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & NumEntryProps;
