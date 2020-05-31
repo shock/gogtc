@@ -1,4 +1,4 @@
-import { TierNum, TroopType } from '../types';
+import { TierNum, TroopType, Int, toInt } from '../types';
 import { MFormCalc, MTroopDef } from '.';
 
 class MTierDef {
@@ -30,6 +30,20 @@ class MTierDef {
     if( selected === undefined )
       throw new Error(`could not find MTroopDef with type ==${troopType}`)
     return selected;
+  }
+
+  /*
+    COMPUTATION FUNCTIONS
+  */
+
+  // gets the tier cap using the existing troop def counts
+  // does not set this.tierCap
+  getCapFromTroopDefs() {
+    let tierCap = 0;
+    this.troopDefs.forEach( troopDef => {
+      tierCap += troopDef.count;
+    });
+    return tierCap;
   }
 };
 

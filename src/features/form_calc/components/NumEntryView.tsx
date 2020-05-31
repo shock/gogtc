@@ -107,6 +107,8 @@ export class NumEntryView extends Component<NumEntryProps, NumEntryState> {
   }
 
   normalizeValue(value: any): string {
+    console.log(`id: ${this.props.id}`);
+    console.log(`value: ${value}`);
     let strVal = ''+value;
     strVal = strVal.replace(/[^0-9.]/g, '');
 

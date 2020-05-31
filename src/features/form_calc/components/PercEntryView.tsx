@@ -18,6 +18,7 @@ export class PercEntryView extends NumEntryView {
   normalizeValue(value: any): string {
     let endsInDecimal = false;
     let strVal = ''+value;
+    console.log(`id: ${this.props.id}`);
     console.log(`value: ${value}`);
     strVal = strVal.replace(/[^0-9.]/g, '');
     strVal = strVal.replace(/\.{2,}/, '.');

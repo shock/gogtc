@@ -6,13 +6,16 @@ import { Row, Col } from 'react-bootstrap';
 import * as actions from '../actions';
 import * as selectors from '../selectors';
 import { TierDefView } from './TierDefView';
+import { NumEntryView } from './NumEntryView';
 import { MFormCalc } from '../models/MFormCalc';
 
 const mapStateToProps = (state: RootState) => ({
+  formCalcs: selectors.getFormCalcs(state.formCalc)
 });
 
 const dispatchProps = {
-  resetState: actions.resetState
+  resetState: actions.resetState,
+  updateMarchCap: actions.updateMarchCap
 };
 
 interface FormCalcViewProps {
@@ -62,6 +65,15 @@ class FormCalcViewBase extends React.Component<Props> {
         <Row>
           <Col>
             <h3>{this.props.formCalcModel?.name}</h3>
+          </Col>
+          <Col>
+          <NumEntryView
+            id={`${this.props.formCalcModel.name}:marchCap`}
+            value={''+this.props.formCalcModel.marchCap}
+            label={'March Cap'}
+            updateAction={this.props.updateMarchCap}
+          />
+
           </Col>
         </Row>
         <Row>

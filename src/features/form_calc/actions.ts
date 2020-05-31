@@ -12,7 +12,12 @@ export const updateTroopPercent = createAction('UPDATE_TROOP_PERCENT', (id: stri
   value: value
 }))<IdValue>();
 
-export type UpdateIdValueAction = typeof updateTroopCount | typeof updateTroopPercent;
+export const updateMarchCap = createAction('UPDATE_MARCH_CAP', (id: string, value: string) => ({
+  id: id,
+  value: value
+}))<IdValue>();
+
+export type UpdateIdValueAction = typeof updateTroopCount | typeof updateTroopPercent | typeof updateMarchCap;
 
 export const resetState = createAction('RESET_STATE', (state:FCState) => ({
   ...state

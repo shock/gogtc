@@ -19,6 +19,9 @@ const formCalc = createReducer(BlankFCState)
   .handleAction(actions.updateTroopPercent, (state, action) => {
     return getFormationById(action.payload.id).handleAction(state, action);
   })
+  .handleAction(actions.updateMarchCap, (state, action) => {
+    return getFormationById(action.payload.id).handleAction(state, action);
+  })
   .handleAction(actions.resetState, (state, action) => {
     return {
       ...state,

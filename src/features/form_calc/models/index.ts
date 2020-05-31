@@ -1,5 +1,5 @@
 import { MFormCalc, MTierDef, MTroopDef } from '.';
-import { TierNum, TroopType, Int } from '../types';
+import { TierNum, TroopType, Int, toInt } from '../types';
 
 function buildTroopDefs(tierDef:MTierDef):MTroopDef[] {
   const troopDefs =  [
@@ -36,6 +36,7 @@ function buildFormCalc(name:string) {
     tierDefs.push(buildTierDefWithTroopDefs(tierNum as TierNum, formCalc));
   }
   formCalc.tierDefs = tierDefs;
+  formCalc.updateMarchCap(formCalc.getCapFromTierDefs());
   return formCalc;
 }
 

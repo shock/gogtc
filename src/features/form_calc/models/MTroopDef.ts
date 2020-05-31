@@ -23,11 +23,22 @@ export class MTroopDef {
     return `${this.tierDef.id()}:${this.type}`;
   }
 
+  lockCount() {
+    if(this.countLocked) return;
+    if(this.percentLocked)
+      this.percentLocked = false;
+    this.countLocked = true;
+  }
+
+  // updates the count unless the percentage is locked
   setCount(value: any) {
+    if(this.percentLocked) return;
     this.count = toInt(value);
   }
 
+  // updates the percentage unless the count is locked
   setPercent(value: any) {
+    if(this.countLocked) return;
     this.percent = parseFloat(''+value);
   }
 

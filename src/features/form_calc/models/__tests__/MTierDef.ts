@@ -1,4 +1,4 @@
-import { Int, TierNum, TroopType } from '../../types';
+import { toInt, TierNum, TroopType } from '../../types';
 import { MFormCalc, MTroopDef, MTierDef } from '..';
 import { buildTierWithTroopDefs, buildFormCalcWithTiers } from '../test_helper';
 
@@ -40,6 +40,16 @@ describe( 'MTierDef', () => {
         });
       });
     });
+  });
+
+  describe('getCapFromTroopDefs()', () => {
+    it('should return the appropriate integer', () => {
+      const tierDef = buildTierWithTroopDefs(TierNum.T1);
+      expect(tierDef.getCapFromTroopDefs()).toBe(toInt(6000));
+      tierDef.troopDefs[0].setCount(tierDef.troopDefs[0].count-1000);
+      expect(tierDef.getCapFromTroopDefs()).toBe(toInt(5000));
+    });
+
   });
 
 });

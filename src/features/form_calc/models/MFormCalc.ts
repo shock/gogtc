@@ -1,15 +1,17 @@
 import { ActionType, getType } from 'typesafe-actions';
 import { MTierDef, MTroopDef, TierDefDictionary } from '.';
 import { IdParser } from './IdParser';
-import { TierNum, TroopType } from '../types';
+import { TierNum, TroopType, Int, toInt } from '../types';
 import * as actions from '../actions';
-import { FCState, BlankFCState, TroopDefDictionary } from '.';
+import { FCState, BlankFCState, TroopDefDictionary, FormCalcDictionary } from '.';
+import formCalcReducer from '../reducer';
 export type FormCalcAction = ActionType<typeof actions>;
 
 
 class MFormCalc extends IdParser {
   name: string;
   tierDefs: MTierDef[] = [];
+  marchCap:Int = toInt(0);
 
   constructor(name:string) {
     super();
@@ -66,6 +68,9 @@ class MFormCalc extends IdParser {
     let troopDef:MTroopDef;
 
     switch (action.type) {
+      case getType(actions.updateMarchCap) :
+        this.updateMarchCap(toInt(action.payload.value));
+        break;
       case getType(actions.updateTroopCount) :
       case getType(actions.updateTroopPercent) :
         tierNum = this.getTierNum(action.payload.id);
@@ -87,13 +92,38 @@ class MFormCalc extends IdParser {
   }
 
   getState(state:FCState = BlankFCState) {
+
+    const formCalcDictionary:FormCalcDictionary = {
+      formCalcs: {}
+    };
+    formCalcDictionary.formCalcs[this.name] = this;
     const returnState = {
       ...state,
+      ...formCalcDictionary,
       ...this.getTierDefs(),
       ...this.getTroopDefs()
     }
     return returnState;
   }
+
+  /*
+    COMPUTATION FUNCTIONS
+  */
+
+  // gets the tier cap using the existing troop def counts
+  // does not set this.tierCap
+  getCapFromTierDefs() {
+    let marchCap = 0;
+    this.tierDefs.forEach( tierDef => {
+      marchCap += tierDef.getCapFromTroopDefs();
+    });
+    return toInt(marchCap);
+  }
+
+  updateMarchCap(marchCap:Int) {
+    this.marchCap = marchCap;
+  }
+
 };
 
 export { MFormCalc };

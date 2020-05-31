@@ -3,10 +3,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 
-// import * as actions from '../actions';
-// import * as selectors from '../selectors';
 import { FormCalcView } from './FormCalcView';
-// import { MFormCalc } from '../models/MFormCalc';
 import { TestLibrary, MFormCalc } from '../models';
 
 const mapStateToProps = (state: RootState) => ({
