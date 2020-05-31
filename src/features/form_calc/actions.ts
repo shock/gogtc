@@ -1,4 +1,4 @@
-import { NumEntry } from './types';
+import { NumEntry, IdValue } from './types';
 import { NumEntryDictionary } from './models';
 import { createAction } from 'typesafe-actions';
 
@@ -6,6 +6,11 @@ export const updateNumEntry = createAction('UPDATE_NUM_ENTRY', (id: string, valu
   id: id,
   value: value
 }))<NumEntry>();
+
+export const updateTroopCount = createAction('UPDATE_TROOP_COUNT', (id: string, value: string) => ({
+  id: id,
+  value: value
+}))<IdValue>();
 
 export const resetState = createAction('RESET_STATE', (state:NumEntryDictionary) => ({
   ...state

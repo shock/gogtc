@@ -8,7 +8,7 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const dispatchProps = {
-  updateNumEntry: actions.updateNumEntry,
+  updateNumEntry: actions.updateTroopCount,
 };
 
 export interface PercEntryProps extends NumEntryProps {

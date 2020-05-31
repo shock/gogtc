@@ -6,6 +6,11 @@ export type NumEntry = {
   label: string;
 }
 
+export type IdValue = {
+  id: string,
+  value: string
+}
+
 // Model Types
 
 // https://spin.atomicobject.com/2018/11/05/using-an-int-type-in-typescript/
