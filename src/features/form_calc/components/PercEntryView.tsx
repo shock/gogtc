@@ -20,7 +20,7 @@ export class PercEntryView extends NumEntryView {
     let strVal = ''+value;
     console.log(`id: ${this.props.id}`);
     console.log(`value: ${value}`);
-    strVal = strVal.replace(/[^0-9.]/g, '');
+    strVal = strVal.replace(/[^0-9.\-\+]/g, '');
     strVal = strVal.replace(/\.{2,}/, '.');
     endsInDecimal = strVal[strVal.length-1] === '.';
 

@@ -110,7 +110,7 @@ export class NumEntryView extends Component<NumEntryProps, NumEntryState> {
     console.log(`id: ${this.props.id}`);
     console.log(`value: ${value}`);
     let strVal = ''+value;
-    strVal = strVal.replace(/[^0-9.]/g, '');
+    strVal = strVal.replace(/[^0-9.\-\+]/g, '');
 
     let numVal = parseInt(strVal);
     if( isNaN(numVal) ) { numVal = 0; }
