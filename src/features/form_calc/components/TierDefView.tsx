@@ -7,6 +7,7 @@ import * as actions from '../actions';
 import * as selectors from '../selectors';
 import { TroopDefView } from './TroopDefView';
 import { NumEntryView } from './NumEntryView';
+import { PercEntryView } from './PercEntryView';
 import { MTierDef } from '../models';
 
 const mapStateToProps = (state: RootState) => ({
@@ -17,7 +18,8 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const dispatchProps = {
-  updateTierCap: actions.updateTierCap
+  updateTierCap: actions.updateTierCap,
+  updateTierPercent: actions.updateTierPercent,
 };
 
 type TierDefViewProps = {
@@ -55,13 +57,18 @@ class TierDefViewBase extends React.Component<Props> {
         </Col>
         <Col sm={2}>
           <div className="TierProps">
+            <PercEntryView
+              id={`${this.props.tierDef.id()}:tierPercent`}
+              value={''+this.props.tierDef.tierPercent}
+              label={'Tier %'}
+              updateAction={this.props.updateTierPercent}
+            />
             <NumEntryView
               id={`${this.props.tierDef.id()}:tierCap`}
               value={''+this.props.tierDef.tierCap}
               label={'Tier Cap'}
               updateAction={this.props.updateTierCap}
             />
-
           </div>
         </Col>
         <Col>
