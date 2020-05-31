@@ -2,10 +2,9 @@ import { ActionType, getType } from 'typesafe-actions';
 import { MTierDef, MTroopDef } from '.';
 import { IdParser } from './IdParser';
 import { TierNum, TroopType } from '../types';
-import * as formCalcActions from '../actions';
-import { updateNumEntry, updateTroopCount } from '../actions';
+import * as Actions from '../actions';
 import { FCState, BlankFCState, KeyedNumEntry, TroopDefDictionary } from '.';
-export type FormCalcAction = ActionType<typeof formCalcActions>;
+export type FormCalcAction = ActionType<typeof Actions>;
 
 
 class MFormCalc extends IdParser {
@@ -57,14 +56,7 @@ class MFormCalc extends IdParser {
     let troopDef:MTroopDef;
 
     switch (action.type) {
-      case getType(updateNumEntry):
-        tierNum = this.getTierNum(action.payload.id);
-        troopType = this.getTroopType(action.payload.id);
-        tierDef = this.findTierDef(tierNum);
-        troopDef = tierDef.findTroopDef(troopType);
-        troopDef.setCount(action.payload.value);
-        break;
-      case getType(updateTroopCount):
+      case getType(Actions.updateTroopCount):
         tierNum = this.getTierNum(action.payload.id);
         troopType = this.getTroopType(action.payload.id);
         tierDef = this.findTierDef(tierNum);
@@ -72,12 +64,7 @@ class MFormCalc extends IdParser {
         troopDef.setCount(action.payload.value);
         break;
     }
-    const returnState = {
-      ...state,
-      numEntries: this.getNumEntries(),
-      ...this.getTroopDefs()
-    }
-    return returnState;
+    return this.getState();
   }
 
   getNumEntries() {
@@ -89,10 +76,8 @@ class MFormCalc extends IdParser {
   }
 
   getState(state:FCState = BlankFCState) {
-    const numEntries = this.getNumEntries();
     const returnState = {
       ...state,
-      numEntries: this.getNumEntries(),
       ...this.getTroopDefs()
     }
     return returnState;

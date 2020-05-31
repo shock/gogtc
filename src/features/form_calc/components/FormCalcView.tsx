@@ -9,7 +9,6 @@ import { TierDefView } from './TierDefView';
 import { MFormCalc } from '../models/MFormCalc';
 
 const mapStateToProps = (state: RootState) => ({
-  fcStore: selectors.getNumEntries(state.formCalc)
 });
 
 const dispatchProps = {

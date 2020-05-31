@@ -8,7 +8,7 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const dispatchProps = {
-  updateNumEntry: actions.updateTroopCount,
+  updateAction: actions.updateTroopCount,
 };
 
 export interface PercEntryProps extends NumEntryProps {
@@ -66,15 +66,15 @@ class PercEntryBase extends NumEntryBase {
   }
 
   decrementValue() {
-    this.props.updateNumEntry(this.props.id, ''+(this.normalizeValue(parseFloat(this.props.value)-0.1)));
+    this.props.updateAction(this.props.id, ''+(this.normalizeValue(parseFloat(this.props.value)-0.1)));
   }
 
   incrementValue() {
-    this.props.updateNumEntry(this.props.id, ''+(this.normalizeValue(parseFloat(this.props.value)+0.1)));
+    this.props.updateAction(this.props.id, ''+(this.normalizeValue(parseFloat(this.props.value)+0.1)));
   }
 
   updateValue(value: any) {
-    this.props.updateNumEntry(this.props.id, ''+this.normalizeValue(value));
+    this.props.updateAction(this.props.id, ''+this.normalizeValue(value));
   }
 
   formattedVal() {
