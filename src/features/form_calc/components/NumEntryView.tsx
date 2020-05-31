@@ -4,12 +4,6 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 import $ from 'jquery';
 
-const mapStateToProps = (state: RootState) => ({
-});
-
-const dispatchProps = {
-};
-
 export interface NumEntryProps {
   id: string;
   value: string;
@@ -19,12 +13,10 @@ export interface NumEntryProps {
   updateAction: actions.UpdateIdValueAction;
 }
 
-type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & NumEntryProps;
-
 export interface NumEntryState {
 }
 
-export class NumEntryBase extends Component<Props, NumEntryState> {
+export class NumEntryView extends Component<NumEntryProps, NumEntryState> {
 
   static defaultProps = {
     minVal: 0,
@@ -39,7 +31,7 @@ export class NumEntryBase extends Component<Props, NumEntryState> {
   acceleration: number;
   direction: string;
 
-  constructor(props: Props) {
+  constructor(props: NumEntryProps) {
     super(props);
 
     this.mouseTimer = null;
@@ -148,7 +140,7 @@ export class NumEntryBase extends Component<Props, NumEntryState> {
     return (
       <div className="NumEntry nobr">
         <label>{this.props.label}</label>
-        <div className='nobr inline'>
+        <div className='nobr inline relative'>
           <span className="button" data-type='dec'
             onMouseDown={this.handleMouseDown}
             onMouseUp={this.handleMouseUp}>-</span>
@@ -162,6 +154,3 @@ export class NumEntryBase extends Component<Props, NumEntryState> {
     );
   }
 }
-
-const NumEntryView = connect(mapStateToProps, dispatchProps)(NumEntryBase);
-export { NumEntryView };

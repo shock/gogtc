@@ -27,4 +27,8 @@ export class MTroopDef {
     this.count = parseInt(''+value) as Int;
   }
 
+  setPercent(value: any) {
+    this.percent = parseFloat(''+value);
+  }
+
 };

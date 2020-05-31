@@ -2,9 +2,9 @@ import { ActionType, getType } from 'typesafe-actions';
 import { MTierDef, MTroopDef, TierDefDictionary } from '.';
 import { IdParser } from './IdParser';
 import { TierNum, TroopType } from '../types';
-import * as Actions from '../actions';
+import * as actions from '../actions';
 import { FCState, BlankFCState, TroopDefDictionary } from '.';
-export type FormCalcAction = ActionType<typeof Actions>;
+export type FormCalcAction = ActionType<typeof actions>;
 
 
 class MFormCalc extends IdParser {
@@ -66,12 +66,21 @@ class MFormCalc extends IdParser {
     let troopDef:MTroopDef;
 
     switch (action.type) {
-      case getType(Actions.updateTroopCount):
+      case getType(actions.updateTroopCount) :
+      case getType(actions.updateTroopPercent) :
         tierNum = this.getTierNum(action.payload.id);
         troopType = this.getTroopType(action.payload.id);
         tierDef = this.findTierDef(tierNum);
         troopDef = tierDef.findTroopDef(troopType);
-        troopDef.setCount(action.payload.value);
+        switch (action.type) {
+          case getType(actions.updateTroopCount) :
+            troopDef.setCount(action.payload.value);
+            break;
+          case getType(actions.updateTroopPercent) :
+            troopDef.setPercent(action.payload.value);
+            break;
+
+        }
         break;
     }
     return this.getState();

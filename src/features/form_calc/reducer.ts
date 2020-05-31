@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
 import { createReducer } from 'typesafe-actions';
-
-import { resetState, updateTroopCount } from './actions';
+import * as actions from './actions';
 import { TestLibrary, MFormCalc, BlankFCState } from './models';
 import { getFormCalcName } from './models/IdParser';
 
@@ -14,10 +13,13 @@ const getFormationById = (id: string) => {
 }
 
 const formCalc = createReducer(BlankFCState)
-  .handleAction(updateTroopCount, (state, action) => {
+  .handleAction(actions.updateTroopCount, (state, action) => {
     return getFormationById(action.payload.id).handleAction(state, action);
   })
-  .handleAction(resetState, (state, action) => {
+  .handleAction(actions.updateTroopPercent, (state, action) => {
+    return getFormationById(action.payload.id).handleAction(state, action);
+  })
+  .handleAction(actions.resetState, (state, action) => {
     return {
       ...state,
       ...action.payload

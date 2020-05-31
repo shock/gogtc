@@ -7,7 +7,12 @@ export const updateTroopCount = createAction('UPDATE_TROOP_COUNT', (id: string, 
   value: value
 }))<IdValue>();
 
-export type UpdateIdValueAction = typeof updateTroopCount;
+export const updateTroopPercent = createAction('UPDATE_TROOP_PERCENT', (id: string, value: string) => ({
+  id: id,
+  value: value
+}))<IdValue>();
+
+export type UpdateIdValueAction = typeof updateTroopCount | typeof updateTroopPercent;
 
 export const resetState = createAction('RESET_STATE', (state:FCState) => ({
   ...state

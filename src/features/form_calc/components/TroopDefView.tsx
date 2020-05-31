@@ -12,7 +12,8 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const dispatchProps = {
-  updateTroopCount: actions.updateTroopCount
+  updateTroopCount: actions.updateTroopCount,
+  updateTroopPercent: actions.updateTroopPercent,
 };
 
 type TroopDefViewProps = {
@@ -37,9 +38,16 @@ class TroopDefViewBase extends React.Component<Props> {
     if( !troopDef ) return <div/>;
     return (
       <div className="TroopDefView">
+        <PercEntryView
+          // key={troopDef.id()}
+          id={troopDef.id()+':percent'}
+          value={''+troopDef.percent}
+          label={this.label(troopDef)}
+          updateAction={this.props.updateTroopPercent}
+        />
         <NumEntryView
-          key={troopDef.id()}
-          id={troopDef.id()}
+          // key={troopDef.id()}
+          id={troopDef.id()+':count'}
           value={''+troopDef.count}
           label={this.label(troopDef)}
           updateAction={this.props.updateTroopCount}

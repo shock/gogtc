@@ -2,24 +2,9 @@ import React from 'react';
 import { RootState } from 'typesafe-actions';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import { NumEntryBase, NumEntryProps } from './NumEntryView';
+import { NumEntryView, NumEntryProps } from './NumEntryView';
 
-const mapStateToProps = (state: RootState) => ({
-});
-
-const dispatchProps = {
-  updateAction: actions.updateTroopCount,
-};
-
-export interface PercEntryProps extends NumEntryProps {
-}
-
-type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & PercEntryProps;
-
-export interface NumEntryState {
-}
-
-class PercEntryBase extends NumEntryBase {
+export class PercEntryView extends NumEntryView {
 
   static defaultProps = {
     minVal: 0,
@@ -86,7 +71,7 @@ class PercEntryBase extends NumEntryBase {
 
   render() {
     return (
-      <div className="NumEntry nobr">
+      <div className="NumEntry PercEntry nobr">
         <label>{this.props.label}</label>
         <div className='nobr inline relative'>
           <span className="button" data-type='dec'
@@ -104,6 +89,3 @@ class PercEntryBase extends NumEntryBase {
   }
 
 }
-
-const PercEntryView = connect(mapStateToProps, dispatchProps)(PercEntryBase);
-export { PercEntryView };
