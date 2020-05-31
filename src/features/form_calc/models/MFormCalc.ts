@@ -4,7 +4,6 @@ import { IdParser } from './IdParser';
 import { TierNum, TroopType, Int, toInt } from '../types';
 import * as actions from '../actions';
 import { FCState, BlankFCState, TroopDefDictionary, FormCalcDictionary } from '.';
-import formCalcReducer from '../reducer';
 export type FormCalcAction = ActionType<typeof actions>;
 
 
@@ -71,6 +70,18 @@ class MFormCalc extends IdParser {
       case getType(actions.updateMarchCap) :
         this.updateMarchCap(toInt(action.payload.value));
         break;
+      case getType(actions.updateTierCap) :
+      case getType(actions.updateTierPercent) :
+        tierNum = this.getTierNum(action.payload.id);
+        tierDef = this.findTierDef(tierNum);
+        switch (action.type) {
+          case getType(actions.updateTierCap) :
+            tierDef.updateCap(toInt(action.payload.value));
+            break;
+          case getType(actions.updateTierPercent) :
+            tierDef.updatePercent(parseFloat(action.payload.value));
+            break;
+        }
       case getType(actions.updateTroopCount) :
       case getType(actions.updateTroopPercent) :
         tierNum = this.getTierNum(action.payload.id);
@@ -79,12 +90,11 @@ class MFormCalc extends IdParser {
         troopDef = tierDef.findTroopDef(troopType);
         switch (action.type) {
           case getType(actions.updateTroopCount) :
-            troopDef.setCount(action.payload.value);
+            troopDef.updateCount(action.payload.value);
             break;
           case getType(actions.updateTroopPercent) :
-            troopDef.setPercent(action.payload.value);
+            troopDef.updatePercent(action.payload.value);
             break;
-
         }
         break;
     }

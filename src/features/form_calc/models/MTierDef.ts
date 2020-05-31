@@ -5,6 +5,9 @@ class MTierDef {
   formCalc: MFormCalc | null = null;
   tierNum: TierNum;
   troopDefs: MTroopDef[] = [];
+  tierCap:Int = toInt(0);
+  tierPercent:number = 0;
+
 
   constructor(tierNum:TierNum) {
     this.tierNum = tierNum;
@@ -45,6 +48,15 @@ class MTierDef {
     });
     return tierCap;
   }
+
+  updateCap(tierCap:Int) {
+    this.tierCap = tierCap;
+  }
+
+  updatePercent(tierPercent:number) {
+    this.tierPercent = tierPercent;
+  }
+
 };
 
 export { MTierDef };

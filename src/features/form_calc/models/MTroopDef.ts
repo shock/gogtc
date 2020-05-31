@@ -31,13 +31,13 @@ export class MTroopDef {
   }
 
   // updates the count unless the percentage is locked
-  setCount(value: any) {
+  updateCount(value: any) {
     if(this.percentLocked) return;
     this.count = toInt(value);
   }
 
   // updates the percentage unless the count is locked
-  setPercent(value: any) {
+  updatePercent(value: any) {
     if(this.countLocked) return;
     this.percent = parseFloat(''+value);
   }

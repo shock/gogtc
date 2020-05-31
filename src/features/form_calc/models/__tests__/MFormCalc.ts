@@ -81,7 +81,7 @@ describe( 'MTierDef', () => {
     it('should return the appropriate integer', () => {
       const formCalc = buildFormCalcWithTiers();
       expect(formCalc.getCapFromTierDefs()).toBe(toInt(12000));
-      formCalc.tierDefs[0].troopDefs[0].setCount(formCalc.tierDefs[0].troopDefs[0].count-1000);
+      formCalc.tierDefs[0].troopDefs[0].updateCount(formCalc.tierDefs[0].troopDefs[0].count-1000);
       expect(formCalc.getCapFromTierDefs()).toBe(toInt(11000));
     });
 
