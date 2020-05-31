@@ -88,7 +88,7 @@ class PercEntryBase extends NumEntryBase {
     return (
       <div className="NumEntry nobr">
         <label>{this.props.label}</label>
-        <div className='nobr inline'>
+        <div className='nobr inline relative'>
           <span className="button" data-type='dec'
             onMouseDown={this.handleMouseDown}
             onMouseUp={this.handleMouseUp}>-</span>

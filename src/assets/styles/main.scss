@@ -11,6 +11,10 @@
   display: inline-block;
 }
 
+.relative {
+  position: relative;
+}
+
 span.button {
   border: 1px solid #444;
   width: 1.2rem;
@@ -40,6 +44,7 @@ $inputColor:  rgb(67, 193, 243);
 
 .TroopDefView {
   .NumEntry {
+    position: relative;
     input {
       &.Infantry {
         background-color: adjust-color($inputColor, $lightness: +10%);
@@ -52,8 +57,9 @@ $inputColor:  rgb(67, 193, 243);
       }
     }
     span.floatPercent {
-      position: relative;
-      left: -1.1em;
+      position: absolute;
+      right: 1.7em;
+      top: 0.2em;
       color: black;
     }
   }
