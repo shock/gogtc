@@ -42,4 +42,14 @@ export class MTroopDef {
     this.percent = parseFloat(''+value);
   }
 
+  calculateAndUpdatePercent(tierCap:Int) {
+    const strVal = (Math.round(this.count * 10000 / tierCap) / 100).toFixed(4);
+    this.percent = parseFloat(strVal);
+  }
+
+  calculateAndUpdateCount(tierCap:Int) {
+    const strVal = Math.round(this.percent * tierCap / 100);
+    this.count = toInt(strVal);
+  }
+
 };

@@ -57,6 +57,16 @@ class MTierDef {
     this.tierPercent = tierPercent;
   }
 
+  calculateAndUpdatePercent(marchCap:Int) {
+    const strVal = (Math.round(this.tierCap * 10000 / marchCap) / 100).toFixed(4);
+    this.tierPercent = parseFloat(strVal);
+  }
+
+  calculateAndUpdateCap(marchCap:Int) {
+    const strVal = Math.round(this.tierPercent * marchCap / 100);
+    this.tierCap = toInt(strVal);
+  }
+
 };
 
 export { MTierDef };

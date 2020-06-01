@@ -46,7 +46,6 @@ export class NumEntryView extends Component<NumEntryProps, NumEntryState> {
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
     this.timerHandler = this.timerHandler.bind(this);
-    this.updateValue(this.props.value);
   }
 
   cancelTimer() {
