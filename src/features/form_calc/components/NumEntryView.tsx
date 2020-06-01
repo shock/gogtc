@@ -1,3 +1,8 @@
+/*
+  This was a great exercise in learning to build custom interactive components.
+  It's fully-functional and decently styled.  However, I'd like to investigate
+  replacing it with this 3rd party component: https://www.npmjs.com/package/react-numeric-input
+*/
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
 import * as actions from '../actions';
@@ -147,7 +152,6 @@ export class NumEntryView extends Component<NumEntryProps, NumEntryState> {
         <label>{this.props.label}</label>
       )
     }
-    const button_variant='light';
     return (
       <div className={`NumEntry ${className}`}>
         {label}

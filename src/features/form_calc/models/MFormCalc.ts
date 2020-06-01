@@ -69,6 +69,7 @@ class MFormCalc extends IdParser {
     switch (action.type) {
       case getType(actions.updateMarchCap) :
         this.updateMarchCap(toInt(action.payload.value));
+        this.resetFromPercentages();
         break;
       case getType(actions.updateTierCap) :
       case getType(actions.updateTierPercent) :
