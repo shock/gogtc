@@ -3,6 +3,7 @@ import { RootState } from 'typesafe-actions';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import { NumEntryView, NumEntryProps } from './NumEntryView';
+import { parse } from 'path';
 
 export class PercEntryView extends NumEntryView {
 
@@ -10,6 +11,13 @@ export class PercEntryView extends NumEntryView {
     minVal: 0,
     maxVal: 100,
     type: ''
+  }
+
+  constructor(props: NumEntryProps) {
+    super(props);
+    this.acceleration = 0.01;
+    this.accelerationFactor = 1.0;
+    this.timerWindow = 50;
   }
 
   componentDidMount() {
@@ -29,7 +37,6 @@ export class PercEntryView extends NumEntryView {
     if( isNaN(numVal) ) { numVal = 0; }
     if( numVal < this.props.minVal ) { numVal = this.props.minVal; }
     if( numVal > this.props.maxVal ) { numVal = this.props.maxVal; }
-    console.log(`numVal: ${numVal}`);
 
     strVal = ''+numVal;
     let parts = strVal.split('.');
@@ -43,16 +50,29 @@ export class PercEntryView extends NumEntryView {
     }
     if( endsInDecimal )
       strVal = `${strVal}.`
-    console.log(`strVal: ${strVal}`);
     return strVal;
   }
 
+  valueTimes100(value:any) {
+    return parseInt(''+Math.round(parseFloat(value)*100));
+  }
+
+  valueBy100(value:number) {
+    return parseFloat((value / 100).toFixed(2));
+  }
+
   decrementValue() {
-    this.props.updateAction(this.props.id, ''+(this.normalizeValue(parseFloat(this.props.value)-0.1)));
+    let val = this.valueTimes100(this.props.value);
+    val -= 1;
+    val = this.valueBy100(val);
+    this.props.updateAction(this.props.id, this.normalizeValue(val));
   }
 
   incrementValue() {
-    this.props.updateAction(this.props.id, ''+(this.normalizeValue(parseFloat(this.props.value)+0.1)));
+    let val = this.valueTimes100(this.props.value);
+    val += 1;
+    val = this.valueBy100(val);
+    this.props.updateAction(this.props.id, this.normalizeValue(val));
   }
 
   updateValue(value: any) {

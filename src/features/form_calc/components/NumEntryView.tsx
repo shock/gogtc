@@ -26,9 +26,9 @@ export class NumEntryView extends Component<NumEntryProps, NumEntryState> {
   }
 
   readonly initialTimeout = 700;
-  readonly timerWindow = 20;
-  readonly accelerationFactor = 1.04;
 
+  timerWindow: number;
+  accelerationFactor: number;
   mouseTimer: ReturnType<typeof setTimeout> | null;
   acceleration: number;
   direction: string;
@@ -39,6 +39,9 @@ export class NumEntryView extends Component<NumEntryProps, NumEntryState> {
     this.mouseTimer = null;
     this.acceleration = 1;
     this.direction = '';
+    this.accelerationFactor = 1.04;
+    this.timerWindow = 20;
+
     this.handleChange = this.handleChange.bind(this);
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
