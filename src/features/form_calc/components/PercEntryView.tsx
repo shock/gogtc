@@ -1,9 +1,5 @@
 import React from 'react';
-import { RootState } from 'typesafe-actions';
-import { connect } from 'react-redux';
-import * as actions from '../actions';
 import { NumEntryView, NumEntryProps } from './NumEntryView';
-import { parse } from 'path';
 
 export class PercEntryView extends NumEntryView {
 
@@ -29,7 +25,7 @@ export class PercEntryView extends NumEntryView {
     let strVal = ''+value;
     console.log(`id: ${this.props.id}`);
     console.log(`value: ${value}`);
-    strVal = strVal.replace(/[^0-9.\-\+]/g, '');
+    strVal = strVal.replace(/[^0-9.\-+]/g, '');
     strVal = strVal.replace(/\.{2,}/, '.');
     endsInDecimal = strVal[strVal.length-1] === '.';
 

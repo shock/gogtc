@@ -1,5 +1,5 @@
 import { MFormCalc, MTierDef, MTroopDef } from '.';
-import { TierNum, TroopType, Int, toInt } from '../types';
+import { TierNum, TroopType, Int } from '../types';
 
 function buildTroopDefs(tierDef:MTierDef):MTroopDef[] {
   const troopDefs =  [

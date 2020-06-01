@@ -1,8 +1,6 @@
-import { RootState } from 'typesafe-actions';
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+
 import * as actions from '../actions';
-import $ from 'jquery';
 
 export interface NumEntryProps {
   id: string;
@@ -90,8 +88,8 @@ export class NumEntryView extends Component<NumEntryProps, NumEntryState> {
 
   handleMouseDown(event: React.MouseEvent) {
     event.preventDefault();
-    let target = $(event.target);
-    switch (target.data('type')) {
+    let target = event.target as any;
+    switch (target.dataset.type) {
       case 'dec':
         this.direction = 'dec';
         this.decrementValue();
@@ -114,7 +112,7 @@ export class NumEntryView extends Component<NumEntryProps, NumEntryState> {
     console.log(`id: ${this.props.id}`);
     console.log(`value: ${value}`);
     let strVal = ''+value;
-    strVal = strVal.replace(/[^0-9.\-\+]/g, '');
+    strVal = strVal.replace(/[^0-9.\-+]/g, '');
 
     let numVal = parseInt(strVal);
     if( isNaN(numVal) ) { numVal = 0; }
@@ -156,7 +154,7 @@ export class NumEntryView extends Component<NumEntryProps, NumEntryState> {
           <span className="button" data-type='dec'
             onMouseDown={this.handleMouseDown}
             onMouseUp={this.handleMouseUp}>–</span>
-          <input type="text" className={this.props.type} value={this.formattedVal()} onChange={this.handleChange} />
+          <input id={this.props.id} type="text" className={this.props.type} value={this.formattedVal()} onChange={this.handleChange} />
           {insert}
           <span className="button" data-type='inc'
             onMouseDown={this.handleMouseDown}
