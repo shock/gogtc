@@ -33,13 +33,17 @@ export class MTroopDef {
   // updates the count unless the percentage is locked
   updateCount(value: any) {
     if(this.percentLocked) return;
-    this.count = toInt(value);
+    let count = toInt(value);
+    if( count > 999999 ) { count = toInt(999999); };
+    this.count = count;
   }
 
   // updates the percentage unless the count is locked
   updatePercent(value: any) {
     if(this.countLocked) return;
-    this.percent = parseFloat(''+value);
+    let percent = parseFloat(''+value);
+    if( percent > 100 ) { percent = 100; }
+    this.percent = percent;
   }
 
   calculateAndUpdatePercent(tierCap:Int) {

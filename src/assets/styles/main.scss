@@ -46,18 +46,7 @@ $inc-dec-color: #000;
   display: inline-block;
   padding: 0.01rem;
   input[type=text] {
-    width: 4.5rem;
-  }
-  label {
-    text-align: left;
-    margin-right: 0.5rem;
-    min-width: 4rem;
-  }
-  button.button.btn {
-    color: $inc-dec-color;
-    background-color: $inc-dec-bg;
-    border-color: $inc-dec-bg;
-    margin: 0 0.1rem;
+    width: 6.5rem;
   }
 }
 
@@ -67,27 +56,36 @@ $lighter1: +10%;
 $lighter2: +18%;
 $lighter3: +26%;
 
-.NumEntry, .PercEntry{
-  position: relative;
-  span.floatPercent {
-    position: absolute;
-    right: 2rem;
-    top: 0.18rem;
-    color: black;
-  }
-}
+// .NumEntry, .PercEntry{
+//   position: relative;
+//   span.floatPercent {
+//     position: absolute;
+//     right: 2rem;
+//     top: 0.18rem;
+//     color: black;
+//   }
+// }
+
+$troopDefSpace: 1rem;
 
 .TroopDefView {
-  .NumEntry {
+  label {
+    text-align: left;
+    margin-right: 0.5rem;
+    min-width: 4rem;
+    margin-right: $troopDefSpace;
+  }
+
+  .TroopCount {
+    margin-right: $troopDefSpace;
     input {
       &.Infantry { background-color: adjust-color($troopCountColor, $lightness: $lighter1); }
       &.Cavalry { background-color: adjust-color($troopCountColor, $lightness: $lighter2); }
       &.Distance { background-color: adjust-color($troopCountColor, $lightness: $lighter3); }
     }
   }
-}
-.TroopDefView {
-  .PercEntry {
+  .TroopPercent {
+    margin-right: $troopDefSpace;
     input {
       &.Infantry { background-color: adjust-color($troopPercentColor, $lightness: $lighter1); }
       &.Cavalry { background-color: adjust-color($troopPercentColor, $lightness: $lighter2); }
