@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { Button } from 'react-bootstrap';
 import * as actions from '../actions';
 
 export interface NumEntryProps {
@@ -147,18 +147,19 @@ export class NumEntryView extends Component<NumEntryProps, NumEntryState> {
         <label>{this.props.label}</label>
       )
     }
+    const button_variant='light';
     return (
       <div className={`NumEntry ${className}`}>
         {label}
         <div className='nobr inline relative'>
-          <span className="button" data-type='dec'
+          <Button className="button btn-xs" data-type='dec'
             onMouseDown={this.handleMouseDown}
-            onMouseUp={this.handleMouseUp}>–</span>
+            onMouseUp={this.handleMouseUp}>–</Button>
           <input id={this.props.id} type="text" className={this.props.type} value={this.formattedVal()} onChange={this.handleChange} />
           {insert}
-          <span className="button" data-type='inc'
+          <Button className="button btn-xs" data-type='inc'
             onMouseDown={this.handleMouseDown}
-            onMouseUp={this.handleMouseUp}>+</span>
+            onMouseUp={this.handleMouseUp}>+</Button>
         </div>
       </div>
 

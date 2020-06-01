@@ -3,6 +3,12 @@
 @import '~bootswatch/dist/darkly/bootstrap.min';
 @import './layout';
 
+button.button.btn-xs.btn {
+  padding: 0.0rem 0.4rem;
+  position: relative;
+  top: -0.08rem;
+}
+
 .nobr {
   white-space: nowrap;
 }
@@ -33,6 +39,9 @@ span.button {
   user-select: none;
 }
 
+$inc-dec-bg: #eee;
+$inc-dec-color: #000;
+
 .NumEntry {
   display: inline-block;
   padding: 0.01rem;
@@ -43,6 +52,12 @@ span.button {
     text-align: left;
     margin-right: 0.5rem;
     min-width: 4rem;
+  }
+  button.button.btn {
+    color: $inc-dec-color;
+    background-color: $inc-dec-bg;
+    border-color: $inc-dec-bg;
+    margin: 0 0.1rem;
   }
 }
 
