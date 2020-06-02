@@ -3,6 +3,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import NumericInput from 'react-numeric-input';
 
+import * as NumEntry from '../../../lib/num-entry';
 import * as selectors from '../selectors';
 import * as actions from '../actions';
 import { NumEntryView } from './NumEntryView';
@@ -52,25 +53,6 @@ class TroopDefViewBase extends React.Component<Props> {
     this.props.updateTroopPercent(this.id(), ''+numVal);
   }
 
-  formatCount(val:number|null) {
-    let strVal = '';
-    if( val !== null )
-      strVal = val.toLocaleString();
-    return strVal;
-  }
-
-  parseCount(strVal:string) {
-    return parseInt(strVal.replace(/[^\d.]/,''));
-  }
-
-  formatPercent(val:number|null) {
-    return `${val} %`;
-  }
-
-  parsePercent(strVal:string) {
-    return parseFloat(strVal.replace(/[^\d.]/,''));
-  }
-
   render() {
     const troopDef = this.data();
     if( !troopDef ) return <div/>;
@@ -85,19 +67,20 @@ class TroopDefViewBase extends React.Component<Props> {
             min={0}
             max={100}
             value={troopDef.percent}
-            format={this.formatPercent}
-            parse={this.parsePercent}
+            format={NumEntry.formatPercent}
+            parse={NumEntry.parsePercent}
             onChange={this.handlePercentChange}
           />
         </div>
         <div className={`TroopCount NumEntry inline`}>
           <NumericInput
+            step={100}
             className={troopDef.type}
             min={0}
             max={999999}
             value={troopDef.count}
-            format={this.formatCount}
-            parse={this.parseCount}
+            format={NumEntry.formatCount}
+            parse={NumEntry.parseCount}
             onChange={this.handleCountChange}
           />
         </div>

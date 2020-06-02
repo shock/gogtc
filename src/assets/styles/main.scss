@@ -69,11 +69,11 @@ $lighter3: +26%;
 $troopDefSpace: 1rem;
 
 .TroopDefView {
+  margin-bottom: 0.5rem;
   label {
     text-align: left;
-    margin-right: 0.5rem;
     min-width: 4rem;
-    margin-right: $troopDefSpace;
+    margin: 0 $troopDefSpace 0 0;
   }
 
   .TroopCount {
