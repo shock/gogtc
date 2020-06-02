@@ -13,9 +13,22 @@ import Home from './routes/home';
 import store from './store';
 import './assets/styles/main.scss';
 
+// setting this to true will enable some components
+// to render as though they were on a touch device.
+// TODO: DO NOT SET TO TRUE in PRODUCTION! FORCE to false somehow.
+const SIMULATE_TOUCH = false;
+
+const checkSimulateTouch = () => {
+  if( SIMULATE_TOUCH ) {
+    document['ontouchstart'] = (ev: TouchEvent) => null;
+  }
+  return null;
+}
+
 const Root = () => (
   <React.StrictMode>
     <Provider store={store}>
+      { checkSimulateTouch() }
       <Home />
     </Provider>
   </React.StrictMode>
