@@ -2,11 +2,12 @@ import { RootState } from 'typesafe-actions';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
+import NumericInput from 'react-numeric-input';
+import * as NumEntry from '../../../lib/num-entry';
 
 import * as actions from '../actions';
 import * as selectors from '../selectors';
 import { TierDefView } from './TierDefView';
-import { NumEntryView } from './NumEntryView';
 import { MFormCalc } from '../models/MFormCalc';
 
 const mapStateToProps = (state: RootState) => ({
@@ -29,9 +30,10 @@ type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & FormCal
 
 class FormCalcViewBase extends React.Component<Props> {
 
-  // constructor(props: Props) {
-  //   super(props);
-  // }
+  constructor(props: Props) {
+    super(props);
+    this.handleMarchCapChange = this.handleMarchCapChange.bind(this);
+  }
 
   componentDidMount() {
     this.resetReduxState();
@@ -62,6 +64,10 @@ class FormCalcViewBase extends React.Component<Props> {
     );
   }
 
+  handleMarchCapChange(numVal:number|null, strVal:string, target:HTMLInputElement) {
+    this.props.updateMarchCap(this.props.formCalcModel.id(), ''+numVal);
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -70,13 +76,17 @@ class FormCalcViewBase extends React.Component<Props> {
             <h3>{this.props.formCalcModel?.name}</h3>
           </Col>
           <Col>
-          <NumEntryView
-            id={`${this.props.formCalcModel.name}:marchCap`}
-            value={''+this.props.formCalcModel.marchCap}
-            label={'March Cap'}
-            updateAction={this.props.updateMarchCap}
-          />
-
+            <label>March Cap</label>&nbsp;
+            <NumericInput
+              step={100}
+              // className={troopDef.type}
+              min={0}
+              max={999999}
+              value={this.props.formCalcModel.marchCap}
+              format={NumEntry.formatInteger}
+              parse={NumEntry.parseInteger}
+              onChange={this.handleMarchCapChange}
+            />
           </Col>
         </Row>
         <Row>

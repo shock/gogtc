@@ -6,9 +6,6 @@ import NumericInput from 'react-numeric-input';
 import * as NumEntry from '../../../lib/num-entry';
 import * as selectors from '../selectors';
 import * as actions from '../actions';
-import { NumEntryView } from './NumEntryView';
-import { TroopCountView } from './TroopCountView';
-import { PercEntryView } from './PercEntryView';
 import { MTroopDef } from '../models';
 
 const mapStateToProps = (state: RootState) => ({
@@ -79,8 +76,8 @@ class TroopDefViewBase extends React.Component<Props> {
             min={0}
             max={999999}
             value={troopDef.count}
-            format={NumEntry.formatCount}
-            parse={NumEntry.parseCount}
+            format={NumEntry.formatInteger}
+            parse={NumEntry.parseInteger}
             onChange={this.handleCountChange}
           />
         </div>

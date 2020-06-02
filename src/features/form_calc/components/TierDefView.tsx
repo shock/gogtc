@@ -2,12 +2,12 @@ import { RootState } from 'typesafe-actions';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
+import NumericInput from 'react-numeric-input';
+import * as NumEntry from '../../../lib/num-entry';
 
 import * as actions from '../actions';
 import * as selectors from '../selectors';
 import { TroopDefView } from './TroopDefView';
-import { NumEntryView } from './NumEntryView';
-import { PercEntryView } from './PercEntryView';
 import { MTierDef } from '../models';
 
 const mapStateToProps = (state: RootState) => ({
@@ -30,6 +30,12 @@ type TierDefViewProps = {
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & TierDefViewProps;
 
 class TierDefViewBase extends React.Component<Props> {
+  constructor(props:Props) {
+    super(props);
+    this.handleTierPercentChange = this.handleTierPercentChange.bind(this);
+    this.handleTierCapChange = this.handleTierCapChange.bind(this);
+  }
+
   static defaultProps = {
     index: 0
   }
@@ -46,6 +52,14 @@ class TierDefViewBase extends React.Component<Props> {
     return this.props.tierDef
   }
 
+  handleTierCapChange(numVal:number|null, strVal:string, target:HTMLInputElement) {
+    this.props.updateTierCap(this.data().id(), ''+numVal);
+  }
+
+  handleTierPercentChange(numVal:number|null, strVal:string, target:HTMLInputElement) {
+    this.props.updateTierPercent(this.data().id(), ''+numVal);
+  }
+
   render() {
     let classNames = ['TierDefView'];
     const cycle = this.props.index%2===1 ? 'odd' : 'even';
@@ -55,23 +69,33 @@ class TierDefViewBase extends React.Component<Props> {
         <Col sm={2}>
           <label className="tierLabel">{this.props.tierDef.tierNum}</label>
         </Col>
-        <Col sm={2}>
+        <Col>
           <div className="TierProps">
-            <PercEntryView
-              id={`${this.props.tierDef.id()}:tierPercent`}
-              value={''+this.props.tierDef.tierPercent}
-              label={'Tier %'}
-              updateAction={this.props.updateTierPercent}
+            <label>Tier %</label>
+            <NumericInput
+              step={0.1} precision={3}
+              snap
+              min={0}
+              max={100}
+              value={this.data().tierPercent}
+              format={NumEntry.formatPercent}
+              parse={NumEntry.parsePercent}
+              onChange={this.handleTierPercentChange}
             />
-            <NumEntryView
-              id={`${this.props.tierDef.id()}:tierCap`}
-              value={''+this.props.tierDef.tierCap}
-              label={'Tier Cap'}
-              updateAction={this.props.updateTierCap}
+            <label>Tier Cap</label>
+            <NumericInput
+              step={100}
+              // className={troopDef.type}
+              min={0}
+              max={999999}
+              value={this.data().tierCap}
+              format={NumEntry.formatInteger}
+              parse={NumEntry.parseInteger}
+              onChange={this.handleTierCapChange}
             />
           </div>
         </Col>
-        <Col>
+        <Col sm={8}>
         {this.buildTroopDefViews()}
         </Col>
       </Row>

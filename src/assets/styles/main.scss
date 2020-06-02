@@ -21,6 +21,10 @@ button.button.btn-xs.btn {
   position: relative;
 }
 
+span.react-numeric-input input {
+  max-width: 8rem;
+}
+
 span.button {
   border: 1px solid #a8a8a8;
   width: 1.4rem;

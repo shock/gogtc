@@ -1,11 +1,13 @@
-export const formatCount = (val:number|null) => {
+export const formatInteger = (val:number|null) => {
   let strVal = '';
-  if( val !== null )
-    strVal = parseInt(''+val).toLocaleString();
+  if( val !== null ) {
+    // strVal = parseInt(''+val).toLocaleString();
+    strVal = parseInt(''+val).toString();
+  }
   return strVal;
 }
 
-export const parseCount = (strVal:string) => {
+export const parseInteger = (strVal:string) => {
   return parseInt(strVal.replace(/[^\d.]/,''));
 }
 
@@ -14,5 +16,7 @@ export const formatPercent = (val:number|null) => {
 }
 
 export const parsePercent = (strVal:string) => {
-  return parseFloat(strVal.replace(/[^\d.]/,''));
+  let sVal = strVal.replace(/[^\d.]/,'');
+  sVal = sVal.replace(/\.{2,}/,'.');
+  return parseFloat(sVal);
 }
