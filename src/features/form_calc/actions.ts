@@ -1,4 +1,4 @@
-import { IdValue } from './types';
+import { IdValue, IdBoolean } from './types';
 import { createAction } from 'typesafe-actions';
 import { FCState } from './models';
 
@@ -27,8 +27,20 @@ export const updateMarchCap = createAction('UPDATE_MARCH_CAP', (id: string, valu
   value: value
 }))<IdValue>();
 
+export const updateTierPercentLock = createAction('UPDATE_TIER_PERCENT_LOCK', (id: string, boolean: boolean) => ({
+  id: id,
+  boolean: boolean
+}))<IdBoolean>();
+
+export const updateTierCapacityLock = createAction('UPDATE_TIER_CAPCITY_LOCK', (id: string, boolean: boolean) => ({
+  id: id,
+  boolean: boolean
+}))<IdBoolean>();
+
 export type UpdateIdValueAction = typeof updateTroopCount | typeof updateTroopPercent |
   typeof updateMarchCap | typeof updateTierCap | typeof updateTierPercent;
+
+export type UpdateIdBooleanAction = typeof updateTierPercentLock | typeof updateTierCapacityLock;
 
 export const resetState = createAction('RESET_STATE', (state:FCState) => ({
   ...state

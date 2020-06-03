@@ -5,6 +5,11 @@ export type IdValue = {
   value: string
 }
 
+export type IdBoolean = {
+  id: string,
+  boolean: boolean
+}
+
 // Model Types
 
 // https://spin.atomicobject.com/2018/11/05/using-an-int-type-in-typescript/

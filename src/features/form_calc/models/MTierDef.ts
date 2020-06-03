@@ -5,8 +5,10 @@ class MTierDef {
   formCalc: MFormCalc | null = null;
   tierNum: TierNum;
   troopDefs: MTroopDef[] = [];
-  tierCap:Int = toInt(0);
-  tierPercent:number = 0;
+  capacity:Int = toInt(0);
+  percent:number = 0;
+  capacityLocked:boolean = false;
+  percentLocked:boolean = false;
 
 
   constructor(tierNum:TierNum) {
@@ -40,31 +42,41 @@ class MTierDef {
   */
 
   // gets the tier cap using the existing troop def counts
-  // does not set this.tierCap
+  // does not set this.capacity
   getCapFromTroopDefs() {
-    let tierCap = 0;
+    let capacity = 0;
     this.troopDefs.forEach( troopDef => {
-      tierCap += troopDef.count;
+      capacity += troopDef.count;
     });
-    return tierCap;
+    return capacity;
   }
 
-  updateCap(tierCap:Int) {
-    this.tierCap = tierCap;
+  updateCap(capacity:Int) {
+    this.capacity = capacity;
   }
 
-  updatePercent(tierPercent:number) {
-    this.tierPercent = tierPercent;
+  updatePercent(percent:number) {
+    this.percent = percent;
+  }
+
+  updateCapacityLock(state: boolean) {
+    this.capacityLocked = state;
+    this.percentLocked = this.percentLocked && !this.capacityLocked;
+  }
+
+  updatePercentLock(state: boolean) {
+    this.percentLocked = state;
+    this.capacityLocked = this.capacityLocked && !this.percentLocked;
   }
 
   calculateAndUpdatePercent(marchCap:Int) {
-    const strVal = (Math.round(this.tierCap * 1000000 / marchCap) / 10000).toFixed(4);
-    this.tierPercent = parseFloat(strVal);
+    const strVal = (Math.round(this.capacity * 1000000 / marchCap) / 10000).toFixed(4);
+    this.percent = parseFloat(strVal);
   }
 
   calculateAndUpdateCap(marchCap:Int) {
-    const strVal = Math.round(this.tierPercent * marchCap / 100);
-    this.tierCap = toInt(strVal);
+    const strVal = Math.round(this.percent * marchCap / 100);
+    this.capacity = toInt(strVal);
   }
 
 };

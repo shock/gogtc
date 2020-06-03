@@ -22,7 +22,7 @@ button.button.btn-xs.btn {
 }
 
 span.react-numeric-input input {
-  max-width: 8rem;
+  max-width: 6.1rem;
 }
 
 $inc-dec-bg: #eee;
@@ -83,6 +83,17 @@ $troopDefSpace: 1rem;
 .FormCalcView {
   fieldset {
     margin-bottom: 1rem;
+  }
+}
+
+.LockState {
+  cursor: pointer;
+  margin: 0 0.3rem 0 0 ;
+  &.locked {
+    color: rgb(216, 0, 0);
+  }
+  &.unlocked {
+    color: rgb(0, 204, 0);
   }
 }
 

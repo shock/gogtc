@@ -79,7 +79,7 @@ class MFormCalc extends IdParser {
           case getType(actions.updateTierCap) :
             tierDef.updateCap(toInt(action.payload.value));
             tierDef.troopDefs.forEach( troopDef => {
-              troopDef.calculateAndUpdateCount(tierDef.tierCap);
+              troopDef.calculateAndUpdateCount(tierDef.capacity);
             });
             this.resetFromTroopCounts();
             break;
@@ -89,11 +89,21 @@ class MFormCalc extends IdParser {
             break;
         }
         break;
+      case getType(actions.updateTierCapacityLock) :
+        tierNum = this.getTierNum(action.payload.id);
+        tierDef = this.findTierDef(tierNum);
+        tierDef.updateCapacityLock(action.payload.boolean);
+        break;
+      case getType(actions.updateTierPercentLock) :
+        tierNum = this.getTierNum(action.payload.id);
+        tierDef = this.findTierDef(tierNum);
+        tierDef.updatePercentLock(action.payload.boolean);
+        break;
       case getType(actions.updateTroopCount) :
       case getType(actions.updateTroopPercent) :
         tierNum = this.getTierNum(action.payload.id);
-        troopType = this.getTroopType(action.payload.id);
         tierDef = this.findTierDef(tierNum);
+        troopType = this.getTroopType(action.payload.id);
         troopDef = tierDef.findTroopDef(troopType);
         switch (action.type) {
           case getType(actions.updateTroopCount) :
@@ -130,7 +140,7 @@ class MFormCalc extends IdParser {
   */
 
   // gets the tier cap using the existing troop def counts
-  // does not set this.tierCap
+  // does not set this.capacity
   getCapFromTierDefs() {
     let marchCap = 0;
     this.tierDefs.forEach( tierDef => {
@@ -149,7 +159,7 @@ class MFormCalc extends IdParser {
       tierDef.updateCap( toInt(tierDef.getCapFromTroopDefs()) );
       tierDef.calculateAndUpdatePercent(this.marchCap);
       tierDef.troopDefs.forEach( troopDef => {
-        troopDef.calculateAndUpdatePercent(tierDef.tierCap);
+        troopDef.calculateAndUpdatePercent(tierDef.capacity);
       });
     });
   }
@@ -158,7 +168,7 @@ class MFormCalc extends IdParser {
     this.tierDefs.forEach( tierDef => {
       tierDef.calculateAndUpdateCap(this.marchCap);
       tierDef.troopDefs.forEach( troopDef => {
-        troopDef.calculateAndUpdateCount(tierDef.tierCap);
+        troopDef.calculateAndUpdateCount(tierDef.capacity);
       });
     });
   }

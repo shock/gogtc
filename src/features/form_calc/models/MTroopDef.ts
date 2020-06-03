@@ -46,13 +46,13 @@ export class MTroopDef {
     this.percent = percent;
   }
 
-  calculateAndUpdatePercent(tierCap:Int) {
-    const strVal = (Math.round(this.count * 1000000 / tierCap) / 10000).toFixed(4);
+  calculateAndUpdatePercent(capacity:Int) {
+    const strVal = (Math.round(this.count * 1000000 / capacity) / 10000).toFixed(4);
     this.percent = parseFloat(strVal);
   }
 
-  calculateAndUpdateCount(tierCap:Int) {
-    const strVal = Math.round(this.percent * tierCap / 100);
+  calculateAndUpdateCount(capacity:Int) {
+    const strVal = Math.round(this.percent * capacity / 100);
     this.count = toInt(strVal);
   }
 
