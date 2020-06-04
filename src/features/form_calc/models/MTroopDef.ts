@@ -57,8 +57,13 @@ export class MTroopDef {
   }
 
   calculateAndUpdatePercent(capacity:Int) {
-    const strVal = (Math.round(this.count * 1000000 / capacity) / 10000).toFixed(4);
-    this.percent = parseFloat(strVal);
+    if(capacity === 0) {
+      this.percent = 0;
+    } else {
+      const strVal = (Math.round(this.count * 1000000 / capacity) / 10000).toFixed(4);
+      this.percent = parseFloat(strVal);
+    }
+    return this.percent;
   }
 
   calculateAndUpdateCount(capacity:Int) {

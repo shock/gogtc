@@ -48,7 +48,7 @@ class MTierDef {
     this.troopDefs.forEach( troopDef => {
       capacity += troopDef.count;
     });
-    return capacity;
+    return toInt(capacity);
   }
 
   updateCap(capacity:Int) {
@@ -72,8 +72,13 @@ class MTierDef {
   }
 
   calculateAndUpdatePercent(marchCap:Int) {
-    const strVal = (Math.round(this.capacity * 1000000 / marchCap) / 10000).toFixed(4);
-    this.percent = parseFloat(strVal);
+    if(marchCap === 0) {
+      this.percent = 0;
+    } else {
+      const strVal = (Math.round(this.capacity * 1000000 / marchCap) / 10000).toFixed(4);
+      this.percent = parseFloat(strVal);
+    }
+    return this.percent;
   }
 
   calculateAndUpdateCap(marchCap:Int) {
