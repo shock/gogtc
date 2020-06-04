@@ -3,7 +3,6 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
 import NumericInput from 'react-numeric-input';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import * as NumEntry from '../../../lib/num-entry';
 import * as actions from '../actions';
@@ -48,8 +47,8 @@ class TierDefViewBase extends React.Component<Props> {
 
   buildTroopDefViews() {
     return this.props.tierDef.troopDefs.map( (troopDef, index) => (
-      <Col>
-        <TroopDefView key={index} troopDef={troopDef} />
+      <Col key={index}>
+        <TroopDefView troopDef={troopDef} />
       </Col>
     ));
   }

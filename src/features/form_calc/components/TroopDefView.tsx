@@ -7,6 +7,7 @@ import * as NumEntry from '../../../lib/num-entry';
 import * as selectors from '../selectors';
 import * as actions from '../actions';
 import { MTroopDef } from '../models';
+import { LockState } from '../../../components/LockState';
 
 const mapStateToProps = (state: RootState) => ({
   troopDefs: selectors.getTroopDefs(state.formCalc)
@@ -15,6 +16,8 @@ const mapStateToProps = (state: RootState) => ({
 const dispatchProps = {
   updateTroopCount: actions.updateTroopCount,
   updateTroopPercent: actions.updateTroopPercent,
+  updateCountLock: actions.updateTroopCountLock,
+  updatePercentLock: actions.updateTroopPercentLock
 };
 
 type TroopDefViewProps = {
@@ -30,6 +33,8 @@ class TroopDefViewBase extends React.Component<Props> {
     super(props);
     this.handleCountChange = this.handleCountChange.bind(this);
     this.handlePercentChange = this.handlePercentChange.bind(this);
+    this.handleCountLockClick = this.handleCountLockClick.bind(this);
+    this.handlePercentLockClick = this.handlePercentLockClick.bind(this);
   }
 
   data() {
@@ -50,13 +55,25 @@ class TroopDefViewBase extends React.Component<Props> {
     this.props.updateTroopPercent(this.id(), ''+numVal);
   }
 
+  handleCountLockClick(event: React.MouseEvent<SVGSVGElement, MouseEvent>) {
+    this.props.updateCountLock(this.id(), !this.data().countLocked);
+  }
+
+  handlePercentLockClick(event: React.MouseEvent<SVGSVGElement, MouseEvent>) {
+    this.props.updatePercentLock(this.id(), !this.data().percentLocked);
+  }
+
   render() {
     const troopDef = this.data();
     if( !troopDef ) return <div/>;
     return (
       <div className="TroopDefView">
         <label>{this.data().type}</label>
-        <div className={`TroopPercent NumEntry PercEntry inline`}>
+        <div className={`TroopPercent NumEntry PercEntry inline nobr`}>
+          <LockState
+            locked={this.data().percentLocked}
+            onClick={this.handlePercentLockClick}
+          />
           <NumericInput
             step={0.1} precision={3}
             snap
@@ -69,7 +86,11 @@ class TroopDefViewBase extends React.Component<Props> {
             onChange={this.handlePercentChange}
           />
         </div>
-        <div className={`TroopCount NumEntry inline`}>
+        <div className={`TroopCount NumEntry inline nobr`}>
+          <LockState
+            locked={this.data().countLocked}
+            onClick={this.handleCountLockClick}
+          />
           <NumericInput
             step={100}
             className={troopDef.type}

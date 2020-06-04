@@ -1,6 +1,6 @@
 // Redux Types
 
-export type IdValue = {
+export type IdString = {
   id: string,
   value: string
 }

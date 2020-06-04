@@ -52,10 +52,12 @@ class MTierDef {
   }
 
   updateCap(capacity:Int) {
+    if( this.percentLocked ) return;
     this.capacity = capacity;
   }
 
   updatePercent(percent:number) {
+    if( this.capacityLocked ) return;
     this.percent = percent;
   }
 

@@ -46,6 +46,16 @@ export class MTroopDef {
     this.percent = percent;
   }
 
+  updateCountLock(state: boolean) {
+    this.countLocked = state;
+    this.percentLocked = this.percentLocked && !this.countLocked;
+  }
+
+  updatePercentLock(state: boolean) {
+    this.percentLocked = state;
+    this.countLocked = this.countLocked && !this.percentLocked;
+  }
+
   calculateAndUpdatePercent(capacity:Int) {
     const strVal = (Math.round(this.count * 1000000 / capacity) / 10000).toFixed(4);
     this.percent = parseFloat(strVal);

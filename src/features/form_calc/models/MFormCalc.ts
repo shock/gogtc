@@ -116,6 +116,20 @@ class MFormCalc extends IdParser {
             break;
         }
         break;
+      case getType(actions.updateTroopCountLock) :
+        tierNum = this.getTierNum(action.payload.id);
+        tierDef = this.findTierDef(tierNum);
+        troopType = this.getTroopType(action.payload.id);
+        troopDef = tierDef.findTroopDef(troopType);
+        troopDef.updateCountLock(action.payload.boolean);
+        break;
+      case getType(actions.updateTroopPercentLock) :
+        tierNum = this.getTierNum(action.payload.id);
+        tierDef = this.findTierDef(tierNum);
+        troopType = this.getTroopType(action.payload.id);
+        troopDef = tierDef.findTroopDef(troopType);
+        troopDef.updatePercentLock(action.payload.boolean);
+        break;
     }
     return this.getState();
   }
