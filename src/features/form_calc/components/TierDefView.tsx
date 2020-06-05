@@ -90,10 +90,10 @@ class TierDefViewBase extends React.Component<Props> {
           <div className="TierProps">
             <label>Tier %</label>
             <div className="nobr">
-              <LockState
+              {/* <LockState
                 locked={this.data().percentLocked}
                 onClick={this.handlePercentLockClick}
-              />
+              /> */}
               <NumericInput
                 step={0.1} precision={3}
                 snap

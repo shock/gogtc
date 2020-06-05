@@ -179,4 +179,20 @@ describe( 'MTierDef', () => {
     });
   });
 
+  describe('getLockedTroopCount()', () => {
+    it('should return the sum of only troopDef counts that are countLocked', () => {
+      const tierDef = new MTierDef(TierNum.T12);
+      const td1 = new MTroopDef(TroopType.Infantry, toInt(1000))
+      td1.updateCountLock(true);
+      const td2 = new MTroopDef(TroopType.Infantry, toInt(500))
+      td2.updateCountLock(false);
+      tierDef.troopDefs = [td1,td2];
+      expect(tierDef.getLockedTroopCount()).toBe(td1.count);
+      td1.updateCountLock(false);
+      td2.updateCountLock(true);
+      expect(tierDef.getLockedTroopCount()).toBe(td2.count);
+    });
+
+  });
+
 });

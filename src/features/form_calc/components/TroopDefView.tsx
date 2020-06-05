@@ -70,10 +70,10 @@ class TroopDefViewBase extends React.Component<Props> {
       <div className="TroopDefView">
         <label>{this.data().type}</label>
         <div className={`TroopPercent NumEntry PercEntry inline nobr`}>
-          <LockState
+          {/* <LockState
             locked={this.data().percentLocked}
             onClick={this.handlePercentLockClick}
-          />
+          /> */}
           <NumericInput
             step={0.1} precision={3}
             snap

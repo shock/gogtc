@@ -58,6 +58,32 @@ describe( 'MTroopDef', () => {
     });
   });
 
+  describe('calculateAndUpdateCount', () => {
+    describe('when count is unlocked', () => {
+      it('should calculate the correct count', () => {
+        const troopDef = new MTroopDef(TroopType.Infantry, toInt(0));
+        troopDef.percent = 66.6667;
+        troopDef.calculateAndUpdateCount(toInt(1000));
+        expect(troopDef.count).toBe(toInt(667));
+      });
+      it('should return the updated count', () => {
+        const troopDef = new MTroopDef(TroopType.Infantry, toInt(0));
+        troopDef.percent = 66.6667;
+        expect(troopDef.calculateAndUpdateCount(toInt(1000))).toBe(toInt(667));
+      });
+    });
+    describe('when count is locked', () => {
+      it('should not update the count', () => {
+        const troopDef = new MTroopDef(TroopType.Infantry, toInt(0));
+        troopDef.percent = 66.6667;
+        troopDef.updateCountLock(true);
+        troopDef.calculateAndUpdateCount(toInt(1000));
+        expect(troopDef.count).toBe(toInt(0));
+      });
+    });
+
+  });
+
   describe('updatePercent()', () => {
     describe('when countLocked is true', () => {
       it('should not change the percent', () => {

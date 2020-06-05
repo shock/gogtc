@@ -71,6 +71,28 @@ class MTierDef {
     this.capacityLocked = this.capacityLocked && !this.percentLocked;
   }
 
+  resolveLockStates() {
+    let allTroopDefsLocked = true;
+    this.troopDefs.forEach( troopDef => {
+      allTroopDefsLocked = allTroopDefsLocked && troopDef.countLocked;
+    });
+    if( !this.capacityLocked ) { this.updateCapacityLock(allTroopDefsLocked) };
+  }
+
+  getLockedTroopCount():Int {
+    let lockedCount:Int = toInt(0);
+    this.troopDefs.forEach( troopDef => {
+      if( troopDef.countLocked ) {
+        lockedCount = toInt(lockedCount + troopDef.count);
+      }
+    });
+    return lockedCount;
+  }
+
+  getUnlockedCapacity():Int {
+    return toInt(this.capacity - this.getLockedTroopCount());
+  }
+
   calculateAndUpdatePercent(marchCap:Int) {
     if(marchCap === 0) {
       this.percent = 0;
@@ -82,8 +104,11 @@ class MTierDef {
   }
 
   calculateAndUpdateCap(marchCap:Int) {
-    const strVal = Math.round(this.percent * marchCap / 100);
-    this.capacity = toInt(strVal);
+    if( !this.capacityLocked ) {
+      const strVal = Math.round(this.percent * marchCap / 100);
+      this.capacity = toInt(strVal);
+    }
+    return this.capacity;
   }
 
 };

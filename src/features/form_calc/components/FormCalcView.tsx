@@ -79,7 +79,6 @@ class FormCalcViewBase extends React.Component<Props> {
             <label>March Cap</label>&nbsp;
             <NumericInput
               step={100}
-              // className={troopDef.type}
               min={0}
               max={999999}
               value={this.props.formCalcModel.marchCap}

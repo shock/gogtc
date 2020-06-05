@@ -89,16 +89,6 @@ class MFormCalc extends IdParser {
             break;
         }
         break;
-      case getType(actions.updateTierCapacityLock) :
-        tierNum = this.getTierNum(action.payload.id);
-        tierDef = this.findTierDef(tierNum);
-        tierDef.updateCapacityLock(action.payload.boolean);
-        break;
-      case getType(actions.updateTierPercentLock) :
-        tierNum = this.getTierNum(action.payload.id);
-        tierDef = this.findTierDef(tierNum);
-        tierDef.updatePercentLock(action.payload.boolean);
-        break;
       case getType(actions.updateTroopCount) :
       case getType(actions.updateTroopPercent) :
         tierNum = this.getTierNum(action.payload.id);
@@ -116,12 +106,25 @@ class MFormCalc extends IdParser {
             break;
         }
         break;
+      case getType(actions.updateTierCapacityLock) :
+        tierNum = this.getTierNum(action.payload.id);
+        tierDef = this.findTierDef(tierNum);
+        tierDef.updateCapacityLock(action.payload.boolean);
+        this.resolveLockStates();
+        break;
+      case getType(actions.updateTierPercentLock) :
+        tierNum = this.getTierNum(action.payload.id);
+        tierDef = this.findTierDef(tierNum);
+        tierDef.updatePercentLock(action.payload.boolean);
+        this.resolveLockStates();
+        break;
       case getType(actions.updateTroopCountLock) :
         tierNum = this.getTierNum(action.payload.id);
         tierDef = this.findTierDef(tierNum);
         troopType = this.getTroopType(action.payload.id);
         troopDef = tierDef.findTroopDef(troopType);
         troopDef.updateCountLock(action.payload.boolean);
+        this.resolveLockStates();
         break;
       case getType(actions.updateTroopPercentLock) :
         tierNum = this.getTierNum(action.payload.id);
@@ -129,6 +132,7 @@ class MFormCalc extends IdParser {
         troopType = this.getTroopType(action.payload.id);
         troopDef = tierDef.findTroopDef(troopType);
         troopDef.updatePercentLock(action.payload.boolean);
+        this.resolveLockStates();
         break;
     }
     return this.getState();
@@ -167,6 +171,10 @@ class MFormCalc extends IdParser {
     this.marchCap = marchCap;
   }
 
+  resolveLockStates() {
+    this.tierDefs.forEach( tierDef => {tierDef.resolveLockStates()} );
+  }
+
   resetFromTroopCounts() {
     this.updateMarchCap(this.getCapFromTierDefs());
     this.tierDefs.forEach( tierDef => {
@@ -182,9 +190,14 @@ class MFormCalc extends IdParser {
     this.tierDefs.forEach( tierDef => {
       tierDef.calculateAndUpdateCap(this.marchCap);
       tierDef.troopDefs.forEach( troopDef => {
-        troopDef.calculateAndUpdateCount(tierDef.capacity);
+        troopDef.calculateAndUpdateCount(tierDef.getUnlockedCapacity());
       });
     });
+  }
+
+  recalculate() {
+    this.resetFromTroopCounts();
+    this.resetFromTroopCounts();
   }
 
 };
