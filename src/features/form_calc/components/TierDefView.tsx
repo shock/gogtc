@@ -45,14 +45,6 @@ class TierDefViewBase extends React.Component<Props> {
     index: 0
   }
 
-  buildTroopDefViews() {
-    return this.props.tierDef.troopDefs.map( (troopDef, index) => (
-      <Col key={index}>
-        <TroopDefView troopDef={troopDef} />
-      </Col>
-    ));
-  }
-
   data() {
     return this.props.tierDef
   }
@@ -77,6 +69,17 @@ class TierDefViewBase extends React.Component<Props> {
     this.props.updatePercentLock(this.id(), !this.data().percentLocked);
   }
 
+  buildTroopDefViews() {
+    return this.data().troopDefs.map( (troopDef, index) => (
+      <Col key={index}>
+        <TroopDefView
+          troopDef={troopDef}
+          tierDef={this.data()}
+        />
+      </Col>
+    ));
+  }
+
   render() {
     let classNames = ['TierDefView'];
     const cycle = this.props.index%2===1 ? 'odd' : 'even';
@@ -86,7 +89,7 @@ class TierDefViewBase extends React.Component<Props> {
         <Col sm={2}>
           <label className="tierLabel">{this.props.tierDef.tierNum}</label>
         </Col>
-        <Col>
+        <Col sm={2}>
           <div className="TierProps">
             <label>Tier %</label>
             <div className="nobr">
@@ -124,7 +127,7 @@ class TierDefViewBase extends React.Component<Props> {
             </div>
           </div>
         </Col>
-        <Col sm={8}>
+        <Col>
         {this.buildTroopDefViews()}
         </Col>
       </Row>

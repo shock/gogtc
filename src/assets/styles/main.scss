@@ -71,6 +71,12 @@ $troopDefSpace: 1rem;
 }
 
 .TierDefView {
+  & > div {
+    text-align: left;
+  }
+  .TierProps {
+    text-align: center;
+  }
   padding: 1rem 0;
   &.even {
     background-color: rgba(255,255,255,0.08)

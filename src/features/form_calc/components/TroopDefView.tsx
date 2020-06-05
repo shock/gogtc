@@ -6,7 +6,7 @@ import NumericInput from 'react-numeric-input';
 import * as NumEntry from '../../../lib/num-entry';
 import * as selectors from '../selectors';
 import * as actions from '../actions';
-import { MTroopDef } from '../models';
+import { MTroopDef, MTierDef } from '../models';
 import { LockState } from '../../../components/LockState';
 
 const mapStateToProps = (state: RootState) => ({
@@ -21,7 +21,8 @@ const dispatchProps = {
 };
 
 type TroopDefViewProps = {
-  troopDef: MTroopDef
+  troopDef: MTroopDef,
+  tierDef: MTierDef
 }
 
 
@@ -65,15 +66,18 @@ class TroopDefViewBase extends React.Component<Props> {
 
   render() {
     const troopDef = this.data();
+    const tierDef = this.props.tierDef;
+    const percentSumOver = tierDef.troopPercentSumOver() ? 'percentOver' : '';
+    const percentSumUnder = tierDef.troopPercentSumUnder() ? 'percentUnder' : '';
     if( !troopDef ) return <div/>;
     return (
       <div className="TroopDefView">
         <label>{this.data().type}</label>
-        <div className={`TroopPercent NumEntry PercEntry inline nobr`}>
-          {/* <LockState
+        <div className={`TroopPercent NumEntry PercEntry inline nobr ${percentSumOver} ${percentSumUnder}`}>
+          <LockState
             locked={this.data().percentLocked}
             onClick={this.handlePercentLockClick}
-          /> */}
+          />
           <NumericInput
             step={0.1} precision={3}
             snap
@@ -101,6 +105,9 @@ class TroopDefViewBase extends React.Component<Props> {
             parse={NumEntry.parseInteger}
             onChange={this.handleCountChange}
           />
+        </div>
+        <div className={'inline nobr troopPercCalculated'}>
+        <span>{troopDef.getActualPercent(tierDef.capacity).toFixed(2)+'%'}</span>
         </div>
       </div>
     )

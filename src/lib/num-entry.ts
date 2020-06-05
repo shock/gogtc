@@ -12,7 +12,7 @@ export const parseInteger = (strVal:string) => {
 }
 
 export const formatPercent = (val:number|null) => {
-  return `${val} %`;
+  return `${val}%`;
 }
 
 export const parsePercent = (strVal:string) => {

@@ -43,6 +43,7 @@ export class MTroopDef {
     if(this.countLocked) return;
     let percent = parseFloat(''+value);
     if( percent > 100 ) { percent = 100; }
+    if( percent < 0 ) { percent = 0; }
     this.percent = percent;
   }
 
@@ -56,14 +57,25 @@ export class MTroopDef {
     this.countLocked = this.countLocked && !this.percentLocked;
   }
 
-  calculateAndUpdatePercent(capacity:Int) {
-    if(capacity === 0) {
+  // calculates the percentage of this troopDefs's count of the supplied tier capcity
+  // if countLocked is true, the calculation is always zero
+  // the troopDefs's percent attribute is updated withe calculated value and returned
+  calculateAndUpdatePercent(tierCapacity:Int) {
+    if( this.percentLocked ) return this.percent;
+    if(tierCapacity === 0 || this.countLocked) {
       this.percent = 0;
     } else {
-      const strVal = (Math.round(this.count * 1000000 / capacity) / 10000).toFixed(4);
+      const strVal = (Math.round(this.count * 1000000 / tierCapacity) / 10000).toFixed(4);
       this.percent = parseFloat(strVal);
     }
     return this.percent;
+  }
+
+  // returns the actual percent of the supplied tierCapacity for this troopDef's count
+  // no attribute are mutated
+  getActualPercent(tierCapacity:Int):number {
+    const strVal = (Math.round(this.count * 1000000 / tierCapacity) / 10000).toFixed(4);
+    return parseFloat(strVal);
   }
 
   calculateAndUpdateCount(capacity:Int) {
