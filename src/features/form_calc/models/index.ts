@@ -36,7 +36,7 @@ function buildFormCalc(name:string) {
     tierDefs.push(buildTierDefWithTroopDefs(tierNum as TierNum, formCalc));
   }
   formCalc.tierDefs = tierDefs;
-  formCalc.resetFromTroopCounts();
+  formCalc.updatePercentsFromCounts();
   return formCalc;
 }
 

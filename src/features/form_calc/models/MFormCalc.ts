@@ -69,7 +69,8 @@ class MFormCalc extends IdParser {
     switch (action.type) {
       case getType(actions.updateMarchCap) :
         this.updateMarchCap(toInt(action.payload.value));
-        this.resetFromPercentages();
+        this.updateCountsFromPercents();
+        // this.recalculateCountsThenPercents();
         break;
       case getType(actions.updateTierCap) :
       case getType(actions.updateTierPercent) :
@@ -81,11 +82,13 @@ class MFormCalc extends IdParser {
             tierDef.troopDefs.forEach( troopDef => {
               troopDef.calculateAndUpdateCount(tierDef.capacity);
             });
-            this.resetFromTroopCounts();
+            this.updatePercentsFromCounts();
+            // this.recalculatePercentsThenCounts();
             break;
           case getType(actions.updateTierPercent) :
             tierDef.updatePercent(parseFloat(action.payload.value));
-            this.resetFromPercentages();
+            this.updateCountsFromPercents();
+            // this.recalculateCountsThenPercents();
             break;
         }
         break;
@@ -98,11 +101,14 @@ class MFormCalc extends IdParser {
         switch (action.type) {
           case getType(actions.updateTroopCount) :
             troopDef.updateCount(action.payload.value);
-            this.resetFromTroopCounts();
+            this.updatePercentsFromCounts();
+            // this.recalculatePercentsThenCounts();
             break;
           case getType(actions.updateTroopPercent) :
             troopDef.updatePercent(action.payload.value);
-            this.resetFromPercentages();
+            this.updateCountsFromPercents();
+            // tierDef.updateTroopDefPercent(troopDef, +action.payload.value);
+            // this.recalculateCountsThenPercents();
             break;
         }
         break;
@@ -111,12 +117,14 @@ class MFormCalc extends IdParser {
         tierDef = this.findTierDef(tierNum);
         tierDef.updateCapacityLock(action.payload.boolean);
         this.resolveLockStates();
+        // this.recalculatePercentsThenCounts();
         break;
       case getType(actions.updateTierPercentLock) :
         tierNum = this.getTierNum(action.payload.id);
         tierDef = this.findTierDef(tierNum);
         tierDef.updatePercentLock(action.payload.boolean);
         this.resolveLockStates();
+        // this.recalculatePercentsThenCounts();
         break;
       case getType(actions.updateTroopCountLock) :
         tierNum = this.getTierNum(action.payload.id);
@@ -125,6 +133,7 @@ class MFormCalc extends IdParser {
         troopDef = tierDef.findTroopDef(troopType);
         troopDef.updateCountLock(action.payload.boolean);
         this.resolveLockStates();
+        this.recalculatePercentsThenCounts();
         break;
       case getType(actions.updateTroopPercentLock) :
         tierNum = this.getTierNum(action.payload.id);
@@ -133,6 +142,7 @@ class MFormCalc extends IdParser {
         troopDef = tierDef.findTroopDef(troopType);
         troopDef.updatePercentLock(action.payload.boolean);
         this.resolveLockStates();
+        // this.recalculatePercentsThenCounts();
         break;
     }
     return this.getState();
@@ -175,18 +185,18 @@ class MFormCalc extends IdParser {
     this.tierDefs.forEach( tierDef => {tierDef.resolveLockStates()} );
   }
 
-  resetFromTroopCounts() {
+  updatePercentsFromCounts() {
     this.updateMarchCap(this.getCapFromTierDefs());
     this.tierDefs.forEach( tierDef => {
       tierDef.updateCap( toInt(tierDef.getCapFromTroopDefs()) );
       tierDef.calculateAndUpdatePercent(this.marchCap);
       tierDef.troopDefs.forEach( troopDef => {
-        troopDef.calculateAndUpdatePercent(tierDef.capacity);
+        troopDef.calculateAndUpdatePercent(tierDef.getUnlockedCapacity());
       });
     });
   }
 
-  resetFromPercentages() {
+  updateCountsFromPercents() {
     this.tierDefs.forEach( tierDef => {
       tierDef.calculateAndUpdateCap(this.marchCap);
       tierDef.troopDefs.forEach( troopDef => {
@@ -195,9 +205,14 @@ class MFormCalc extends IdParser {
     });
   }
 
-  recalculate() {
-    this.resetFromTroopCounts();
-    this.resetFromTroopCounts();
+  recalculateCountsThenPercents() {
+    this.updateCountsFromPercents();
+    this.updatePercentsFromCounts();
+  }
+
+  recalculatePercentsThenCounts() {
+    this.updatePercentsFromCounts();
+    this.updateCountsFromPercents();
   }
 
 };
