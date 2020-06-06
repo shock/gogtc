@@ -2,6 +2,7 @@ import { RootState } from 'typesafe-actions';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import NumericInput from 'react-numeric-input';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import * as NumEntry from '../../../lib/num-entry';
 import * as selectors from '../selectors';
@@ -17,7 +18,8 @@ const dispatchProps = {
   updateTroopCount: actions.updateTroopCount,
   updateTroopPercent: actions.updateTroopPercent,
   updateCountLock: actions.updateTroopCountLock,
-  updatePercentLock: actions.updateTroopPercentLock
+  updatePercentLock: actions.updateTroopPercentLock,
+  fixTroopPercent: actions.fixTroopPercent
 };
 
 type TroopDefViewProps = {
@@ -36,6 +38,7 @@ class TroopDefViewBase extends React.Component<Props> {
     this.handlePercentChange = this.handlePercentChange.bind(this);
     this.handleCountLockClick = this.handleCountLockClick.bind(this);
     this.handlePercentLockClick = this.handlePercentLockClick.bind(this);
+    this.handleFixPercentOver = this.handleFixPercentOver.bind(this);
   }
 
   data() {
@@ -64,6 +67,32 @@ class TroopDefViewBase extends React.Component<Props> {
     this.props.updatePercentLock(this.id(), !this.data().percentLocked);
   }
 
+  handleFixPercentOver(event: React.MouseEvent<SVGSVGElement, MouseEvent>) {
+    this.props.fixTroopPercent(this.id());
+  }
+
+  fixThisPercent() {
+    const tierDef = this.props.tierDef;
+    if( !this.data().countLocked && (tierDef.troopPercentSumOver() || tierDef.troopPercentSumUnder()) ) {
+      return (
+        <div className="PercentDelta delta inline" >
+          <FontAwesomeIcon
+            icon={'wrench'}
+            onClick={this.handleFixPercentOver}
+          />
+        </div>
+      );
+    } else {
+      return (
+        <div className="PercentDelta no-delta inline" >
+          <FontAwesomeIcon
+            icon={'check'}
+          />
+        </div>
+      );
+    }
+  }
+
   render() {
     const troopDef = this.data();
     const tierDef = this.props.tierDef;
@@ -78,6 +107,7 @@ class TroopDefViewBase extends React.Component<Props> {
             locked={this.data().percentLocked}
             onClick={this.handlePercentLockClick}
           /> */}
+          { this.fixThisPercent() }
           <NumericInput
             step={0.1} precision={3}
             snap

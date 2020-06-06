@@ -92,14 +92,30 @@ $troopDefSpace: 1rem;
   }
 }
 
+$icon-ok: rgb(108, 128, 243);
+$icon-green: rgb(142, 211, 142);
+$icon-red: rgb(235, 57, 57);
+$icon-unlocked: rgb(142, 211, 142);
+$icon-action: rgb(252, 236, 97);
 .LockState {
   cursor: pointer;
   margin: 0 0.3rem 0 0 ;
   &.locked {
-    color: rgb(216, 0, 0);
+    color: $icon-red;
   }
   &.unlocked {
-    color: rgb(0, 204, 0);
+    color: $icon-unlocked;
+  }
+}
+
+.PercentDelta {
+  margin: 0 0.3rem 0 0 ;
+  &.delta {
+    color: $icon-action;
+    cursor: pointer;
+  }
+  &.no-delta {
+    color: $icon-ok;
   }
 }
 

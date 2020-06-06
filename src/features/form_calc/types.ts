@@ -10,6 +10,10 @@ export type IdBoolean = {
   boolean: boolean
 }
 
+export type IdOnly = {
+  id: string
+}
+
 // Model Types
 
 // https://spin.atomicobject.com/2018/11/05/using-an-int-type-in-typescript/

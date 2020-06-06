@@ -63,6 +63,9 @@ class MTierDef {
 
   updateCapacityLock(state: boolean) {
     this.capacityLocked = state;
+    if( state ) {
+      this.troopDefs.forEach( troopDef => troopDef.updateCountLock(state) );
+    }
     this.percentLocked = this.percentLocked && !this.capacityLocked;
   }
 
@@ -99,12 +102,20 @@ class MTierDef {
     return sum;
   }
 
+  troopPercentDelta() {
+    return this.troopPercentSum() - 100;
+  }
+
   troopPercentSumOver():boolean {
-    return this.troopPercentSum() > 100;
+    return this.troopPercentDelta() > 0;
   }
 
   troopPercentSumUnder():boolean {
-    return this.troopPercentSum() < 100;
+    return this.troopPercentDelta() < 0 ;
+  }
+
+  fixTroopPercent(troopDef:MTroopDef) {
+    troopDef.percent = troopDef.percent - this.troopPercentDelta();
   }
 
   getLockedTroopPercent():number {
@@ -119,6 +130,30 @@ class MTierDef {
 
   getUnlockedPercent():number {
     return 100 - this.getLockedTroopPercent();
+  }
+
+  calculateAndUpdateTroopPercents(fixDelta:boolean = false) {
+    this.troopDefs.forEach( troopDef => {
+      troopDef.calculateAndUpdatePercent(this.getUnlockedCapacity());
+    });
+    if( fixDelta && this.troopPercentDelta() !== 0 ) {
+      let firstUnlockedTroopDef:MTroopDef|null = null;
+      for( let i=0; i<this.troopDefs.length; i++ ) {
+        if( !this.troopDefs[0].countLocked ) {
+          firstUnlockedTroopDef = this.troopDefs[0];
+          break;
+        }
+      }
+      if( firstUnlockedTroopDef ) {
+        this.fixTroopPercent(firstUnlockedTroopDef);
+      }
+    }
+  }
+
+  calculateAndUpdateTroopCounts() {
+    this.troopDefs.forEach( troopDef => {
+      troopDef.calculateAndUpdateCount(this.getUnlockedCapacity());
+    });
   }
 
   updateTroopDefPercent(troopDef:MTroopDef, newPercent:number) {

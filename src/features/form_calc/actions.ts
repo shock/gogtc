@@ -1,4 +1,4 @@
-import { IdString, IdBoolean } from './types';
+import { IdString, IdBoolean, IdOnly } from './types';
 import { createAction } from 'typesafe-actions';
 import { FCState } from './models';
 
@@ -47,11 +47,17 @@ export const updateTroopCountLock = createAction('UPDATE_TROOP_COUNT_LOCK', (id:
   boolean: boolean
 }))<IdBoolean>();
 
+export const fixTroopPercent = createAction('FIX_TROOP_PERCENT', (id:string) => ({
+  id: id
+}))<IdOnly>();
+
 export type UpdateIdValueAction = typeof updateTroopCount | typeof updateTroopPercent |
   typeof updateMarchCap | typeof updateTierCap | typeof updateTierPercent;
 
 export type UpdateIdBooleanAction = typeof updateTierPercentLock | typeof updateTierCapacityLock |
   typeof updateTroopCountLock | typeof updateTroopPercentLock;
+
+export type IdOnlyAction = typeof fixTroopPercent;
 
 export const resetState = createAction('RESET_STATE', (state:FCState) => ({
   ...state
