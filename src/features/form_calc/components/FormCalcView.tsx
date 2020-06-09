@@ -68,6 +68,23 @@ class FormCalcViewBase extends React.Component<Props> {
     this.props.updateMarchCap(this.props.formCalcModel.id(), ''+numVal);
   }
 
+  renderDebug() {
+    if( this.props.formCalcModel.debug || true ) {
+      return (
+        <Col>
+          <div className="NumCell inline nobr">
+            <label>Troops Sum</label>
+            <span className="sum">{this.props.formCalcModel.getCapFromTierDefs()}</span>
+          </div>
+          <div className="NumCell inline nobr">
+            <label>Tier % Sum</label>
+            <span className="sum">{this.props.formCalcModel.getTierDefPercentsSum()}</span>
+          </div>
+        </Col>
+      );
+    } else return null;
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -75,6 +92,7 @@ class FormCalcViewBase extends React.Component<Props> {
           <Col sm={3}>
             <h3>{this.props.formCalcModel?.name}</h3>
           </Col>
+          {this.renderDebug()}
           <Col >
             <label>March Cap</label>&nbsp;
             <NumericInput

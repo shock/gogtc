@@ -11,18 +11,11 @@ class MFormCalc extends IdParser {
   name: string;
   tierDefs: MTierDef[] = [];
   marchCap:Int = toInt(0);
+  debug:boolean = false;
 
   constructor(name:string) {
     super();
     this.name = name;
-  }
-
-  addTierDefs(tierDefs: MTierDef[]) {
-    this.tierDefs = tierDefs;
-  }
-
-  setTierDefs(tierDef: MTierDef) {
-    this.tierDefs.push(tierDef);
   }
 
   id():string {
@@ -203,13 +196,23 @@ class MFormCalc extends IdParser {
   */
 
   // gets the tier cap using the existing troop def counts
-  // does not set this.capacity
+  // does not change anything
   getCapFromTierDefs() {
     let marchCap = 0;
     this.tierDefs.forEach( tierDef => {
       marchCap += tierDef.getCapFromTroopDefs();
     });
     return toInt(marchCap);
+  }
+
+  // gets the sum of tier def percents
+  // does not change anything
+  getTierDefPercentsSum() {
+    let sum = 0;
+    this.tierDefs.forEach( tierDef => {
+      sum += tierDef.percent;
+    });
+    return sum;
   }
 
   updateMarchCap(marchCap:Int) {
