@@ -31,8 +31,11 @@ $inc-dec-color: #000;
 .NumEntry {
   display: inline-block;
   padding: 0.01rem;
-  span.react-numeric-input input {
+  span.react-numeric-input input, span.sum {
     width: 6.1rem;
+  }
+  span.sum {
+    display: inline-block;
   }
 }
 
@@ -120,13 +123,13 @@ $icon-action: rgb(250, 234, 90);
 }
 
 @include media-breakpoint-down(xs) {
-  span.react-numeric-input input {
+  span.react-numeric-input input, span.sum {
     max-width: 8rem;
   }
   .NumEntry {
     display: inline-block;
     padding: 0.01rem;
-    span.react-numeric-input input {
+    span.react-numeric-input input, span.sum {
       width: 8rem;
     }
   }

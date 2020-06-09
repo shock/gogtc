@@ -3,6 +3,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
 import NumericInput from 'react-numeric-input';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import * as NumEntry from '../../../lib/num-entry';
 import * as actions from '../actions';
@@ -71,13 +72,50 @@ class TierDefViewBase extends React.Component<Props> {
 
   buildTroopDefViews() {
     return this.data().troopDefs.map( (troopDef, index) => (
-      <Col key={index}>
+      // <Col key={index}>
         <TroopDefView
           troopDef={troopDef}
           tierDef={this.data()}
         />
-      </Col>
+      // </Col>
     ));
+  }
+
+  getActualTroopDefPercentsSum() {
+    let sum = 0;
+    this.data().troopDefs.forEach( troopDef => {
+      sum += troopDef.getActualPercent(this.data().capacity)
+    })
+    return sum;
+  }
+
+  renderSums() {
+    return (
+      <div className="TroopDefView">
+        <label>{"Sums"}</label>
+        <div className={`TroopPercent NumEntry PercEntry inline nobr`}>
+          {/* <div className="PercentDelta no-delta inline" > */}
+            <FontAwesomeIcon
+              icon={'check'}
+              color={'transparent'}
+              fixedWidth
+            />
+          {/* </div> */}
+          <span className="sum">{this.data().troopPercentSum().toFixed(3)}%</span>
+        </div>
+        <div className={`TroopCount NumEntry inline nobr`}>
+          <FontAwesomeIcon
+            icon={'check'}
+            color={'transparent'}
+            fixedWidth
+          />
+          <span className="sum">{this.data().getCapFromTroopDefs()}</span>
+        </div>
+        <div className={'inline nobr troopPercCalculated'}>
+          <span>{this.getActualTroopDefPercentsSum().toFixed(2)+'%'}</span>
+        </div>
+      </div>
+    )
   }
 
   render() {
@@ -128,7 +166,8 @@ class TierDefViewBase extends React.Component<Props> {
           </div>
         </Col>
         <Col>
-        {this.buildTroopDefViews()}
+          {this.buildTroopDefViews()}
+          {this.renderSums()}
         </Col>
       </Row>
     )

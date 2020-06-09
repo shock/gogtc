@@ -115,7 +115,10 @@ class MTierDef {
   }
 
   fixTroopPercent(troopDef:MTroopDef) {
-    troopDef.percent = troopDef.percent - this.troopPercentDelta();
+    let newPercent = troopDef.percent - this.troopPercentDelta();
+    if( newPercent < 0 ) { newPercent = 0; }
+    if( newPercent > 100 ) { newPercent = 100; }
+    troopDef.percent = newPercent;
   }
 
   getLockedTroopPercent():number {

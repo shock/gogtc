@@ -107,6 +107,7 @@ class MFormCalc extends IdParser {
           case getType(actions.updateTroopPercent) :
             troopDef.updatePercent(action.payload.value);
             this.updateCountsFromPercents();
+            // this.updatePercentsFromCounts();
             // tierDef.updateTroopDefPercent(troopDef, +action.payload.value);
             // this.recalculateCountsThenPercents();
             break;

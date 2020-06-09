@@ -137,7 +137,7 @@ class TroopDefViewBase extends React.Component<Props> {
           />
         </div>
         <div className={'inline nobr troopPercCalculated'}>
-        <span>{troopDef.getActualPercent(tierDef.capacity).toFixed(2)+'%'}</span>
+          <span>{troopDef.getActualPercent(tierDef.capacity).toFixed(2)+'%'}</span>
         </div>
       </div>
     )
