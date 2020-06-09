@@ -34,7 +34,7 @@ describe( 'MTierDef', () => {
       it('should throw an Error', () => {
         const formCalc = new MFormCalc('test');
         expect(
-          () => {formCalc.findTierDef(TierNum.T12)}
+          () => {formCalc.findTierDef(':'+TierNum.T12)}
         ).toThrow(Error);
       });
     });
@@ -42,7 +42,7 @@ describe( 'MTierDef', () => {
       describe('with valid TierNum', () => {
         it('should find the tierDef ', () => {
           const formCalc = buildFormCalcWithTiers();
-          const found = formCalc.findTierDef(TierNum.T12);
+          const found = formCalc.findTierDef(':'+TierNum.T12);
           expect( found instanceof MTierDef ).toBe(true);
           expect( found.tierNum ).toEqual( TierNum.T12 );
         });
@@ -51,7 +51,7 @@ describe( 'MTierDef', () => {
         it('should throw an Error', () => {
           const formCalc = buildFormCalcWithTiers();
           expect(
-            () => {formCalc.findTierDef(TierNum.T1)}
+            () => {formCalc.findTierDef(':'+TierNum.T1)}
           ).toThrow(Error);
         });
       });

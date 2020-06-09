@@ -1,7 +1,7 @@
 import { ActionType, getType } from 'typesafe-actions';
 import { MTierDef, MTroopDef, TierDefDictionary } from '.';
 import { IdParser } from './IdParser';
-import { TierNum, TroopType, Int, toInt } from '../types';
+import { TierNum, TroopType, Int, toInt, IdString, IdBoolean, IdOnly } from '../types';
 import * as actions from '../actions';
 import { FCState, BlankFCState, TroopDefDictionary, FormCalcDictionary } from '.';
 export type FormCalcAction = ActionType<typeof actions>;
@@ -29,11 +29,18 @@ class MFormCalc extends IdParser {
     return this.name;
   }
 
-  findTierDef( tierNum: TierNum ) {
+  findTierDef( id: string ) {
+    const tierNum = this.getTierNum(id);
     const selected = this.tierDefs.find( tierDef => tierDef.tierNum === tierNum );
     if( selected === undefined )
       throw new Error(`could not find MTierDef with tierNum ==${tierNum}`)
     return selected;
+  }
+
+  findTroopDef( id: string) {
+    const tierDef = this.findTierDef(id);
+    const troopType = this.getTroopType(id);
+    return tierDef.findTroopDef(troopType);
   }
 
   getTroopDefs():TroopDefDictionary {
@@ -60,100 +67,119 @@ class MFormCalc extends IdParser {
     return tdd;
   }
 
+  //
+  // ACTION HANDLERS
+  //
+
+  // Handles change to main march cap.
+  // should update entire formation based on new march cap
+  handleUpdateMarchCap(payload:IdString) {
+    this.updateMarchCap(toInt(payload.value));
+    this.updateCountsFromPercents();
+    // this.recalculateCountsThenPercents();
+  }
+
+  // We're not supporting this for now.
+  handleUpdateTierCap(payload:IdString) {
+    const tierDef = this.findTierDef(payload.id);
+    tierDef.updateCap(toInt(payload.value));
+    tierDef.troopDefs.forEach( troopDef => {
+      troopDef.calculateAndUpdateCount(tierDef.capacity);
+    });
+    this.updatePercentsFromCounts();
+    // this.recalculatePercentsThenCounts();
+  }
+
+  // Updates the tier percent and corespondingly the troop defs' counts
+  // and the tier cap
+  handleUpdateTierPercent(payload:IdString) {
+    const tierDef = this.findTierDef(payload.id);
+    tierDef.updatePercent(parseFloat(payload.value));
+    this.updateCountsFromPercents();
+    // this.recalculateCountsThenPercents();
+  }
+
+  // Updates an individual troop def's count
+  // if the troop def's count is not locked, updates the unlocked troop def percentages
+  // without changin the sibling troop def counts
+  handleUpdateTroopCount(payload:IdString) {
+    const troopDef = this.findTroopDef(payload.id);
+    troopDef.updateCount(payload.value);
+    this.updatePercentsFromCounts();
+    // this.recalculatePercentsThenCounts();
+  }
+
+  // updates the troop def percentage if it's not count-locked
+  // updates the troop count accordingly, which, in turn updates the tier def's cap
+  handleUpdateTroopPercent(payload:IdString) {
+    const troopDef = this.findTroopDef(payload.id);
+    troopDef.updatePercent(payload.value);
+    this.updateCountsFromPercents();
+    // this.updatePercentsFromCounts();
+    // tierDef.updateTroopDefPercent(troopDef, +action.payload.value);
+    // this.recalculateCountsThenPercents();
+  }
+
+  handleUpdateTroopCountLock(payload:IdBoolean) {
+    const troopDef = this.findTroopDef(payload.id);
+    troopDef.updateCountLock(payload.boolean);
+    this.resolveLockStates();
+    this.updatePercentsFromCounts();
+    // this.recalculatePercentsThenCounts();
+  }
+
+  handleFixTroopPercent(payload:IdOnly) {
+    const tierDef = this.findTierDef(payload.id);
+    const troopDef = this.findTroopDef(payload.id);
+    tierDef.fixTroopPercent(troopDef);
+    this.updateCountsFromPercents();
+  }
+
   handleAction( state:FCState, action:FormCalcAction ) {
-    let tierNum:TierNum;
-    let troopType:TroopType;
     let tierDef:MTierDef;
     let troopDef:MTroopDef;
 
     switch (action.type) {
       case getType(actions.updateMarchCap) :
-        this.updateMarchCap(toInt(action.payload.value));
-        this.updateCountsFromPercents();
-        // this.recalculateCountsThenPercents();
+        this.handleUpdateMarchCap(action.payload);
         break;
       case getType(actions.updateTierCap) :
+        this.handleUpdateTierCap(action.payload);
+        break;
       case getType(actions.updateTierPercent) :
-        tierNum = this.getTierNum(action.payload.id);
-        tierDef = this.findTierDef(tierNum);
-        switch (action.type) {
-          case getType(actions.updateTierCap) :
-            tierDef.updateCap(toInt(action.payload.value));
-            tierDef.troopDefs.forEach( troopDef => {
-              troopDef.calculateAndUpdateCount(tierDef.capacity);
-            });
-            this.updatePercentsFromCounts();
-            // this.recalculatePercentsThenCounts();
-            break;
-          case getType(actions.updateTierPercent) :
-            tierDef.updatePercent(parseFloat(action.payload.value));
-            this.updateCountsFromPercents();
-            // this.recalculateCountsThenPercents();
-            break;
-        }
+        this.handleUpdateTierPercent(action.payload);
         break;
       case getType(actions.updateTroopCount) :
+        this.handleUpdateTroopCount(action.payload);
+        break;
       case getType(actions.updateTroopPercent) :
-        tierNum = this.getTierNum(action.payload.id);
-        tierDef = this.findTierDef(tierNum);
-        troopType = this.getTroopType(action.payload.id);
-        troopDef = tierDef.findTroopDef(troopType);
-        switch (action.type) {
-          case getType(actions.updateTroopCount) :
-            troopDef.updateCount(action.payload.value);
-            this.updatePercentsFromCounts();
-            // this.recalculatePercentsThenCounts();
-            break;
-          case getType(actions.updateTroopPercent) :
-            troopDef.updatePercent(action.payload.value);
-            this.updateCountsFromPercents();
-            // this.updatePercentsFromCounts();
-            // tierDef.updateTroopDefPercent(troopDef, +action.payload.value);
-            // this.recalculateCountsThenPercents();
-            break;
-        }
-        break;
-      case getType(actions.updateTierCapacityLock) :
-        tierNum = this.getTierNum(action.payload.id);
-        tierDef = this.findTierDef(tierNum);
-        tierDef.updateCapacityLock(action.payload.boolean);
-        this.resolveLockStates();
-        // this.recalculatePercentsThenCounts();
-        break;
-      case getType(actions.updateTierPercentLock) :
-        tierNum = this.getTierNum(action.payload.id);
-        tierDef = this.findTierDef(tierNum);
-        tierDef.updatePercentLock(action.payload.boolean);
-        this.resolveLockStates();
-        // this.recalculatePercentsThenCounts();
+        this.handleUpdateTroopPercent(action.payload);
         break;
       case getType(actions.updateTroopCountLock) :
-        tierNum = this.getTierNum(action.payload.id);
-        tierDef = this.findTierDef(tierNum);
-        troopType = this.getTroopType(action.payload.id);
-        troopDef = tierDef.findTroopDef(troopType);
-        troopDef.updateCountLock(action.payload.boolean);
-        this.resolveLockStates();
-        this.updatePercentsFromCounts();
-        // this.recalculatePercentsThenCounts();
-        break;
-      case getType(actions.updateTroopPercentLock) :
-        tierNum = this.getTierNum(action.payload.id);
-        tierDef = this.findTierDef(tierNum);
-        troopType = this.getTroopType(action.payload.id);
-        troopDef = tierDef.findTroopDef(troopType);
-        troopDef.updatePercentLock(action.payload.boolean);
-        this.resolveLockStates();
-        // this.recalculatePercentsThenCounts();
+        this.handleUpdateTroopCountLock(action.payload);
         break;
       case getType(actions.fixTroopPercent) :
-        tierNum = this.getTierNum(action.payload.id);
-        tierDef = this.findTierDef(tierNum);
-        troopType = this.getTroopType(action.payload.id);
-        troopDef = tierDef.findTroopDef(troopType);
-        tierDef.fixTroopPercent(troopDef);
-        this.updateCountsFromPercents();
-      }
+        this.handleFixTroopPercent(action.payload);
+        break;
+      // case getType(actions.updateTierCapacityLock) :
+      //   tierDef = this.findTierDef(action.payload.id);
+      //   tierDef.updateCapacityLock(action.payload.boolean);
+      //   this.resolveLockStates();
+      //   // this.recalculatePercentsThenCounts();
+      //   break;
+      // case getType(actions.updateTierPercentLock) :
+      //   tierDef = this.findTierDef(action.payload.id);
+      //   tierDef.updatePercentLock(action.payload.boolean);
+      //   this.resolveLockStates();
+      //   // this.recalculatePercentsThenCounts();
+      //   break;
+      // case getType(actions.updateTroopPercentLock) :
+      //   troopDef = this.findTroopDef(action.payload.id);
+      //   troopDef.updatePercentLock(action.payload.boolean);
+      //   this.resolveLockStates();
+      //   // this.recalculatePercentsThenCounts();
+      //   break;
+    }
     return this.getState();
   }
 
