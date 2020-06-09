@@ -72,10 +72,10 @@ class FormCalcViewBase extends React.Component<Props> {
     return (
       <React.Fragment>
         <Row>
-          <Col>
+          <Col sm={3}>
             <h3>{this.props.formCalcModel?.name}</h3>
           </Col>
-          <Col>
+          <Col >
             <label>March Cap</label>&nbsp;
             <NumericInput
               step={100}

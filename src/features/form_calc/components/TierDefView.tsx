@@ -124,11 +124,11 @@ class TierDefViewBase extends React.Component<Props> {
     classNames.push(cycle);
     return (
       <Row className={classNames.join(' ')}>
-        <Col sm={2}>
+        <div className="TierNum">
           <label className="tierLabel">{this.props.tierDef.tierNum}</label>
-        </Col>
-        <Col sm={3}>
-          <div className="TierProps nobr">
+        </div>
+        <div className="TierProps" >
+          <div className="nobr">
             <label>Tier %</label>
             <div className="nobr inline">
               {/* <LockState
@@ -147,7 +147,7 @@ class TierDefViewBase extends React.Component<Props> {
               />
             </div>
           </div>
-          <div className="TierProps NumEntry nobr">
+          <div className="TierProps NumCell nobr">
             <label>Tier Cap</label>
             <div className="nobr inline">
               {/* <LockState
@@ -167,11 +167,11 @@ class TierDefViewBase extends React.Component<Props> {
               /> */}
             </div>
           </div>
-        </Col>
-        <Col>
+        </div>
+        <div className="TierDefs">
           {this.buildTroopDefViews()}
           {this.renderSums()}
-        </Col>
+        </div>
       </Row>
     )
   }
