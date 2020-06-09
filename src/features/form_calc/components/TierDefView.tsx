@@ -127,16 +127,16 @@ class TierDefViewBase extends React.Component<Props> {
         <Col sm={2}>
           <label className="tierLabel">{this.props.tierDef.tierNum}</label>
         </Col>
-        <Col sm={2}>
-          <div className="TierProps">
+        <Col sm={3}>
+          <div className="TierProps nobr">
             <label>Tier %</label>
-            <div className="nobr">
+            <div className="nobr inline">
               {/* <LockState
                 locked={this.data().percentLocked}
                 onClick={this.handlePercentLockClick}
               /> */}
               <NumericInput
-                step={0.1} precision={3}
+                step={1} precision={3}
                 snap
                 min={0}
                 max={100}
@@ -146,13 +146,16 @@ class TierDefViewBase extends React.Component<Props> {
                 onChange={this.handleTierPercentChange}
               />
             </div>
+          </div>
+          <div className="TierProps NumEntry nobr">
             <label>Tier Cap</label>
-            <div className="nobr">
-              <LockState
+            <div className="nobr inline">
+              {/* <LockState
                 locked={this.data().capacityLocked}
                 onClick={this.handleCapLockClick}
-              />
-              <NumericInput
+              /> */}
+              <span className="sum">{this.data().capacity}</span>
+              {/* <NumericInput
                 step={100}
                 // className={troopDef.type}
                 min={0}
@@ -161,7 +164,7 @@ class TierDefViewBase extends React.Component<Props> {
                 format={NumEntry.formatInteger}
                 parse={NumEntry.parseInteger}
                 onChange={this.handleTierCapChange}
-              />
+              /> */}
             </div>
           </div>
         </Col>

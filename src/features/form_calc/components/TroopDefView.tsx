@@ -127,6 +127,7 @@ class TroopDefViewBase extends React.Component<Props> {
           />
           <NumericInput
             step={100}
+            snap
             className={troopDef.type}
             min={0}
             max={999999}
