@@ -40,7 +40,8 @@ $inc-dec-color: #000;
 }
 
 $troopCountColor:  rgb(65, 179, 255);
-$troopPercentColor:  rgb(255, 174, 53);
+$troopPercentColor:  rgb(255, 235, 205);
+$troopPercentErrorColor:  rgb(255, 153, 153);
 $lighter1: +10%;
 $lighter2: +18%;
 $lighter3: +26%;
@@ -66,9 +67,16 @@ $troopDefSpace: 1rem;
   .TroopPercent {
     margin-right: $troopDefSpace;
     input {
-      &.Infantry { background-color: adjust-color($troopPercentColor, $lightness: $lighter1); }
-      &.Cavalry { background-color: adjust-color($troopPercentColor, $lightness: $lighter2); }
-      &.Distance { background-color: adjust-color($troopPercentColor, $lightness: $lighter3); }
+      &.Infantry { background-color: $troopPercentColor; }
+      &.Cavalry { background-color: $troopPercentColor; }
+      &.Distance { background-color: $troopPercentColor; }
+    }
+    &.percentUnder, &.percentOver {
+      input {
+        &.Infantry { background-color: $troopPercentErrorColor; }
+        &.Cavalry { background-color: $troopPercentErrorColor; }
+        &.Distance { background-color: $troopPercentErrorColor; }
+      }
     }
   }
 }

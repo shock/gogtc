@@ -96,8 +96,8 @@ class TroopDefViewBase extends React.Component<Props> {
   render() {
     const troopDef = this.data();
     const tierDef = this.props.tierDef;
-    const percentSumOver = tierDef.troopPercentSumOver() ? 'percentOver' : '';
-    const percentSumUnder = tierDef.troopPercentSumUnder() ? 'percentUnder' : '';
+    const percentSumOver = tierDef.troopPercentSumOver() && !this.data().countLocked ? 'percentOver' : '';
+    const percentSumUnder = tierDef.troopPercentSumUnder() && !this.data().countLocked ? 'percentUnder' : '';
     if( !troopDef ) return <div/>;
     return (
       <div className="TroopDefView">
