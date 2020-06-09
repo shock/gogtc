@@ -109,7 +109,7 @@ class TroopDefViewBase extends React.Component<Props> {
           /> */}
           { this.fixThisPercent() }
           <NumericInput
-            step={0.1} precision={3}
+            step={1} precision={3}
             snap
             className={troopDef.type}
             min={0}
