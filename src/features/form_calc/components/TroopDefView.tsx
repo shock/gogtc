@@ -102,7 +102,7 @@ class TroopDefViewBase extends React.Component<Props> {
     return (
       <div className="TroopDefView">
         <label>{this.data().type}</label>
-        <div className={`TroopPercent NumEntry PercEntry inline nobr ${percentSumOver} ${percentSumUnder}`}>
+        <div className={`TroopPercent NumCell PercEntry inline nobr ${percentSumOver} ${percentSumUnder}`}>
           {/* <LockState
             locked={this.data().percentLocked}
             onClick={this.handlePercentLockClick}
@@ -120,7 +120,7 @@ class TroopDefViewBase extends React.Component<Props> {
             onChange={this.handlePercentChange}
           />
         </div>
-        <div className={`TroopCount NumEntry inline nobr`}>
+        <div className={`TroopCount NumCell inline nobr`}>
           <LockState
             locked={this.data().countLocked}
             onClick={this.handleCountLockClick}

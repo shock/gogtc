@@ -93,7 +93,7 @@ class TierDefViewBase extends React.Component<Props> {
     return (
       <div className="TroopDefView">
         <label>{"Sums"}</label>
-        <div className={`TroopPercent NumEntry PercEntry inline nobr`}>
+        <div className={`TroopPercent NumCell PercEntry inline nobr`}>
           {/* <div className="PercentDelta no-delta inline" > */}
             <FontAwesomeIcon
               icon={'check'}
@@ -103,7 +103,7 @@ class TierDefViewBase extends React.Component<Props> {
           {/* </div> */}
           <span className="sum">{this.data().troopPercentSum().toFixed(3)}%</span>
         </div>
-        <div className={`TroopCount NumEntry inline nobr`}>
+        <div className={`TroopCount NumCell inline nobr`}>
           <FontAwesomeIcon
             icon={'check'}
             color={'transparent'}

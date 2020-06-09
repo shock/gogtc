@@ -153,7 +153,7 @@ export class NumEntryView extends Component<NumEntryProps, NumEntryState> {
       )
     }
     return (
-      <div className={`NumEntry ${className}`}>
+      <div className={`NumCell ${className}`}>
         {label}
         <div className='nobr inline relative'>
           <Button className="button btn-xs" data-type='dec'

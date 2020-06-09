@@ -28,7 +28,7 @@ span.react-numeric-input input {
 $inc-dec-bg: #eee;
 $inc-dec-color: #000;
 
-.NumEntry {
+.NumCell {
   display: inline-block;
   padding: 0.01rem;
   span.react-numeric-input input, span.sum {
@@ -129,7 +129,7 @@ $icon-action: rgb(250, 234, 90);
   span.react-numeric-input input, span.sum {
     max-width: 8rem;
   }
-  .NumEntry {
+  .NumCell {
     display: inline-block;
     padding: 0.01rem;
     span.react-numeric-input input, span.sum {

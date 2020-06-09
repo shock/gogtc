@@ -81,6 +81,6 @@ export class TroopCountView extends Component<TroopCountProps, TroopCountState> 
   }
 
   render() {
-    return this.renderWithInsert(null, 'NumEntry');
+    return this.renderWithInsert(null, 'NumCell');
   }
 }
