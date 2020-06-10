@@ -11,9 +11,8 @@ import { TierDefView } from './TierDefView';
 import { MFormCalc } from '../models/MFormCalc';
 
 const mapStateToProps = (state: RootState) => ({
-  // this has to be here to trigger re-rendering even though the props
-  // used to render are passed from the parent.
-  // TODO: figure out the right way to trigger re-rendering
+  // hack to trigger re-rendering any time the formCalc changes
+  // TODO: figure out an efficient way to trigger selective, partial re-rendering
   formCalcs: selectors.getFormCalcs(state.formCalc)
 });
 
@@ -30,7 +29,6 @@ interface FormCalcViewProps {
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & FormCalcViewProps;
 
 class FormCalcViewBase extends React.Component<Props> {
-
   constructor(props: Props) {
     super(props);
     this.handleMarchCapChange = this.handleMarchCapChange.bind(this);
@@ -46,9 +44,8 @@ class FormCalcViewBase extends React.Component<Props> {
   }
 
   componentDidUpdate(prevProps:Props) {
-    if( prevProps.formCalc !== this.props.formCalc && this.hasModel()) {
-      this.resetReduxState();
-    }
+    if( prevProps.formCalc !== this.props.formCalc && this.hasModel() )
+      { this.resetReduxState(); };
   }
 
   resetReduxState() {
