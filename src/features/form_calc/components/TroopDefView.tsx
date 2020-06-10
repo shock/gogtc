@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as NumEntry from '../../../lib/num-entry';
 import * as selectors from '../selectors';
 import * as actions from '../actions';
-import { MTroopDef, MTierDef } from '../models';
+import { MTroopDef, MTierDef, PercentPrecision } from '../models';
 import { LockState } from '../../../components/LockState';
 
 const mapStateToProps = (state: RootState) => ({
@@ -113,7 +113,7 @@ class TroopDefViewBase extends React.Component<Props> {
         <div className={`TroopPercent NumCell PercEntry inline nobr ${hasDelta} ${locked}`}>
           { this.fixThisPercent() }
           <NumericInput
-            step={1} precision={3}
+            step={1} precision={PercentPrecision}
             snap
             className={troopDef.type}
             min={0}

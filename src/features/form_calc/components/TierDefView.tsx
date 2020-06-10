@@ -10,7 +10,7 @@ import * as actions from '../actions';
 import * as selectors from '../selectors';
 import { TroopDefView } from './TroopDefView';
 import { LockState } from '../../../components/LockState';
-import { MTierDef, MFormCalc } from '../models';
+import { MTierDef, PercentPrecision } from '../models';
 
 const mapStateToProps = (state: RootState) => ({
   // hack to trigger re-rendering any time the formCalc changes
@@ -169,7 +169,7 @@ class TierDefViewBase extends React.Component<Props> {
             <div className="nobr inline">
               { this.fixThisPercent() }
               <NumericInput
-                step={1} precision={3}
+                step={1} precision={PercentPrecision}
                 snap
                 min={0}
                 max={100}

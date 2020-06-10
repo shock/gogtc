@@ -1,5 +1,7 @@
 import { TierNum, TroopType, Int, toInt } from '../types';
-import { MFormCalc, MTroopDef } from '.';
+import { MTroopDef } from '.';
+
+const PercentPrecision = 4;
 
 class MTierDef {
   tierNum: TierNum;
@@ -157,10 +159,10 @@ class MTierDef {
   }
 
   calculateAndUpdatePercent(marchCap:Int) {
-    if(marchCap === 0 || this.capacityLocked) {
+    if(marchCap === 0 || this.capacityLocked && false) {
       this.percent = 0;
     } else {
-      const strVal = (Math.round(this.capacity * 100000 / marchCap) / 1000).toFixed(4);
+      const strVal = (Math.round(this.capacity * (10**(PercentPrecision+2)) / marchCap) / (10**PercentPrecision)).toFixed(PercentPrecision);
       this.percent = parseFloat(strVal);
     }
     return this.percent;

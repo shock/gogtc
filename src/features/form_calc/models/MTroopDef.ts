@@ -1,5 +1,6 @@
 import { Int, toInt, TroopType } from '../types';
-import { MTierDef } from '.';
+
+const PercentPrecision = 4;
 
 export class MTroopDef {
   type: TroopType;
@@ -68,7 +69,7 @@ export class MTroopDef {
     if(tierCapacity === 0 || this.countLocked) {
       this.percent = 0;
     } else {
-      const strVal = (Math.round(this.count * 100000 / tierCapacity) / 1000).toFixed(4);
+      const strVal = (Math.round(this.count * (10**(PercentPrecision+2)) / tierCapacity) / (10**PercentPrecision)).toFixed(PercentPrecision);
       this.percent = parseFloat(strVal);
     }
     return this.percent;
@@ -77,7 +78,7 @@ export class MTroopDef {
   // returns the actual percent of the supplied tierCapacity for this troopDef's count
   // no attribute are mutated
   getActualPercent(tierCapacity:Int):number {
-    const strVal = (Math.round(this.count * 100000 / tierCapacity) / 1000).toFixed(4);
+    const strVal = (Math.round(this.count * (10**(PercentPrecision+2)) / tierCapacity) / (10**PercentPrecision)).toFixed(PercentPrecision);
     return parseFloat(strVal);
   }
 

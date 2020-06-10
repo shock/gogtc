@@ -67,6 +67,8 @@ export const TestLibrary:FormCalcDictionary = {
   }
 };
 
+export const PercentPrecision = 4;
+
 export * from './MTierDef';
 export * from './MTroopDef';
 export * from './MFormCalc';
