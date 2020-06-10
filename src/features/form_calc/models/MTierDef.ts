@@ -10,9 +10,21 @@ class MTierDef {
   capacityLocked:boolean = false;
   percentLocked:boolean = false;
 
-
   constructor(tierNum:TierNum) {
     this.tierNum = tierNum;
+  }
+
+  asJsonObject() {
+    let obj:any = {};
+    obj.tierNum = this.tierNum;
+    obj.capacity = this.capacity;
+    obj.percent = this.percent;
+    obj.capacityLocked = this.capacityLocked;
+    obj.percentLocked = this.percentLocked;
+    obj.troopDefs = this.troopDefs.map( troopDef => {
+      return troopDef.asJsonObject();
+    });
+    return obj;
   }
 
   id():string {

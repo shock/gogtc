@@ -9,7 +9,7 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 
-import Home from './routes/home';
+import Router from './router';
 import store from './store';
 import './assets/styles/main.scss';
 import './fontawesome'
@@ -30,7 +30,7 @@ const Root = () => (
   <React.StrictMode>
     <Provider store={store}>
       { checkSimulateTouch() }
-      <Home />
+      <Router />
     </Provider>
   </React.StrictMode>
 );

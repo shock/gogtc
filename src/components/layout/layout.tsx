@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from 'react'; // importing FunctionComponent
+import { Link } from "react-router-dom";
 import { LayoutProps } from './layout.types';
 import { Container, Row, Col, Navbar, Nav, NavDropdown, Form, FormControl,
   Button } from 'react-bootstrap';
@@ -14,8 +15,8 @@ const Layout: FunctionComponent<LayoutProps> = ({ title, paragraph, children }) 
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                  <Nav.Link href="#home">Home</Nav.Link>
-                  <Nav.Link href="#link">Link</Nav.Link>
+                  <Link to="/" className='nav-link'>Calc</Link>
+                  <Link to="/json" className='nav-link'>Json</Link>
                   <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                     <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                     <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>

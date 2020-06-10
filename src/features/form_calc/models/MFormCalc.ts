@@ -18,6 +18,17 @@ class MFormCalc extends IdParser {
     this.name = name;
   }
 
+  asJsonObject() {
+    let obj:any = {};
+    obj.name = this.name;
+    obj.marchCap = this.marchCap;
+    obj.debug = this.debug;
+    obj.tierDefs = this.tierDefs.map( tierDef => {
+      return tierDef.asJsonObject();
+    });
+    return obj;
+  }
+
   id():string {
     return this.name;
   }

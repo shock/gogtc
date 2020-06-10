@@ -17,6 +17,16 @@ export class MTroopDef {
     this.countLocked = false;
   }
 
+  asJsonObject() {
+    let obj:any = {};
+    obj.type = this.type;
+    obj.count = this.count;
+    obj.percent = this.percent;
+    obj.countLocked = this.countLocked;
+    obj.percentLocked = this.percentLocked;
+    return obj;
+  }
+
   id():string {
     if ( !this.tierDef )
       throw new Error('attribute tierDef is null');
