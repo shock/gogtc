@@ -101,9 +101,9 @@ class TroopDefViewBase extends React.Component<Props> {
 
   render() {
     const troopDef = this.data();
-    const tierDef = this.props.tierDef;
-    const hasDelta = (tierDef.troopPercentDelta() !== 0) && !this.data().countLocked ? 'hasDelta' : '';
     if( !troopDef ) return <div/>;
+    const tierDef = this.props.tierDef;
+    const hasDelta = (tierDef.troopPercentDelta() !== 0) && !troopDef.countLocked ? 'hasDelta' : '';
     return (
       <div className="TroopDefView">
         <label>{this.data().type}</label>

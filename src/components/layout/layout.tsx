@@ -10,7 +10,7 @@ const Layout: FunctionComponent<LayoutProps> = ({ title, paragraph, children }) 
         <Row>
           <Col md={12}>
             <Navbar bg="primary" expand="lg" className="navbar-dark">
-              <Navbar.Brand href="#home">Voodoo</Navbar.Brand>
+              <Navbar.Brand href="#home">Divine</Navbar.Brand>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
