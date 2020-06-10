@@ -1,0 +1,8 @@
+.JsonView {
+  pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
+  .string { color: rgb(68, 209, 68); }
+  .number { color: rgb(253, 173, 76); }
+  .boolean { color: rgb(146, 181, 255); }
+  .null { color: rgb(255, 142, 255); }
+  .key { color: rgb(231, 231, 231); }
+}

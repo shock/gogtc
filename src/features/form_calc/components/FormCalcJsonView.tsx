@@ -51,7 +51,27 @@ class FormCalcJsonViewBase extends React.Component<Props, State> {
     })
   }
 
+  syntaxHighlight(json:string) {
+    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+        var cls = 'number';
+        if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+                cls = 'key';
+            } else {
+                cls = 'string';
+            }
+        } else if (/true|false/.test(match)) {
+            cls = 'boolean';
+        } else if (/null/.test(match)) {
+            cls = 'null';
+        }
+        return '<span class="' + cls + '">' + match + '</span>';
+    });
+  }
+
   render() {
+    const json = JSON.stringify(this.state.formCalcModel.asJsonObject(), null, 2);
     return (
       <React.Fragment>
         <Form onSubmit={this.handleNameSubmit}>
@@ -71,9 +91,7 @@ class FormCalcJsonViewBase extends React.Component<Props, State> {
               src={this.state.formCalcModel.asJsonObject()}
               theme='monokai'
             /> */}
-            <pre>
-              {JSON.stringify(this.state.formCalcModel.asJsonObject())}
-            </pre>
+            <pre className="JsonView" dangerouslySetInnerHTML={{ __html: this.syntaxHighlight(json) }} />
           </Col>
         </Row>
       </React.Fragment>
