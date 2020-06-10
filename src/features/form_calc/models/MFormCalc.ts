@@ -224,6 +224,20 @@ class MFormCalc extends IdParser {
     return toInt(marchCap);
   }
 
+  getLockedTierCap():Int {
+    let lockedCap:Int = toInt(0);
+    this.tierDefs.forEach( tierDef => {
+      if( tierDef.capacityLocked ) {
+        lockedCap = toInt(lockedCap + tierDef.capacity);
+      }
+    });
+    return lockedCap;
+  }
+
+  getUnlockedCapacity():Int {
+    return toInt(this.marchCap - this.getLockedTierCap());
+  }
+
   // gets the sum of tier def percents
   // does not change anything
   getTierDefPercentsSum() {
@@ -244,7 +258,7 @@ class MFormCalc extends IdParser {
 
   calculateAndUpdateTierPercents(fixDelta:boolean = true) {
     this.tierDefs.forEach( tierDef => {
-      tierDef.calculateAndUpdatePercent(this.marchCap);
+      tierDef.calculateAndUpdatePercent(this.getUnlockedCapacity());
     });
     if( fixDelta && this.tierPercentDelta() !== 0 ) {
       let firstUnlockedTierDef:MTierDef|null = null;
