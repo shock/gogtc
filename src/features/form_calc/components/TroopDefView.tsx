@@ -105,11 +105,12 @@ class TroopDefViewBase extends React.Component<Props> {
     const troopDef = this.data();
     if( !troopDef ) return <div/>;
     const tierDef = this.props.tierDef;
+    const locked = troopDef.countLocked ? "locked" : '';
     const hasDelta = (this.props.troopPercentDelta !== 0) && !troopDef.countLocked ? 'hasDelta' : '';
     return (
       <div className="TroopDefView">
         <label>{this.data().type}</label>
-        <div className={`TroopPercent NumCell PercEntry inline nobr ${hasDelta}`}>
+        <div className={`TroopPercent NumCell PercEntry inline nobr ${hasDelta} ${locked}`}>
           { this.fixThisPercent() }
           <NumericInput
             step={1} precision={3}
@@ -117,7 +118,7 @@ class TroopDefViewBase extends React.Component<Props> {
             className={troopDef.type}
             min={0}
             max={100}
-            value={troopDef.percent}
+            value={troopDef.countLocked ? '' : troopDef.percent}
             format={NumEntry.formatPercent}
             parse={NumEntry.parsePercent}
             onChange={this.handlePercentChange}
