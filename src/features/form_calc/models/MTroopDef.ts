@@ -23,6 +23,10 @@ export class MTroopDef {
     return `${this.tierDef.id()}:${this.type}`;
   }
 
+  debug() {
+    return this.tierDef?.debug();
+  }
+
   lockCount() {
     if(this.countLocked) return;
     if(this.percentLocked)

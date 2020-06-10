@@ -1,7 +1,7 @@
 import { RootState } from 'typesafe-actions';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
 import NumericInput from 'react-numeric-input';
 import * as NumEntry from '../../../lib/num-entry';
 
@@ -19,7 +19,8 @@ const mapStateToProps = (state: RootState) => ({
 
 const dispatchProps = {
   resetState: actions.resetState,
-  updateMarchCap: actions.updateMarchCap
+  updateMarchCap: actions.updateMarchCap,
+  toggleFormCalcDebug: actions.toggleFormCalcDebug
 };
 
 interface FormCalcViewProps {
@@ -33,6 +34,7 @@ class FormCalcViewBase extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
     this.handleMarchCapChange = this.handleMarchCapChange.bind(this);
+    this.handleDebugClick = this.handleDebugClick.bind(this);
   }
 
   componentDidMount() {
@@ -53,6 +55,10 @@ class FormCalcViewBase extends React.Component<Props> {
     return this.props.formCalcModel;
   }
 
+  data() {
+    return this.hasModel();
+  }
+
   buildTierDefViews() {
     if (this.props.formCalcModel) {
       return this.props.formCalcModel.tierDefs.map( (tierDef, index) => {
@@ -65,24 +71,39 @@ class FormCalcViewBase extends React.Component<Props> {
   }
 
   handleMarchCapChange(numVal:number|null, strVal:string, target:HTMLInputElement) {
-    this.props.updateMarchCap(this.props.formCalcModel.id(), ''+numVal);
+    this.props.updateMarchCap(this.data().id(), ''+numVal);
+  }
+
+  handleDebugClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    this.props.toggleFormCalcDebug(this.data().id());
   }
 
   renderDebug() {
-    if( this.props.formCalcModel.debug || true ) {
+    const button = (
+      <Button
+        variant={this.data().debug ? "primary" : "secondary"}
+        onClick={this.handleDebugClick}
+      >DEBUG</Button>
+    );
+    if( this.data().debug ) {
       return (
         <Col>
           <div className="NumCell inline nobr">
             <label>Troops Sum</label>
-            <span className="sum">{this.props.formCalcModel.getCapFromTierDefs()}</span>
+            <span className="sum">{this.data().getCapFromTierDefs()}</span>
           </div>
           <div className="NumCell inline nobr">
             <label>Tier % Sum</label>
-            <span className="sum">{this.props.formCalcModel.getTierDefPercentsSum()}</span>
+            <span className="sum">{this.data().getTierDefPercentsSum().toFixed(3)}</span>
           </div>
+          {button}
         </Col>
       );
-    } else return null;
+    } else return (
+      <Col>
+        {button}
+      </Col>
+    );
   }
 
   render() {

@@ -15,18 +15,14 @@ class MTierDef {
     this.tierNum = tierNum;
   }
 
-  addTroopDef(troopDef: MTroopDef) {
-    this.troopDefs.push(troopDef);
-  }
-
-  setTroopDefs(troopDefs: MTroopDef[]) {
-    this.troopDefs = troopDefs;
-  }
-
   id():string {
     if ( !this.formCalc )
       throw new Error('attribute formCalc is null');
     return `${this.formCalc.id()}:${this.tierNum}`;
+  }
+
+  debug() {
+    return this.formCalc?.debug;
   }
 
   findTroopDef( troopType: TroopType ) {
@@ -157,35 +153,6 @@ class MTierDef {
     this.troopDefs.forEach( troopDef => {
       troopDef.calculateAndUpdateCount(this.getUnlockedCapacity());
     });
-  }
-
-  updateTroopDefPercent(troopDef:MTroopDef, newPercent:number) {
-    // update the troopDef's percent regardless of whether it's locked or now
-    troopDef.updatePercent(newPercent);
-
-    //
-    // now we need to adjust the other troopDefs' percents relative to this one's change
-    //
-    const oldPercent = troopDef.percent;
-
-    const percentDiff10k = (newPercent*10000) - (oldPercent*10000); // multiple by 10k for 4 decimal precision
-
-    const otherTroopDefs = this.troopDefs.filter( tmpTroopDef => (troopDef !== tmpTroopDef) && (tmpTroopDef.percentLocked === false) )
-    if( otherTroopDefs.length > 0 ) {
-      if( otherTroopDefs.length === 1 ) {
-        const otherTroopDef = otherTroopDefs[0];
-        otherTroopDef.updatePercent( (otherTroopDef.percent*10000 - percentDiff10k) / 10000 );
-      } else {
-        // there are 2 other unlocked troopDefs
-        const otd0 = otherTroopDefs[0];
-        const otd1 = otherTroopDefs[1];
-        const otdPercentSum = (otd0.percent * 10000) + (otd1.percent*10000);
-        const otd0ratio = otd0.percent * 10000 / otdPercentSum;
-        const otd1ratio = otd1.percent * 10000 / otdPercentSum;
-        otd0.updatePercent(otd0ratio*percentDiff10k/10000);
-        otd1.updatePercent(otd1ratio*percentDiff10k/10000);
-      }
-    }
   }
 
   calculateAndUpdatePercent(marchCap:Int) {

@@ -93,6 +93,18 @@ class TroopDefViewBase extends React.Component<Props> {
     }
   }
 
+  renderDebug() {
+    if( this.data().debug() ) {
+      const troopDef = this.data();
+      const tierDef = this.props.tierDef;
+      return (
+        <div className={'inline nobr troopPercCalculated'}>
+          <span>{troopDef.getActualPercent(tierDef.capacity).toFixed(2)+'%'}</span>
+        </div>
+      )
+    } else return null;
+  }
+
   render() {
     const troopDef = this.data();
     const tierDef = this.props.tierDef;
@@ -103,10 +115,6 @@ class TroopDefViewBase extends React.Component<Props> {
       <div className="TroopDefView">
         <label>{this.data().type}</label>
         <div className={`TroopPercent NumCell PercEntry inline nobr ${percentSumOver} ${percentSumUnder}`}>
-          {/* <LockState
-            locked={this.data().percentLocked}
-            onClick={this.handlePercentLockClick}
-          /> */}
           { this.fixThisPercent() }
           <NumericInput
             step={1} precision={3}
@@ -137,9 +145,7 @@ class TroopDefViewBase extends React.Component<Props> {
             onChange={this.handleCountChange}
           />
         </div>
-        <div className={'inline nobr troopPercCalculated'}>
-          <span>{troopDef.getActualPercent(tierDef.capacity).toFixed(2)+'%'}</span>
-        </div>
+        { this.renderDebug() }
       </div>
     )
   }

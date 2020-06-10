@@ -94,7 +94,7 @@ class MFormCalc extends IdParser {
 
   // Updates an individual troop def's count
   // if the troop def's count is not locked, updates the unlocked troop def percentages
-  // without changin the sibling troop def counts
+  // without changing the sibling troop def counts
   handleUpdateTroopCount(payload:IdString) {
     const troopDef = this.findTroopDef(payload.id);
     troopDef.updateCount(payload.value);
@@ -103,7 +103,7 @@ class MFormCalc extends IdParser {
   }
 
   // updates the troop def percentage if it's not count-locked
-  // updates the troop count accordingly, which, in turn updates the tier def's cap
+  // updates the troop count accordingly which, in turn, updates the tier defs' cap
   handleUpdateTroopPercent(payload:IdString) {
     const troopDef = this.findTroopDef(payload.id);
     troopDef.updatePercent(payload.value);
@@ -128,10 +128,11 @@ class MFormCalc extends IdParser {
     this.updateCountsFromPercents();
   }
 
-  handleAction( state:FCState, action:FormCalcAction ) {
-    let tierDef:MTierDef;
-    let troopDef:MTroopDef;
+  handleToggleFormCalcDebug(payload:IdOnly) {
+    this.debug = !this.debug;
+  }
 
+  handleAction( state:FCState, action:FormCalcAction ) {
     switch (action.type) {
       case getType(actions.updateMarchCap) :
         this.handleUpdateMarchCap(action.payload);
@@ -154,24 +155,8 @@ class MFormCalc extends IdParser {
       case getType(actions.fixTroopPercent) :
         this.handleFixTroopPercent(action.payload);
         break;
-      // case getType(actions.updateTierCapacityLock) :
-      //   tierDef = this.findTierDef(action.payload.id);
-      //   tierDef.updateCapacityLock(action.payload.boolean);
-      //   this.resolveLockStates();
-      //   // this.recalculatePercentsThenCounts();
-      //   break;
-      // case getType(actions.updateTierPercentLock) :
-      //   tierDef = this.findTierDef(action.payload.id);
-      //   tierDef.updatePercentLock(action.payload.boolean);
-      //   this.resolveLockStates();
-      //   // this.recalculatePercentsThenCounts();
-      //   break;
-      // case getType(actions.updateTroopPercentLock) :
-      //   troopDef = this.findTroopDef(action.payload.id);
-      //   troopDef.updatePercentLock(action.payload.boolean);
-      //   this.resolveLockStates();
-      //   // this.recalculatePercentsThenCounts();
-      //   break;
+      case getType(actions.toggleFormCalcDebug) :
+        this.handleToggleFormCalcDebug(action.payload);
     }
     return this.getState();
   }

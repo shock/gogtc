@@ -43,6 +43,9 @@ const formCalc = createReducer(BlankFCState)
   .handleAction(actions.fixTroopPercent, (state, action) => {
     return getFormationById(action.payload.id).handleAction(state, action);
   })
+  .handleAction(actions.toggleFormCalcDebug, (state, action) => {
+    return getFormationById(action.payload.id).handleAction(state, action);
+  })
   .handleAction(actions.resetState, (state, action) => {
     return {
       ...state,

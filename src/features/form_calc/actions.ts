@@ -47,6 +47,10 @@ export const updateTroopCountLock = createAction('UPDATE_TROOP_COUNT_LOCK', (id:
   boolean: boolean
 }))<IdBoolean>();
 
+export const toggleFormCalcDebug = createAction('TOGGLE_FC_DEBUG', (id: string) => ({
+  id: id
+}))<IdBoolean>();
+
 export const fixTroopPercent = createAction('FIX_TROOP_PERCENT', (id:string) => ({
   id: id
 }))<IdOnly>();
@@ -57,7 +61,7 @@ export type UpdateIdValueAction = typeof updateTroopCount | typeof updateTroopPe
 export type UpdateIdBooleanAction = typeof updateTierPercentLock | typeof updateTierCapacityLock |
   typeof updateTroopCountLock | typeof updateTroopPercentLock;
 
-export type IdOnlyAction = typeof fixTroopPercent;
+export type IdOnlyAction = typeof fixTroopPercent | typeof toggleFormCalcDebug;
 
 export const resetState = createAction('RESET_STATE', (state:FCState) => ({
   ...state

@@ -90,7 +90,7 @@ class TierDefViewBase extends React.Component<Props> {
   }
 
   renderSums() {
-    return (
+    if( this.data().debug() ) { return (
       <div className="TroopDefView">
         <label>{"Sums"}</label>
         <div className={`TroopPercent NumCell PercEntry inline nobr`}>
@@ -115,7 +115,18 @@ class TierDefViewBase extends React.Component<Props> {
           <span>{this.getActualTroopDefPercentsSum().toFixed(2)+'%'}</span>
         </div>
       </div>
-    )
+    ) } else return null;
+  }
+
+  renderTierCap() {
+    return (
+      <div className="TierProps NumCell nobr">
+        <label>Tier Cap</label>
+        <div className="nobr inline">
+          <span className="sum">{this.data().capacity}</span>
+        </div>
+      </div>
+    );
   }
 
   render() {
@@ -147,26 +158,7 @@ class TierDefViewBase extends React.Component<Props> {
               />
             </div>
           </div>
-          <div className="TierProps NumCell nobr">
-            <label>Tier Cap</label>
-            <div className="nobr inline">
-              {/* <LockState
-                locked={this.data().capacityLocked}
-                onClick={this.handleCapLockClick}
-              /> */}
-              <span className="sum">{this.data().capacity}</span>
-              {/* <NumericInput
-                step={100}
-                // className={troopDef.type}
-                min={0}
-                max={999999}
-                value={this.data().capacity}
-                format={NumEntry.formatInteger}
-                parse={NumEntry.parseInteger}
-                onChange={this.handleTierCapChange}
-              /> */}
-            </div>
-          </div>
+          {this.renderTierCap()}
         </div>
         <div className="TierDefs">
           {this.buildTroopDefViews()}
