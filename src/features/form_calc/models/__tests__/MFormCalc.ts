@@ -22,10 +22,6 @@ describe( 'MTierDef', () => {
       formCalc.tierDefs = [tierDef];
       const testState:FCState = BlankFCState;
       const state = formCalc.getState();
-      expect(Object.values(state.troopDefs).length).toBe(3);
-      expect(Object.values(state.tierDefs).length).toBe(1);
-      expect(state.tierDefs[tierDef.id()]).toBe(tierDef);
-      expect(state.troopDefs[tierDef.troopDefs[0].id()]).toBe(tierDef.troopDefs[0]);
     });
   });
 
@@ -53,25 +49,6 @@ describe( 'MTierDef', () => {
           expect(
             () => {formCalc.findTierDef(':'+TierNum.T1)}
           ).toThrow(Error);
-        });
-      });
-    });
-  });
-
-  describe('getTroopDefs()', () => {
-    describe('with no tierDefs', () => {
-      it('should return an empty TroopDefDictionary', () => {
-        const formCalc = new MFormCalc('test');
-        expect( formCalc.getTroopDefs() ).toEqual({troopDefs:{}});
-      });
-    });
-    describe('with tierDefs', () => {
-      describe('with valid TierNum', () => {
-        it('should return the corresponding TroopDefDictionary', () => {
-          const formCalc = buildFormCalcWithTiers();
-          const troopDefs = formCalc.getTroopDefs().troopDefs;
-          expect( Object.values(troopDefs).length ).toEqual(6);
-          expect( troopDefs['test:T12:Distance'] instanceof MTroopDef ).toBe(true);
         });
       });
     });

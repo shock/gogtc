@@ -2,7 +2,6 @@ import { TierNum, TroopType, Int, toInt } from '../types';
 import { MFormCalc, MTroopDef } from '.';
 
 class MTierDef {
-  formCalc: MFormCalc | null = null;
   tierNum: TierNum;
   troopDefs: MTroopDef[] = [];
   capacity:Int = toInt(0);
@@ -25,16 +24,6 @@ class MTierDef {
       return troopDef.asJsonObject();
     });
     return obj;
-  }
-
-  id():string {
-    if ( !this.formCalc )
-      throw new Error('attribute formCalc is null');
-    return `${this.formCalc.id()}:${this.tierNum}`;
-  }
-
-  debug() {
-    return this.formCalc?.debug;
   }
 
   findTroopDef( troopType: TroopType ) {

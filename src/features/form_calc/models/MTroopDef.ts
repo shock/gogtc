@@ -2,7 +2,6 @@ import { Int, toInt, TroopType } from '../types';
 import { MTierDef } from '.';
 
 export class MTroopDef {
-  tierDef: MTierDef | null = null;
   type: TroopType;
   count: Int;
   percent: number;
@@ -25,16 +24,6 @@ export class MTroopDef {
     obj.countLocked = this.countLocked;
     obj.percentLocked = this.percentLocked;
     return obj;
-  }
-
-  id():string {
-    if ( !this.tierDef )
-      throw new Error('attribute tierDef is null');
-    return `${this.tierDef.id()}:${this.type}`;
-  }
-
-  debug() {
-    return this.tierDef?.debug();
   }
 
   lockCount() {

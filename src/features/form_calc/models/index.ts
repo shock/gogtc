@@ -16,16 +16,16 @@ function buildTroopDefs(tierDef:MTierDef):MTroopDef[] {
       3000 as Int,
     ),
   ];
-  troopDefs.forEach( (troopDef) => {
-    troopDef.tierDef = tierDef;
-  });
+  // troopDefs.forEach( (troopDef) => {
+  //   troopDef.tierDef = tierDef;
+  // });
   return troopDefs;
 }
 
 function buildTierDefWithTroopDefs(tierNum:TierNum, formCalc:MFormCalc):MTierDef {
   let tierDef = new MTierDef(tierNum);
   tierDef.troopDefs = buildTroopDefs(tierDef);
-  tierDef.formCalc = formCalc;
+  // tierDef.formCalc = formCalc;
   return tierDef;
 }
 

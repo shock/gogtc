@@ -24,7 +24,7 @@ const dispatchProps = {
 };
 
 interface FormCalcViewProps {
-  formCalcModel: MFormCalc;
+  formCalc: MFormCalc;
 }
 
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & FormCalcViewProps;
@@ -37,22 +37,26 @@ class FormCalcViewBase extends React.Component<Props> {
     this.handleDebugClick = this.handleDebugClick.bind(this);
   }
 
+  id():string {
+    return this.props.formCalc.name;
+  }
+
   componentDidMount() {
     this.resetReduxState();
   }
 
   componentDidUpdate(prevProps:Props) {
-    if( prevProps.formCalcModel !== this.props.formCalcModel && this.hasModel()) {
+    if( prevProps.formCalc !== this.props.formCalc && this.hasModel()) {
       this.resetReduxState();
     }
   }
 
   resetReduxState() {
-    this.props.resetState(this.props.formCalcModel.getState());
+    this.props.resetState(this.props.formCalc.getState());
   }
 
   hasModel() {
-    return this.props.formCalcModel;
+    return this.props.formCalc;
   }
 
   data() {
@@ -60,14 +64,18 @@ class FormCalcViewBase extends React.Component<Props> {
   }
 
   buildTierDefViews() {
-    if (this.props.formCalcModel) {
-      return this.props.formCalcModel.tierDefs.map( (tierDef, index) => {
-        return <TierDefView key={index} tierDef={tierDef} index={index}/>
-      });
-    }
-    return (
-      <span>No formation loaded.</span>
-    );
+    return this.props.formCalc.tierDefs.map( (tierDef, index) => {
+      return (
+        <TierDefView
+          id={`${this.id()}:${tierDef.tierNum}`}
+          tierPercentDelta={this.props.formCalc.tierPercentDelta()}
+          key={index}
+          tierDef={tierDef}
+          index={index}
+          debug={this.data().debug}
+        />
+      );
+    });
   }
 
   handleMarchCapChange(numVal:number|null, strVal:string, target:HTMLInputElement) {
@@ -111,16 +119,16 @@ class FormCalcViewBase extends React.Component<Props> {
       <React.Fragment>
         <Row>
           <Col sm={3}>
-            <h3>{this.props.formCalcModel?.name}</h3>
+            <h3>{this.props.formCalc?.name}</h3>
           </Col>
           {this.renderDebug()}
           <Col >
             <label>March Cap</label>&nbsp;
             <NumericInput
-              step={100}
+              step={1000}
               min={0}
               max={999999}
-              value={this.props.formCalcModel.marchCap}
+              value={this.props.formCalc.marchCap}
               format={NumEntry.formatInteger}
               parse={NumEntry.parseInteger}
               onChange={this.handleMarchCapChange}

@@ -4,13 +4,13 @@ import formCalcReducer from '../reducer';
 
 export function buildTierDef(tierNum:TierNum, formCalc:MFormCalc = new MFormCalc('test')) {
   let instance = new MTierDef(tierNum);
-  instance.formCalc = formCalc;
+  // instance.formCalc = formCalc;
   return instance;
 }
 
 export function buildTroopDef(type:TroopType, count:Int, tierDef:MTierDef = buildTierDef(TierNum.T12)) {
   const instance = new MTroopDef(type, count);
-  instance.tierDef = tierDef;
+  // instance.tierDef = tierDef;
   return instance;
 }
 
@@ -38,7 +38,7 @@ export function buildTroopDefs(tierDef:MTierDef):MTroopDef[] {
 export function buildTierWithTroopDefs(tierNum:TierNum, formCalc:MFormCalc = new MFormCalc('test') ):MTierDef {
   let tierDef = new MTierDef(tierNum);
   tierDef.troopDefs = buildTroopDefs(tierDef);
-  tierDef.formCalc = formCalc;
+  // tierDef.formCalc = formCalc;
   return tierDef;
 }
 

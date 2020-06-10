@@ -33,7 +33,7 @@ class MFormCalc extends IdParser {
     return this.name;
   }
 
-  findTierDef( id: string ) {
+  findTierDef(id: string) {
     const tierNum = this.getTierNum(id);
     const selected = this.tierDefs.find( tierDef => tierDef.tierNum === tierNum );
     if( selected === undefined )
@@ -41,34 +41,22 @@ class MFormCalc extends IdParser {
     return selected;
   }
 
-  findTroopDef( id: string) {
+  findTroopDef(id: string) {
     const tierDef = this.findTierDef(id);
     const troopType = this.getTroopType(id);
     return tierDef.findTroopDef(troopType);
   }
 
-  getTroopDefs():TroopDefDictionary {
-    const tdd = {
-      troopDefs: {}
-    } as TroopDefDictionary;
+  getTroopDefs():MTroopDef[] {
     let troopDefs:MTroopDef[] = [];
     this.tierDefs.forEach( (tierDef) => {
       troopDefs = troopDefs.concat(tierDef.troopDefs);
     });
-    troopDefs.forEach( (troopDef) => {
-      tdd.troopDefs[troopDef.id()] = troopDef;
-    });
-    return tdd;
+    return troopDefs;
   }
 
-  getTierDefs():TierDefDictionary {
-    const tdd = {
-      tierDefs: {}
-    } as TierDefDictionary;
-    this.tierDefs.forEach( (tierDef) => {
-      tdd.tierDefs[tierDef.id()] = tierDef;
-    });
-    return tdd;
+  getTierDefs():MTierDef[] {
+    return this.tierDefs;
   }
 
   tierPercentSum():number {
@@ -218,8 +206,6 @@ class MFormCalc extends IdParser {
     const returnState = {
       ...state,
       ...formCalcDictionary,
-      ...this.getTierDefs(),
-      ...this.getTroopDefs()
     }
     return returnState;
   }

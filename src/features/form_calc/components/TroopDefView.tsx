@@ -11,7 +11,10 @@ import { MTroopDef, MTierDef } from '../models';
 import { LockState } from '../../../components/LockState';
 
 const mapStateToProps = (state: RootState) => ({
-  troopDefs: selectors.getTroopDefs(state.formCalc)
+  // this has to be here to trigger re-rendering even though the props
+  // used to render are passed from the parent.
+  // TODO: figure out the right way to trigger re-rendering
+  formCalcs: selectors.getFormCalcs(state.formCalc)
 });
 
 const dispatchProps = {
@@ -23,9 +26,11 @@ const dispatchProps = {
 
 type TroopDefViewProps = {
   troopDef: MTroopDef,
-  tierDef: MTierDef
+  tierDef: MTierDef,
+  id: string,
+  debug: boolean,
+  troopPercentDelta: number
 }
-
 
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & TroopDefViewProps;
 
@@ -40,34 +45,32 @@ class TroopDefViewBase extends React.Component<Props> {
   }
 
   data() {
-    return this.props.troopDefs[this.props.troopDef.id()];
+    return this.props.troopDef;
   }
 
   label(troopDef:MTroopDef) {
     return `${troopDef.type}`.trim();
   }
 
-  id() { return this.props.troopDef.id() }
-
   handleCountChange(numVal:number|null, strVal:string, target:HTMLInputElement) {
-    this.props.updateTroopCount(this.id(), ''+numVal);
+    this.props.updateTroopCount(this.props.id, ''+numVal);
   }
 
   handlePercentChange(numVal:number|null, strVal:string, target:HTMLInputElement) {
-    this.props.updateTroopPercent(this.id(), ''+numVal);
+    this.props.updateTroopPercent(this.props.id, ''+numVal);
   }
 
   handleCountLockClick(event: React.MouseEvent<SVGSVGElement, MouseEvent>) {
-    this.props.updateCountLock(this.id(), !this.data().countLocked);
+    this.props.updateCountLock(this.props.id, !this.data().countLocked);
   }
 
   handleFixPercentClick(event: React.MouseEvent<SVGSVGElement, MouseEvent>) {
-    this.props.fixTroopPercent(this.id());
+    this.props.fixTroopPercent(this.props.id);
   }
 
   fixThisPercent() {
     const tierDef = this.props.tierDef;
-    if( !this.data().countLocked && (tierDef.troopPercentDelta() !== 0) ) {
+    if( !this.data().countLocked && (this.props.troopPercentDelta !== 0) ) {
       return (
         <div className="PercentDelta delta inline" >
           <FontAwesomeIcon
@@ -88,7 +91,7 @@ class TroopDefViewBase extends React.Component<Props> {
   }
 
   renderDebug() {
-    if( this.data().debug() ) {
+    if( this.props.debug ) {
       const troopDef = this.data();
       const tierDef = this.props.tierDef;
       return (
@@ -103,7 +106,7 @@ class TroopDefViewBase extends React.Component<Props> {
     const troopDef = this.data();
     if( !troopDef ) return <div/>;
     const tierDef = this.props.tierDef;
-    const hasDelta = (tierDef.troopPercentDelta() !== 0) && !troopDef.countLocked ? 'hasDelta' : '';
+    const hasDelta = (this.props.troopPercentDelta !== 0) && !troopDef.countLocked ? 'hasDelta' : '';
     return (
       <div className="TroopDefView">
         <label>{this.data().type}</label>

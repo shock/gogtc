@@ -10,13 +10,13 @@ import * as actions from '../actions';
 import * as selectors from '../selectors';
 import { TroopDefView } from './TroopDefView';
 import { LockState } from '../../../components/LockState';
-import { MTierDef } from '../models';
+import { MTierDef, MFormCalc } from '../models';
 
 const mapStateToProps = (state: RootState) => ({
   // this has to be here to trigger re-rendering even though the props
   // used to render are passed from the parent.
   // TODO: figure out the right way to trigger re-rendering
-  tierDefs: selectors.getTierDefs(state.formCalc)
+  formCalcs: selectors.getFormCalcs(state.formCalc)
 });
 
 const dispatchProps = {
@@ -28,7 +28,10 @@ const dispatchProps = {
 
 type TierDefViewProps = {
   tierDef: MTierDef
-  index: number
+  index: number,
+  id: string,
+  debug: boolean,
+  tierPercentDelta: number
 }
 
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & TierDefViewProps;
@@ -50,16 +53,12 @@ class TierDefViewBase extends React.Component<Props> {
     return this.props.tierDef
   }
 
-  id() {
-    return this.data().id();
-  }
-
   handleTierCapChange(numVal:number|null, strVal:string, target:HTMLInputElement) {
-    this.props.updateTierCap(this.id(), ''+numVal);
+    this.props.updateTierCap(this.props.id, ''+numVal);
   }
 
   handleTierPercentChange(numVal:number|null, strVal:string, target:HTMLInputElement) {
-    this.props.updateTierPercent(this.id(), ''+numVal);
+    this.props.updateTierPercent(this.props.id, ''+numVal);
   }
 
   buildTroopDefViews() {
@@ -68,6 +67,9 @@ class TierDefViewBase extends React.Component<Props> {
         <TroopDefView
           troopDef={troopDef}
           tierDef={this.data()}
+          id={`${this.props.id}:${troopDef.type}`}
+          debug={this.props.debug}
+          troopPercentDelta={this.data().troopPercentDelta()}
         />
       // </Col>
     ));
@@ -82,7 +84,7 @@ class TierDefViewBase extends React.Component<Props> {
   }
 
   renderSums() {
-    if( this.data().debug() ) { return (
+    if( this.props.debug ) { return (
       <div className="TroopDefView">
         <label>{"Sums"}</label>
         <div className={`TroopPercent NumCell PercEntry inline nobr`}>
@@ -109,7 +111,7 @@ class TierDefViewBase extends React.Component<Props> {
   }
 
   handleCapLockClick(event: React.MouseEvent<SVGSVGElement, MouseEvent>) {
-    this.props.updateTierCapacityLock(this.id(), !this.data().capacityLocked);
+    this.props.updateTierCapacityLock(this.props.id, !this.data().capacityLocked);
   }
 
   renderTierCap() {
@@ -128,15 +130,11 @@ class TierDefViewBase extends React.Component<Props> {
   }
 
   handleFixPercentClick(event: React.MouseEvent<SVGSVGElement, MouseEvent>) {
-    this.props.fixTierPercent(this.id());
+    this.props.fixTierPercent(this.props.id);
   }
 
   fixThisPercent() {
-    const formCalc = this.data().formCalc;
-    if( !formCalc ) {
-      throw new Error(`tierDef ${this.data().id()} has null formCalc attribute`);
-    };
-    if( !this.data().capacityLocked && (formCalc.tierPercentDelta() !== 0) ) {
+    if( !this.data().capacityLocked && (this.props.tierPercentDelta !== 0) ) {
       return (
         <div className="PercentDelta delta inline" >
           <FontAwesomeIcon
@@ -160,7 +158,7 @@ class TierDefViewBase extends React.Component<Props> {
     let classNames = ['TierDefView'];
     const cycle = this.props.index%2===1 ? 'odd' : 'even';
     classNames.push(cycle);
-    const hasDelta = (this.data().formCalc?.tierPercentDelta() !== 0) && !this.data().capacityLocked ? 'hasDelta' : '';
+    const hasDelta = (this.props.tierPercentDelta !== 0) && !this.data().capacityLocked ? 'hasDelta' : '';
     return (
       <Row className={classNames.join(' ')}>
         <div className="TierNum">

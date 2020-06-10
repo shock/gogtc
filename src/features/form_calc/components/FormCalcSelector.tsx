@@ -18,7 +18,7 @@ interface FormCalcSelectorProps {
 
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & FormCalcSelectorProps;
 type State = {
-  formCalcModel: MFormCalc,
+  formCalc: MFormCalc,
   formName: string
 }
 
@@ -27,7 +27,7 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      formCalcModel: TestLibrary.formCalcs[this.props.name],
+      formCalc: TestLibrary.formCalcs[this.props.name],
       formName: ''
     }
     this.handleNameChange = this.handleNameChange.bind(this);
@@ -42,11 +42,11 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
 
   handleNameSubmit(event: any) {
     event.preventDefault();
-    const formCalcModel = TestLibrary.formCalcs[this.state.formName];
-    if( !formCalcModel )
+    const formCalc = TestLibrary.formCalcs[this.state.formName];
+    if( !formCalc )
       alert(`Couldn't find model with name: '${this.state.formName}'`);
     this.setState({
-      formCalcModel: formCalcModel
+      formCalc: formCalc
     })
   }
 
@@ -66,7 +66,7 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
         </Form>
         <Row>
           <Col>
-            <FormCalcView formCalcModel={this.state.formCalcModel} />
+            <FormCalcView formCalc={this.state.formCalc} />
           </Col>
         </Row>
       </React.Fragment>
