@@ -242,6 +242,24 @@ class MFormCalc extends IdParser {
     this.tierDefs.forEach( tierDef => {tierDef.resolveLockStates()} );
   }
 
+  calculateAndUpdateTierPercents(fixDelta:boolean = true) {
+    this.tierDefs.forEach( tierDef => {
+      tierDef.calculateAndUpdatePercent(this.marchCap);
+    });
+    if( fixDelta && this.tierPercentDelta() !== 0 ) {
+      let firstUnlockedTierDef:MTierDef|null = null;
+      for( let i=0; i<this.tierDefs.length; i++ ) {
+        if( !this.tierDefs[i].capacityLocked ) {
+          firstUnlockedTierDef = this.tierDefs[i];
+          break;
+        }
+      }
+      if( firstUnlockedTierDef ) {
+        this.fixTierPercent(firstUnlockedTierDef);
+      }
+    }
+  }
+
   updatePercentsFromCounts() {
     this.updateMarchCap(this.getCapFromTierDefs());
     this.tierDefs.forEach( tierDef => {
@@ -249,6 +267,7 @@ class MFormCalc extends IdParser {
       tierDef.calculateAndUpdatePercent(this.marchCap);
       tierDef.calculateAndUpdateTroopPercents(true);
     });
+    this.calculateAndUpdateTierPercents();
   }
 
   updateCountsFromPercents() {

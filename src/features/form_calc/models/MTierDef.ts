@@ -139,8 +139,8 @@ class MTierDef {
     if( fixDelta && this.troopPercentDelta() !== 0 ) {
       let firstUnlockedTroopDef:MTroopDef|null = null;
       for( let i=0; i<this.troopDefs.length; i++ ) {
-        if( !this.troopDefs[0].countLocked ) {
-          firstUnlockedTroopDef = this.troopDefs[0];
+        if( !this.troopDefs[i].countLocked ) {
+          firstUnlockedTroopDef = this.troopDefs[i];
           break;
         }
       }
