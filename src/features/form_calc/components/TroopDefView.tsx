@@ -18,7 +18,6 @@ const dispatchProps = {
   updateTroopCount: actions.updateTroopCount,
   updateTroopPercent: actions.updateTroopPercent,
   updateCountLock: actions.updateTroopCountLock,
-  updatePercentLock: actions.updateTroopPercentLock,
   fixTroopPercent: actions.fixTroopPercent
 };
 
@@ -37,8 +36,7 @@ class TroopDefViewBase extends React.Component<Props> {
     this.handleCountChange = this.handleCountChange.bind(this);
     this.handlePercentChange = this.handlePercentChange.bind(this);
     this.handleCountLockClick = this.handleCountLockClick.bind(this);
-    this.handlePercentLockClick = this.handlePercentLockClick.bind(this);
-    this.handleFixPercentOver = this.handleFixPercentOver.bind(this);
+    this.handleFixPercentClick = this.handleFixPercentClick.bind(this);
   }
 
   data() {
@@ -63,22 +61,18 @@ class TroopDefViewBase extends React.Component<Props> {
     this.props.updateCountLock(this.id(), !this.data().countLocked);
   }
 
-  handlePercentLockClick(event: React.MouseEvent<SVGSVGElement, MouseEvent>) {
-    this.props.updatePercentLock(this.id(), !this.data().percentLocked);
-  }
-
-  handleFixPercentOver(event: React.MouseEvent<SVGSVGElement, MouseEvent>) {
+  handleFixPercentClick(event: React.MouseEvent<SVGSVGElement, MouseEvent>) {
     this.props.fixTroopPercent(this.id());
   }
 
   fixThisPercent() {
     const tierDef = this.props.tierDef;
-    if( !this.data().countLocked && (tierDef.troopPercentSumOver() || tierDef.troopPercentSumUnder()) ) {
+    if( !this.data().countLocked && (tierDef.troopPercentDelta() !== 0) ) {
       return (
         <div className="PercentDelta delta inline" >
           <FontAwesomeIcon
             icon={'wrench'}
-            onClick={this.handleFixPercentOver}
+            onClick={this.handleFixPercentClick}
           />
         </div>
       );
@@ -99,7 +93,7 @@ class TroopDefViewBase extends React.Component<Props> {
       const tierDef = this.props.tierDef;
       return (
         <div className={'inline nobr troopPercCalculated'}>
-          <span>{troopDef.getActualPercent(tierDef.capacity).toFixed(2)+'%'}</span>
+          <span>{troopDef.getActualPercent(tierDef.capacity).toFixed(3)+'%'}</span>
         </div>
       )
     } else return null;
@@ -108,13 +102,12 @@ class TroopDefViewBase extends React.Component<Props> {
   render() {
     const troopDef = this.data();
     const tierDef = this.props.tierDef;
-    const percentSumOver = tierDef.troopPercentSumOver() && !this.data().countLocked ? 'percentOver' : '';
-    const percentSumUnder = tierDef.troopPercentSumUnder() && !this.data().countLocked ? 'percentUnder' : '';
+    const hasDelta = (tierDef.troopPercentDelta() !== 0) && !this.data().countLocked ? 'hasDelta' : '';
     if( !troopDef ) return <div/>;
     return (
       <div className="TroopDefView">
         <label>{this.data().type}</label>
-        <div className={`TroopPercent NumCell PercEntry inline nobr ${percentSumOver} ${percentSumUnder}`}>
+        <div className={`TroopPercent NumCell PercEntry inline nobr ${hasDelta}`}>
           { this.fixThisPercent() }
           <NumericInput
             step={1} precision={3}

@@ -69,7 +69,7 @@ export class MTroopDef {
     if(tierCapacity === 0 || this.countLocked) {
       this.percent = 0;
     } else {
-      const strVal = (Math.round(this.count * 1000000 / tierCapacity) / 10000).toFixed(4);
+      const strVal = (Math.round(this.count * 100000 / tierCapacity) / 1000).toFixed(4);
       this.percent = parseFloat(strVal);
     }
     return this.percent;
@@ -78,7 +78,7 @@ export class MTroopDef {
   // returns the actual percent of the supplied tierCapacity for this troopDef's count
   // no attribute are mutated
   getActualPercent(tierCapacity:Int):number {
-    const strVal = (Math.round(this.count * 1000000 / tierCapacity) / 10000).toFixed(4);
+    const strVal = (Math.round(this.count * 100000 / tierCapacity) / 1000).toFixed(4);
     return parseFloat(strVal);
   }
 

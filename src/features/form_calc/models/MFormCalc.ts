@@ -11,7 +11,7 @@ class MFormCalc extends IdParser {
   name: string;
   tierDefs: MTierDef[] = [];
   marchCap:Int = toInt(0);
-  debug:boolean = false;
+  debug:boolean = true;
 
   constructor(name:string) {
     super();
@@ -58,6 +58,23 @@ class MFormCalc extends IdParser {
       tdd.tierDefs[tierDef.id()] = tierDef;
     });
     return tdd;
+  }
+
+  tierPercentSum():number {
+    let sum = 0;
+    this.tierDefs.forEach( tierDef => sum += tierDef.percent );
+    return sum;
+  }
+
+  tierPercentDelta() {
+    return this.tierPercentSum() - 100;
+  }
+
+  fixTierPercent(tierDef:MTierDef) {
+    let newPercent = tierDef.percent - this.tierPercentDelta();
+    if( newPercent < 0 ) { newPercent = 0; }
+    if( newPercent > 100 ) { newPercent = 100; }
+    tierDef.percent = newPercent;
   }
 
   //
@@ -121,10 +138,24 @@ class MFormCalc extends IdParser {
     // this.recalculatePercentsThenCounts();
   }
 
+  handleUpdateTierCapcityLock(payload:IdBoolean) {
+    const tierDef = this.findTierDef(payload.id);
+    tierDef.updateCapacityLock(payload.boolean);
+    this.resolveLockStates();
+    this.updatePercentsFromCounts();
+    // this.recalculatePercentsThenCounts();
+  }
+
   handleFixTroopPercent(payload:IdOnly) {
     const tierDef = this.findTierDef(payload.id);
     const troopDef = this.findTroopDef(payload.id);
     tierDef.fixTroopPercent(troopDef);
+    this.updateCountsFromPercents();
+  }
+
+  handleFixTierPercent(payload:IdOnly) {
+    const tierDef = this.findTierDef(payload.id);
+    this.fixTierPercent(tierDef);
     this.updateCountsFromPercents();
   }
 
@@ -152,8 +183,14 @@ class MFormCalc extends IdParser {
       case getType(actions.updateTroopCountLock) :
         this.handleUpdateTroopCountLock(action.payload);
         break;
+      case getType(actions.updateTierCapacityLock) :
+        this.handleUpdateTierCapcityLock(action.payload);
+        break;
       case getType(actions.fixTroopPercent) :
         this.handleFixTroopPercent(action.payload);
+        break;
+      case getType(actions.fixTierPercent) :
+        this.handleFixTierPercent(action.payload);
         break;
       case getType(actions.toggleFormCalcDebug) :
         this.handleToggleFormCalcDebug(action.payload);

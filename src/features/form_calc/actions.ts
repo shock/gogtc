@@ -55,13 +55,17 @@ export const fixTroopPercent = createAction('FIX_TROOP_PERCENT', (id:string) => 
   id: id
 }))<IdOnly>();
 
+export const fixTierPercent = createAction('FIX_TIER_PERCENT', (id:string) => ({
+  id: id
+}))<IdOnly>();
+
 export type UpdateIdValueAction = typeof updateTroopCount | typeof updateTroopPercent |
   typeof updateMarchCap | typeof updateTierCap | typeof updateTierPercent;
 
 export type UpdateIdBooleanAction = typeof updateTierPercentLock | typeof updateTierCapacityLock |
   typeof updateTroopCountLock | typeof updateTroopPercentLock;
 
-export type IdOnlyAction = typeof fixTroopPercent | typeof toggleFormCalcDebug;
+export type IdOnlyAction = typeof fixTroopPercent | typeof fixTierPercent | typeof toggleFormCalcDebug;
 
 export const resetState = createAction('RESET_STATE', (state:FCState) => ({
   ...state

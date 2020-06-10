@@ -17,14 +17,14 @@ describe( 'MTroopDef', () => {
 
   describe('calculateAndUpdatePercent()', () => {
     describe('when tier capacity is greater than 0', () => {
-      it('should calculate and set the proper percentage with 4 decimal places', () => {
+      it('should calculate and set the proper percentage with 3 decimal places', () => {
         const troopDef = new MTroopDef(TroopType.Infantry, toInt(1000));
         expect(troopDef.count).toBe(toInt(1000));
         troopDef.calculateAndUpdatePercent(toInt(3000));
-        expect(troopDef.percent).toBe(33.3333);
+        expect(troopDef.percent).toBe(33.333);
         troopDef.count = toInt(2000);
         const returnedPercent = troopDef.calculateAndUpdatePercent(toInt(3000));
-        expect(troopDef.percent).toBe(66.6667);
+        expect(troopDef.percent).toBe(66.667);
         expect(troopDef.percent).toBe(returnedPercent);
       });
     });

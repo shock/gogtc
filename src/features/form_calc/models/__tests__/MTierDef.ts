@@ -54,15 +54,15 @@ describe( 'MTierDef', () => {
 
   describe('calculateAndUpdatePercent()', () => {
     describe('when marchCap is greater than 0', () => {
-      it('should calculate and set the proper percentage with 4 decimal places', () => {
+      it('should calculate and set the proper percentage with 3 decimal places', () => {
         const tierDef = buildTierWithTroopDefs(TierNum.T12);
         const tierCap = tierDef.getCapFromTroopDefs();
         expect(tierCap).toBe(toInt(6000));
         tierDef.updateCap(tierCap);
         tierDef.calculateAndUpdatePercent(toInt(18000));
-        expect(tierDef.percent).toBe(33.3333);
+        expect(tierDef.percent).toBe(33.333);
         const returnedPercent = tierDef.calculateAndUpdatePercent(toInt(9000));
-        expect(tierDef.percent).toBe(66.6667);
+        expect(tierDef.percent).toBe(66.667);
         expect(tierDef.percent).toBe(returnedPercent);
       });
     });

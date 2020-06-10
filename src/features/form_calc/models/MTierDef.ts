@@ -131,7 +131,7 @@ class MTierDef {
     return 100 - this.getLockedTroopPercent();
   }
 
-  calculateAndUpdateTroopPercents(fixDelta:boolean = false) {
+  calculateAndUpdateTroopPercents(fixDelta:boolean = true) {
     this.troopDefs.forEach( troopDef => {
       troopDef.calculateAndUpdatePercent(this.getUnlockedCapacity());
     });
@@ -159,7 +159,7 @@ class MTierDef {
     if(marchCap === 0 || this.capacityLocked) {
       this.percent = 0;
     } else {
-      const strVal = (Math.round(this.capacity * 1000000 / marchCap) / 10000).toFixed(4);
+      const strVal = (Math.round(this.capacity * 100000 / marchCap) / 1000).toFixed(4);
       this.percent = parseFloat(strVal);
     }
     return this.percent;

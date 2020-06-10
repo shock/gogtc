@@ -22,8 +22,8 @@ const mapStateToProps = (state: RootState) => ({
 const dispatchProps = {
   updateTierCap: actions.updateTierCap,
   updateTierPercent: actions.updateTierPercent,
-  updateCapacityLock: actions.updateTierCapacityLock,
-  updatePercentLock: actions.updateTierPercentLock
+  updateTierCapacityLock: actions.updateTierCapacityLock,
+  fixTierPercent: actions.fixTierPercent
 };
 
 type TierDefViewProps = {
@@ -39,7 +39,7 @@ class TierDefViewBase extends React.Component<Props> {
     this.handleTierPercentChange = this.handleTierPercentChange.bind(this);
     this.handleTierCapChange = this.handleTierCapChange.bind(this);
     this.handleCapLockClick = this.handleCapLockClick.bind(this);
-    this.handlePercentLockClick = this.handlePercentLockClick.bind(this);
+    this.handleFixPercentClick = this.handleFixPercentClick.bind(this);
   }
 
   static defaultProps = {
@@ -60,14 +60,6 @@ class TierDefViewBase extends React.Component<Props> {
 
   handleTierPercentChange(numVal:number|null, strVal:string, target:HTMLInputElement) {
     this.props.updateTierPercent(this.id(), ''+numVal);
-  }
-
-  handleCapLockClick(event: React.MouseEvent<SVGSVGElement, MouseEvent>) {
-    this.props.updateCapacityLock(this.id(), !this.data().capacityLocked);
-  }
-
-  handlePercentLockClick(event: React.MouseEvent<SVGSVGElement, MouseEvent>) {
-    this.props.updatePercentLock(this.id(), !this.data().percentLocked);
   }
 
   buildTroopDefViews() {
@@ -94,14 +86,12 @@ class TierDefViewBase extends React.Component<Props> {
       <div className="TroopDefView">
         <label>{"Sums"}</label>
         <div className={`TroopPercent NumCell PercEntry inline nobr`}>
-          {/* <div className="PercentDelta no-delta inline" > */}
-            <FontAwesomeIcon
-              icon={'check'}
-              color={'transparent'}
-              fixedWidth
-            />
-          {/* </div> */}
-          <span className="sum">{this.data().troopPercentSum().toFixed(3)}%</span>
+          <FontAwesomeIcon
+            icon={'check'}
+            color={'transparent'}
+            fixedWidth
+          />
+          <span className="sum">{this.data().troopPercentSum().toFixed(6)}%</span>
         </div>
         <div className={`TroopCount NumCell inline nobr`}>
           <FontAwesomeIcon
@@ -112,16 +102,24 @@ class TierDefViewBase extends React.Component<Props> {
           <span className="sum">{this.data().getCapFromTroopDefs()}</span>
         </div>
         <div className={'inline nobr troopPercCalculated'}>
-          <span>{this.getActualTroopDefPercentsSum().toFixed(2)+'%'}</span>
+          <span>{this.getActualTroopDefPercentsSum().toFixed(3)+'%'}</span>
         </div>
       </div>
     ) } else return null;
+  }
+
+  handleCapLockClick(event: React.MouseEvent<SVGSVGElement, MouseEvent>) {
+    this.props.updateTierCapacityLock(this.id(), !this.data().capacityLocked);
   }
 
   renderTierCap() {
     return (
       <div className="TierProps NumCell nobr">
         <label>Tier Cap</label>
+        <LockState
+          locked={this.data().capacityLocked}
+          onClick={this.handleCapLockClick}
+        />
         <div className="nobr inline">
           <span className="sum">{this.data().capacity}</span>
         </div>
@@ -129,23 +127,50 @@ class TierDefViewBase extends React.Component<Props> {
     );
   }
 
+  handleFixPercentClick(event: React.MouseEvent<SVGSVGElement, MouseEvent>) {
+    this.props.fixTierPercent(this.id());
+  }
+
+  fixThisPercent() {
+    const formCalc = this.data().formCalc;
+    if( !formCalc ) {
+      throw new Error(`tierDef ${this.data().id()} has null formCalc attribute`);
+    };
+    if( !this.data().capacityLocked && (formCalc.tierPercentDelta() !== 0) ) {
+      return (
+        <div className="PercentDelta delta inline" >
+          <FontAwesomeIcon
+            icon={'wrench'}
+            onClick={this.handleFixPercentClick}
+          />
+        </div>
+      );
+    } else {
+      return (
+        <div className="PercentDelta no-delta inline" >
+          <FontAwesomeIcon
+            icon={'check'}
+          />
+        </div>
+      );
+    }
+  }
+
   render() {
     let classNames = ['TierDefView'];
     const cycle = this.props.index%2===1 ? 'odd' : 'even';
     classNames.push(cycle);
+    const hasDelta = (this.data().formCalc?.tierPercentDelta() !== 0) && !this.data().capacityLocked ? 'hasDelta' : '';
     return (
       <Row className={classNames.join(' ')}>
         <div className="TierNum">
           <label className="tierLabel">{this.props.tierDef.tierNum}</label>
         </div>
-        <div className="TierProps" >
-          <div className="nobr">
+        <div className={`TierProps`} >
+          <div className={`TierPercent nobr ${hasDelta}`}>
             <label>Tier %</label>
             <div className="nobr inline">
-              {/* <LockState
-                locked={this.data().percentLocked}
-                onClick={this.handlePercentLockClick}
-              /> */}
+              { this.fixThisPercent() }
               <NumericInput
                 step={1} precision={3}
                 snap

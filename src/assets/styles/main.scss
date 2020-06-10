@@ -71,7 +71,7 @@ $troopDefSpace: 1rem;
       &.Cavalry { background-color: $troopPercentColor; }
       &.Distance { background-color: $troopPercentColor; }
     }
-    &.percentUnder, &.percentOver {
+    &.hasDelta {
       input {
         &.Infantry { background-color: $troopPercentErrorColor; }
         &.Cavalry { background-color: $troopPercentErrorColor; }
@@ -95,7 +95,14 @@ $troopDefSpace: 1rem;
     label {
       width: 6rem;
     }
-  }
+    .TierPercent {
+      &.hasDelta {
+        input {
+          background-color: $troopPercentErrorColor;
+        }
+      }
+    }
+    }
   .TierDefs {
     min-width: 28rem;
   }
