@@ -1,14 +1,16 @@
-import { TierNum, TroopType, Int, toInt } from '../types';
+import { Big } from 'big.js';
+
+import { TierNum, TroopType, toInt, toBig } from '../types';
 import { MTroopDef } from '.';
 
 const PercentPrecision = 4;
-const PercentDeltaEpsilon = parseFloat((0.1**(PercentPrecision+1)).toFixed(PercentPrecision+1));
+const PercentDeltaEpsilon = toBig(parseFloat((0.1**(PercentPrecision+1)).toFixed(PercentPrecision+1)));
 
 class MTierDef {
   tierNum: TierNum;
   troopDefs: MTroopDef[] = [];
-  capacity:Int = toInt(0);
-  percent:number = 0;
+  capacity:Big = toBig(0);
+  percent:Big = toBig(0);
   capacityLocked:boolean = false;
   percentLocked:boolean = false;
 
@@ -44,20 +46,28 @@ class MTierDef {
   // gets the tier cap using the existing troop def counts
   // does not set this.capacity
   getCapFromTroopDefs() {
-    let capacity = 0;
+    let capacity = toInt(0);
     this.troopDefs.forEach( troopDef => {
-      capacity += troopDef.count;
+      capacity = capacity.plus(troopDef.count);
     });
     return toInt(capacity);
   }
 
-  updateCap(capacity:Int) {
+  updateCap(capacity:Big) {
     if( this.percentLocked ) return;
+    const max = toInt(99999999);
+    const zero = toInt(0);
+    if( capacity.gt(max) ) { capacity = max; };
+    if( capacity.lt(zero) ) { capacity = zero; };
     this.capacity = capacity;
   }
 
-  updatePercent(percent:number) {
+  updatePercent(percent:Big) {
     if( this.capacityLocked ) return;
+    const max = toInt(100);
+    const zero = toInt(0);
+    if( percent.gt(max) ) { percent = max; };
+    if( percent.lt(zero) ) { percent = zero; };
     this.percent = percent;
   }
 
@@ -82,68 +92,62 @@ class MTierDef {
     this.updateCapacityLock(allTroopDefsLocked);
   }
 
-  getLockedTroopCount():Int {
-    let lockedCount:Int = toInt(0);
+  getLockedTroopCount():Big {
+    let lockedCount:Big = toInt(0);
     this.troopDefs.forEach( troopDef => {
       if( troopDef.countLocked ) {
-        lockedCount = toInt(lockedCount + troopDef.count);
+        lockedCount = lockedCount.plus(troopDef.count);
       }
     });
     return lockedCount;
   }
 
-  getUnlockedCapacity():Int {
-    return toInt(this.capacity - this.getLockedTroopCount());
+  getUnlockedCapacity():Big {
+    return this.capacity.minus(this.getLockedTroopCount());
   }
 
-  troopPercentSum():number {
-    let sum = 0;
-    this.troopDefs.forEach( troopDef => sum += troopDef.percent );
+  troopPercentSum():Big {
+    let sum = toInt(0);
+    this.troopDefs.forEach( troopDef => sum = sum.plus(troopDef.percent) );
     return sum;
   }
 
   troopPercentDelta() {
-    return this.troopPercentSum() - 100;
+    return this.troopPercentSum().minus(toInt(100));;
   }
 
   hasTroopPercentDelta() {
-    return Math.abs(this.troopPercentDelta()) > PercentDeltaEpsilon;
-  }
-
-  troopPercentSumOver():boolean {
-    return this.troopPercentDelta() > 0;
-  }
-
-  troopPercentSumUnder():boolean {
-    return this.troopPercentDelta() < 0 ;
+    return this.troopPercentDelta().abs().gt(PercentDeltaEpsilon);
   }
 
   fixTroopPercent(troopDef:MTroopDef) {
-    let newPercent = troopDef.percent - this.troopPercentDelta();
-    if( newPercent < 0 ) { newPercent = 0; }
-    if( newPercent > 100 ) { newPercent = 100; }
+    let newPercent = troopDef.percent.minus(this.troopPercentDelta());
+    const hundred = toBig(100);
+    const zero = toBig(0);
+    if( newPercent.lt(zero) ) { newPercent = zero; }
+    if( newPercent.gt(hundred) ) { newPercent = hundred; }
     troopDef.percent = newPercent;
   }
 
-  getLockedTroopPercent():number {
-    let lockedPercent = 0;
+  getLockedTroopPercent():Big {
+    let lockedPercent = toBig(0);
     this.troopDefs.forEach( troopDef => {
       if( troopDef.percentLocked ) {
-        lockedPercent += troopDef.percent;
+        lockedPercent = lockedPercent.plus(troopDef.percent);
       }
     });
     return lockedPercent;
   }
 
-  getUnlockedPercent():number {
-    return 100 - this.getLockedTroopPercent();
+  getUnlockedPercent():Big {
+    return toBig(100).minus(this.getLockedTroopPercent());
   }
 
   calculateAndUpdateTroopPercents(fixDelta:boolean = true) {
     this.troopDefs.forEach( troopDef => {
       troopDef.calculateAndUpdatePercent(this.getUnlockedCapacity());
     });
-    if( fixDelta && this.troopPercentDelta() !== 0 ) {
+    if( fixDelta && this.hasTroopPercentDelta() ) {
       let firstUnlockedTroopDef:MTroopDef|null = null;
       for( let i=0; i<this.troopDefs.length; i++ ) {
         if( !this.troopDefs[i].countLocked ) {
@@ -163,20 +167,19 @@ class MTierDef {
     });
   }
 
-  calculateAndUpdatePercent(marchCap:Int) {
-    if((marchCap === 0) || this.capacityLocked) {
-      this.percent = 0;
+  calculateAndUpdatePercent(marchCap:Big) {
+    if((marchCap.eq(0)) || this.capacityLocked) {
+      this.percent = toBig(0);
     } else {
-      const strVal = (Math.round(this.capacity * (10**(PercentPrecision+2)) / marchCap) / (10**PercentPrecision)).toFixed(PercentPrecision);
-      this.percent = parseFloat(strVal);
+      // const strVal = (Math.round(this.capacity * (10**(PercentPrecision+2)) / marchCap) / (10**PercentPrecision)).toFixed(PercentPrecision);
+      this.percent = this.capacity.times(100).div(marchCap).round(PercentPrecision);
     }
     return this.percent;
   }
 
-  calculateAndUpdateCap(marchCap:Int) {
+  calculateAndUpdateCap(marchCap:Big) {
     if( !this.capacityLocked ) {
-      const strVal = Math.round(this.percent * marchCap / 100);
-      this.capacity = toInt(strVal);
+      this.capacity = this.percent.times(marchCap).div(100).round();
     }
     return this.capacity;
   }

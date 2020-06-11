@@ -1,18 +1,20 @@
 import { ActionType, getType } from 'typesafe-actions';
+import { Big } from 'big.js';
+
 import { MTierDef, MTroopDef } from '.';
 import { IdParser } from './IdParser';
-import { Int, toInt, IdString, IdBoolean, IdOnly } from '../types';
+import { toInt, toBig, IdString, IdBoolean, IdOnly } from '../types';
 import * as actions from '../actions';
 import { FCState, BlankFCState, FormCalcDictionary } from '.';
 export type FormCalcAction = ActionType<typeof actions>;
 
 const PercentPrecision = 4;
-const PercentDeltaEpsilon = parseFloat((0.1**(PercentPrecision+1)).toFixed(PercentPrecision+1));
+const PercentDeltaEpsilon = toBig(parseFloat((0.1**(PercentPrecision+1)).toFixed(PercentPrecision+1)));
 
 class MFormCalc extends IdParser {
   name: string;
   tierDefs: MTierDef[] = [];
-  marchCap:Int = toInt(0);
+  marchCap:Big = toInt(0);
   debug:boolean = true;
 
   constructor(name:string) {
@@ -61,24 +63,26 @@ class MFormCalc extends IdParser {
     return this.tierDefs;
   }
 
-  tierPercentSum():number {
-    let sum = 0;
-    this.tierDefs.forEach( tierDef => sum += tierDef.percent );
+  tierPercentSum():Big {
+    let sum = toBig(0);
+    this.tierDefs.forEach( tierDef => sum = sum.plus(tierDef.percent) );
     return sum;
   }
 
   tierPercentDelta() {
-    return this.tierPercentSum() - 100;
+    return this.tierPercentSum().minus(100);
   }
 
   hasTierPercentDelta() {
-    return Math.abs(this.tierPercentDelta()) > PercentDeltaEpsilon;
+    return this.tierPercentDelta().abs().gt(PercentDeltaEpsilon);
   }
 
   fixTierPercent(tierDef:MTierDef) {
-    let newPercent = tierDef.percent - this.tierPercentDelta();
-    if( newPercent < 0 ) { newPercent = 0; }
-    if( newPercent > 100 ) { newPercent = 100; }
+    let newPercent = tierDef.percent.minus(this.tierPercentDelta());
+    const zero = toInt(0);
+    const hundred = toInt(100);
+    if( newPercent.lt(zero) ) { newPercent = zero; }
+    if( newPercent.gt(hundred) ) { newPercent = hundred; }
     tierDef.percent = newPercent;
   }
 
@@ -111,7 +115,7 @@ class MFormCalc extends IdParser {
   // and the tier cap
   handleUpdateTierPercent(payload:IdString) {
     const tierDef = this.findTierDef(payload.id);
-    tierDef.updatePercent(parseFloat(payload.value));
+    tierDef.updatePercent(toBig(payload.value));
     this.updateCountsFromPercents();
     // this.recalculateCountsThenPercents();
   }
@@ -226,38 +230,38 @@ class MFormCalc extends IdParser {
   // gets the tier cap using the existing troop def counts
   // does not change anything
   getCapFromTierDefs() {
-    let marchCap = 0;
+    let marchCap = toInt(0);
     this.tierDefs.forEach( tierDef => {
-      marchCap += tierDef.getCapFromTroopDefs();
+      marchCap = marchCap.plus(tierDef.getCapFromTroopDefs());
     });
     return toInt(marchCap);
   }
 
-  getLockedTierCap():Int {
-    let lockedCap:Int = toInt(0);
+  getLockedTierCap():Big {
+    let lockedCap:Big = toInt(0);
     this.tierDefs.forEach( tierDef => {
       if( tierDef.capacityLocked ) {
-        lockedCap = toInt(lockedCap + tierDef.capacity);
+        lockedCap = lockedCap.plus(tierDef.capacity);
       }
     });
     return lockedCap;
   }
 
-  getUnlockedCapacity():Int {
-    return toInt(this.marchCap - this.getLockedTierCap());
+  getUnlockedCapacity():Big {
+    return toInt(this.marchCap.minus(this.getLockedTierCap()));
   }
 
   // gets the sum of tier def percents
   // does not change anything
   getTierDefPercentsSum() {
-    let sum = 0;
+    let sum = toInt(0);
     this.tierDefs.forEach( tierDef => {
-      sum += tierDef.percent;
+      sum = sum.plus(tierDef.percent);
     });
     return sum;
   }
 
-  updateMarchCap(marchCap:Int) {
+  updateMarchCap(marchCap:Big) {
     this.marchCap = marchCap;
   }
 

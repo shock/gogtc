@@ -1,18 +1,19 @@
-import { Int, toInt, TroopType } from '../types';
+import { Big } from 'big.js';
+import { toInt, toBig, TroopType } from '../types';
 
 const PercentPrecision = 4;
 
 export class MTroopDef {
   type: TroopType;
-  count: Int;
-  percent: number;
+  count: Big;
+  percent: Big;
   percentLocked: boolean;
   countLocked: boolean;
 
-  constructor(type:TroopType, count:Int) {
+  constructor(type:TroopType, count:Big) {
     this.type = type;
     this.count = count;
-    this.percent = 0;
+    this.percent = toBig(0);
     this.percentLocked = false;
     this.countLocked = false;
   }
@@ -35,19 +36,28 @@ export class MTroopDef {
   }
 
   // updates the count unless the percentage is locked
-  updateCount(value: any) {
+  updateCount(value: Big) {
     if(this.percentLocked) return;
-    let count = toInt(value);
-    if( count > 999999 ) { count = toInt(999999); };
+    let count = value;
+    const max = toInt(99999999);
+    const zero = toInt(0);
+    if( count.gt(max) ) { count = max; };
+    if( count.lt(zero) ) { count = zero; };
     this.count = count;
   }
 
   // updates the percentage unless the count is locked
-  updatePercent(value: any) {
+  updatePercent(value: Big) {
     if(this.countLocked) return;
-    let percent = parseFloat(''+value);
-    if( percent > 100 ) { percent = 100; }
-    if( percent < 0 ) { percent = 0; }
+    let percent = value;
+    const hundred = toInt(100);
+    const zero = toInt(0);
+    if( percent.gt(hundred) ) {
+      percent = hundred;
+    }
+    if( percent.lt(zero) ) {
+      percent = zero;
+    }
     this.percent = percent;
   }
 
@@ -64,28 +74,26 @@ export class MTroopDef {
   // calculates the percentage of this troopDefs's count of the supplied tier capcity
   // if countLocked is true, the calculation is always zero
   // the troopDefs's percent attribute is updated withe calculated value and returned
-  calculateAndUpdatePercent(tierCapacity:Int) {
+  calculateAndUpdatePercent(tierCapacity:Big) {
     if( this.percentLocked ) return this.percent;
-    if(tierCapacity === 0 || this.countLocked) {
-      this.percent = 0;
+    if(tierCapacity.eq(0) || this.countLocked) {
+      this.percent = toBig(0);
     } else {
-      const strVal = (Math.round(this.count * (10**(PercentPrecision+2)) / tierCapacity) / (10**PercentPrecision)).toFixed(PercentPrecision);
-      this.percent = parseFloat(strVal);
+      // const strVal = (Math.round(this.count * (10**(PercentPrecision+2)) / tierCapacity) / (10**PercentPrecision)).toFixed(PercentPrecision);
+      this.percent = this.count.times(100).div(tierCapacity).round(PercentPrecision);
     }
     return this.percent;
   }
 
   // returns the actual percent of the supplied tierCapacity for this troopDef's count
   // no attribute are mutated
-  getActualPercent(tierCapacity:Int):number {
-    const strVal = (Math.round(this.count * (10**(PercentPrecision+2)) / tierCapacity) / (10**PercentPrecision)).toFixed(PercentPrecision);
-    return parseFloat(strVal);
+  getActualPercent(tierCapacity:Big):Big {
+    return this.count.div(tierCapacity);
   }
 
-  calculateAndUpdateCount(capacity:Int) {
+  calculateAndUpdateCount(capacity:Big) {
     if( !this.countLocked ) {
-      const strVal = Math.round(this.percent * capacity / 100);
-      this.count = toInt(strVal);
+      this.count = this.percent.times(capacity).div(100).round();
     }
     return this.count;
   }

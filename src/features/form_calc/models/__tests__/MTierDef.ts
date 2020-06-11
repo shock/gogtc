@@ -1,6 +1,6 @@
-import { toInt, TierNum, TroopType } from '../../types';
-import { MFormCalc, MTroopDef, MTierDef } from '..';
-import { buildTierWithTroopDefs, buildFormCalcWithTiers } from '../test_helper';
+import { toInt, toBig, TierNum, TroopType } from '../../types';
+import { MTroopDef, MTierDef } from '..';
+import { buildTierWithTroopDefs } from '../test_helper';
 
 describe( 'MTierDef', () => {
 
@@ -45,9 +45,9 @@ describe( 'MTierDef', () => {
   describe('getCapFromTroopDefs()', () => {
     it('should return the appropriate integer', () => {
       const tierDef = buildTierWithTroopDefs(TierNum.T1);
-      expect(tierDef.getCapFromTroopDefs()).toBe(toInt(6000));
-      tierDef.troopDefs[0].updateCount(tierDef.troopDefs[0].count-1000);
-      expect(tierDef.getCapFromTroopDefs()).toBe(toInt(5000));
+      expect(tierDef.getCapFromTroopDefs()).toEqual(toInt(6000));
+      tierDef.troopDefs[0].updateCount(tierDef.troopDefs[0].count.minus(1000));
+      expect(tierDef.getCapFromTroopDefs()).toEqual(toInt(5000));
     });
 
   });
@@ -57,24 +57,24 @@ describe( 'MTierDef', () => {
       it('should calculate and set the proper percentage with 4 decimal places', () => {
         const tierDef = buildTierWithTroopDefs(TierNum.T12);
         const tierCap = tierDef.getCapFromTroopDefs();
-        expect(tierCap).toBe(toInt(6000));
+        expect(tierCap).toEqual(toInt(6000));
         tierDef.updateCap(tierCap);
         tierDef.calculateAndUpdatePercent(toInt(18000));
-        expect(tierDef.percent).toBe(33.3333);
+        expect(tierDef.percent.toString()).toEqual('33.3333');
         const returnedPercent = tierDef.calculateAndUpdatePercent(toInt(9000));
-        expect(tierDef.percent).toBe(66.6667);
-        expect(tierDef.percent).toBe(returnedPercent);
+        expect(tierDef.percent.toString()).toEqual('66.6667');
+        expect(tierDef.percent.toString()).toEqual(returnedPercent.toString());
       });
     });
     describe('when marchCap is 0', () => {
       it('should calculate and set 0', () => {
         const tierDef = buildTierWithTroopDefs(TierNum.T12);
         const tierCap = tierDef.getCapFromTroopDefs();
-        expect(tierCap).toBe(toInt(6000));
+        expect(tierCap).toEqual(toInt(6000));
         tierDef.updateCap(tierCap);
         const returnedPercent = tierDef.calculateAndUpdatePercent(toInt(0));
-        expect(tierDef.percent).toBe(0);
-        expect(tierDef.percent).toBe(returnedPercent);
+        expect(tierDef.percent.toString()).toEqual('0');
+        expect(tierDef.percent.toString()).toEqual(returnedPercent.toString());
       });
     });
   });
@@ -86,7 +86,7 @@ describe( 'MTierDef', () => {
         tierDef.capacity = toInt(999);
         tierDef.updatePercentLock(true);
         tierDef.updateCap(toInt(0));
-        expect(tierDef.capacity).toBe(999);
+        expect(tierDef.capacity.toString()).toEqual('999');
       });
     });
     describe('when percentLocked is false', () => {
@@ -95,7 +95,7 @@ describe( 'MTierDef', () => {
         tierDef.capacity = toInt(999);
         tierDef.updatePercentLock(false);
         tierDef.updateCap(toInt(0));
-        expect(tierDef.capacity).toBe(toInt(0));
+        expect(tierDef.capacity.toString()).toEqual('0');
       });
     });
   });
@@ -104,19 +104,19 @@ describe( 'MTierDef', () => {
     describe('when capacityLocked is true', () => {
       it('should not change the percent', () => {
         const tierDef = new MTierDef(TierNum.T12);
-        tierDef.percent = 32.2;
+        tierDef.percent = toBig(32.2);
         tierDef.updateCapacityLock(true);
-        tierDef.updatePercent(0);
-        expect(tierDef.percent).toBe(32.2);
+        tierDef.updatePercent(toBig(0));
+        expect(tierDef.percent.toString()).toEqual('32.2');
       });
     });
     describe('when capacityLocked is false', () => {
       it('should change the percent', () => {
         const tierDef = new MTierDef(TierNum.T12);
-        tierDef.percent = 0;
+        tierDef.percent = toBig(0);
         tierDef.updateCapacityLock(false);
-        tierDef.updatePercent(32.2);
-        expect(tierDef.percent).toBe(32.2);
+        tierDef.updatePercent(toBig('32.2'));
+        expect(tierDef.percent.toString()).toEqual('32.2');
       });
     });
   });
@@ -187,10 +187,10 @@ describe( 'MTierDef', () => {
       const td2 = new MTroopDef(TroopType.Infantry, toInt(500))
       td2.updateCountLock(false);
       tierDef.troopDefs = [td1,td2];
-      expect(tierDef.getLockedTroopCount()).toBe(td1.count);
+      expect(tierDef.getLockedTroopCount().toString()).toEqual(td1.count.toString());
       td1.updateCountLock(false);
       td2.updateCountLock(true);
-      expect(tierDef.getLockedTroopCount()).toBe(td2.count);
+      expect(tierDef.getLockedTroopCount().toString()).toEqual(td2.count.toString());
     });
 
   });

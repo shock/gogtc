@@ -1,5 +1,5 @@
 import { TierNum, toInt } from '../../types';
-import { MFormCalc, MTierDef, MTroopDef, FCState, BlankFCState } from '..';
+import { MFormCalc, MTierDef, FCState, BlankFCState } from '..';
 import { buildTierWithTroopDefs, buildFormCalcWithTiers } from '../test_helper';
 
 describe( 'MTierDef', () => {
@@ -57,9 +57,9 @@ describe( 'MTierDef', () => {
   describe('getCapFromTierDefs()', () => {
     it('should return the appropriate integer', () => {
       const formCalc = buildFormCalcWithTiers();
-      expect(formCalc.getCapFromTierDefs()).toBe(toInt(12000));
-      formCalc.tierDefs[0].troopDefs[0].updateCount(formCalc.tierDefs[0].troopDefs[0].count-1000);
-      expect(formCalc.getCapFromTierDefs()).toBe(toInt(11000));
+      expect(formCalc.getCapFromTierDefs().toString()).toBe('12000');
+      formCalc.tierDefs[0].troopDefs[0].updateCount(formCalc.tierDefs[0].troopDefs[0].count.minus(1000));
+      expect(formCalc.getCapFromTierDefs().toString()).toBe('11000');
     });
 
   });

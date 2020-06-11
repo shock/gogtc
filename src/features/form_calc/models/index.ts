@@ -1,19 +1,21 @@
+import { Big } from 'big.js';
+
 import { MFormCalc, MTierDef, MTroopDef } from '.';
-import { TierNum, TroopType, Int } from '../types';
+import { TierNum, TroopType, toInt, toBig } from '../types';
 
 function buildTroopDefs(tierDef:MTierDef):MTroopDef[] {
   const troopDefs =  [
     new MTroopDef(
       TroopType.Infantry,
-      1000 as Int,
+      toBig(1000),
     ),
     new MTroopDef(
       TroopType.Cavalry,
-      2000 as Int,
+      toBig(2000),
     ),
     new MTroopDef(
       TroopType.Distance,
-      3000 as Int,
+      toBig(3000),
     ),
   ];
   // troopDefs.forEach( (troopDef) => {

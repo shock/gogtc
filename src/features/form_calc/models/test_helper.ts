@@ -1,5 +1,7 @@
+import { Big } from 'big.js';
+
 import { MTierDef, MTroopDef, MFormCalc } from '.';
-import { TroopType, TierNum, Int, toInt } from '../types';
+import { TroopType, TierNum, toInt } from '../types';
 import formCalcReducer from '../reducer';
 
 export function buildTierDef(tierNum:TierNum, formCalc:MFormCalc = new MFormCalc('test')) {
@@ -8,7 +10,7 @@ export function buildTierDef(tierNum:TierNum, formCalc:MFormCalc = new MFormCalc
   return instance;
 }
 
-export function buildTroopDef(type:TroopType, count:Int, tierDef:MTierDef = buildTierDef(TierNum.T12)) {
+export function buildTroopDef(type:TroopType, count:Big, tierDef:MTierDef = buildTierDef(TierNum.T12)) {
   const instance = new MTroopDef(type, count);
   // instance.tierDef = tierDef;
   return instance;
