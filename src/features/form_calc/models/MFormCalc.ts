@@ -229,14 +229,16 @@ class MFormCalc extends IdParser {
       tierDef.calculateAndUpdatePercent(this.marchCap);
     });
     if( fixDelta && this.hasTierPercentDelta() ) {
-      let firstUnlockedTierDef:MTierDef|null = null;
-      for( let i=0; i<this.tierDefs.length; i++ ) {
-        if( !this.tierDefs[i].capacityLocked ) {
-          firstUnlockedTierDef = this.tierDefs[i];
-          break;
-        }
-      }
+      let unlockedTierDefs = this.tierDefs.filter( tierDef => {
+        return !tierDef.capacityLocked;
+      });
+      const firstUnlockedTierDef = unlockedTierDefs[0];
       if( firstUnlockedTierDef ) {
+        const initialDelta = this.tierPercentDelta();
+        const partialDelta = initialDelta.div(unlockedTierDefs.length);
+        unlockedTierDefs.forEach( tierDef => {
+          this.fixTierPercent(tierDef, partialDelta);
+        })
         this.fixTierPercent(firstUnlockedTierDef, this.tierPercentDelta());
       }
     }

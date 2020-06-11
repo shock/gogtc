@@ -135,15 +135,17 @@ class MTierDef {
       troopDef.calculateAndUpdatePercent(this.getUnlockedCapacity());
     });
     if( fixDelta && this.hasTroopPercentDelta() ) {
-      let firstUnlockedTroopDef:MTroopDef|null = null;
-      for( let i=0; i<this.troopDefs.length; i++ ) {
-        if( !this.troopDefs[i].countLocked ) {
-          firstUnlockedTroopDef = this.troopDefs[i];
-          break;
-        }
-      }
-      if( firstUnlockedTroopDef ) {
-        this.fixTroopPercent(firstUnlockedTroopDef, this.troopPercentDelta());
+      let unlockedTroopDefs = this.troopDefs.filter( troopDef => {
+        return !troopDef.countLocked;
+      });
+      const firstUnlockedTierDef = unlockedTroopDefs[0];
+      if( firstUnlockedTierDef ) {
+        const initialDelta = this.troopPercentDelta();
+        const partialDelta = initialDelta.div(unlockedTroopDefs.length);
+        unlockedTroopDefs.forEach( troopDef => {
+          this.fixTroopPercent(troopDef, partialDelta);
+        })
+        this.fixTroopPercent(firstUnlockedTierDef, this.troopPercentDelta());
       }
     }
   }
