@@ -54,15 +54,15 @@ describe( 'MTierDef', () => {
 
   describe('calculateAndUpdatePercent()', () => {
     describe('when marchCap is greater than 0', () => {
-      it('should calculate and set the proper percentage with 4 decimal places', () => {
+      it('should calculate and set the proper percentage with 20 decimal places', () => {
         const tierDef = buildTierWithTroopDefs(TierNum.T12);
         const tierCap = tierDef.getCapFromTroopDefs();
         expect(tierCap).toEqual(toInt(6000));
         tierDef.updateCap(tierCap);
         tierDef.calculateAndUpdatePercent(toInt(18000));
-        expect(tierDef.percent.toString()).toEqual('33.3333');
+        expect(tierDef.percent.toString()).toEqual('33.33333333333333333333');
         const returnedPercent = tierDef.calculateAndUpdatePercent(toInt(9000));
-        expect(tierDef.percent.toString()).toEqual('66.6667');
+        expect(tierDef.percent.toString()).toEqual('66.66666666666666666667');
         expect(tierDef.percent.toString()).toEqual(returnedPercent.toString());
       });
     });
@@ -80,23 +80,11 @@ describe( 'MTierDef', () => {
   });
 
   describe('updateCap()', () => {
-    describe('when percentLocked is true', () => {
-      it('should not change the capacity', () => {
-        const tierDef = new MTierDef(TierNum.T12);
-        tierDef.capacity = toInt(999);
-        tierDef.updatePercentLock(true);
-        tierDef.updateCap(toInt(0));
-        expect(tierDef.capacity.toString()).toEqual('999');
-      });
-    });
-    describe('when percentLocked is false', () => {
-      it('should change the capacity', () => {
-        const tierDef = new MTierDef(TierNum.T12);
-        tierDef.capacity = toInt(999);
-        tierDef.updatePercentLock(false);
-        tierDef.updateCap(toInt(0));
-        expect(tierDef.capacity.toString()).toEqual('0');
-      });
+    it('should change the capacity', () => {
+      const tierDef = new MTierDef(TierNum.T12);
+      tierDef.capacity = toInt(999);
+      tierDef.updateCap(toInt(0));
+      expect(tierDef.capacity.toString()).toEqual('0');
     });
   });
 
@@ -129,53 +117,6 @@ describe( 'MTierDef', () => {
       expect(tierDef.capacityLocked).toBe(true);
       tierDef.updateCapacityLock(false);
       expect(tierDef.capacityLocked).toBe(false);
-    });
-    describe('setting to true', () => {
-      describe('when percentLocked is true', () => {
-        it('should set percentLocked to false', () => {
-          const tierDef = new MTierDef(TierNum.T12);
-          tierDef.percentLocked = true;
-          tierDef.updateCapacityLock(true);
-          expect(tierDef.percentLocked).toBe(false);
-        });
-      });
-      describe('when percentLocked is true', () => {
-        it('should leave percentLocked as false', () => {
-          const tierDef = new MTierDef(TierNum.T12);
-          tierDef.percentLocked = false;
-          tierDef.updateCapacityLock(true);
-          expect(tierDef.percentLocked).toBe(false);
-        });
-      });
-    });
-  });
-
-  describe('updatePercentLock()', () => {
-    it('should set it to the supplied value', () => {
-      const tierDef = new MTierDef(TierNum.T12);
-      expect(tierDef.percentLocked).toBe(false);
-      tierDef.updatePercentLock(true);
-      expect(tierDef.percentLocked).toBe(true);
-      tierDef.updatePercentLock(false);
-      expect(tierDef.percentLocked).toBe(false);
-    });
-    describe('setting to true', () => {
-      describe('when capacityLocked is true', () => {
-        it('should set capacityLocked to false', () => {
-          const tierDef = new MTierDef(TierNum.T12);
-          tierDef.capacityLocked = true;
-          tierDef.updatePercentLock(true);
-          expect(tierDef.capacityLocked).toBe(false);
-        });
-      });
-      describe('when capacityLocked is true', () => {
-        it('should leave capacityLocked as false', () => {
-          const tierDef = new MTierDef(TierNum.T12);
-          tierDef.capacityLocked = false;
-          tierDef.updatePercentLock(true);
-          expect(tierDef.capacityLocked).toBe(false);
-        });
-      });
     });
   });
 

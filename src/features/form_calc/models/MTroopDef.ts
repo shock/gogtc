@@ -7,14 +7,12 @@ export class MTroopDef {
   type: TroopType;
   count: Big;
   percent: Big;
-  percentLocked: boolean;
   countLocked: boolean;
 
   constructor(type:TroopType, count:Big) {
     this.type = type;
     this.count = count;
     this.percent = toBig(0);
-    this.percentLocked = false;
     this.countLocked = false;
   }
 
@@ -24,20 +22,11 @@ export class MTroopDef {
     obj.count = this.count;
     obj.percent = this.percent;
     obj.countLocked = this.countLocked;
-    obj.percentLocked = this.percentLocked;
     return obj;
-  }
-
-  lockCount() {
-    if(this.countLocked) return;
-    if(this.percentLocked)
-      this.percentLocked = false;
-    this.countLocked = true;
   }
 
   // updates the count unless the percentage is locked
   updateCount(value: Big) {
-    if(this.percentLocked) return;
     let count = value;
     const max = toInt(99999999);
     const zero = toInt(0);
@@ -63,19 +52,12 @@ export class MTroopDef {
 
   updateCountLock(state: boolean) {
     this.countLocked = state;
-    this.percentLocked = this.percentLocked && !this.countLocked;
-  }
-
-  updatePercentLock(state: boolean) {
-    this.percentLocked = state;
-    this.countLocked = this.countLocked && !this.percentLocked;
   }
 
   // calculates the percentage of this troopDefs's count of the supplied tier capcity
   // if countLocked is true, the calculation is always zero
   // the troopDefs's percent attribute is updated withe calculated value and returned
   calculateAndUpdatePercent(tierCapacity:Big) {
-    if( this.percentLocked ) return this.percent;
     if(tierCapacity.eq(0) || this.countLocked) {
       this.percent = toBig(0);
     } else {

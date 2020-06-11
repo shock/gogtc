@@ -1,7 +1,5 @@
-import { Big } from 'big.js';
-
 import { MFormCalc, MTierDef, MTroopDef } from '.';
-import { TierNum, TroopType, toInt, toBig } from '../types';
+import { TierNum, TroopType, toBig } from '../types';
 
 function buildTroopDefs(tierDef:MTierDef):MTroopDef[] {
   const troopDefs =  [

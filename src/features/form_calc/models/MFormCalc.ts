@@ -96,8 +96,6 @@ class MFormCalc extends IdParser {
   handleUpdateMarchCap(payload:IdString) {
     this.updateMarchCap(toInt(payload.value));
     this.updateCountsFromPercents();
-    // this.updateTierPercentsFromCounts();
-    // this.recalculateCountsThenPercents();
   }
 
   // We're not supporting this for now.
@@ -109,7 +107,6 @@ class MFormCalc extends IdParser {
     });
     this.updateMarchCap(this.getCapFromTierDefs());
     this.updatePercentsFromCounts();
-    // this.recalculatePercentsThenCounts();
   }
 
   // Updates the tier percent and corespondingly the troop defs' counts
@@ -118,7 +115,6 @@ class MFormCalc extends IdParser {
     const tierDef = this.findTierDef(payload.id);
     tierDef.updatePercent(toBig(payload.value));
     this.updateCountsFromPercents();
-    // this.recalculateCountsThenPercents();
   }
 
   // Updates an individual troop def's count
@@ -129,7 +125,6 @@ class MFormCalc extends IdParser {
     troopDef.updateCount(toBig(payload.value));
     this.updateMarchCap(this.getCapFromTierDefs());
     this.updatePercentsFromCounts();
-    // this.recalculatePercentsThenCounts();
   }
 
   // updates the troop def percentage if it's not count-locked
@@ -138,9 +133,6 @@ class MFormCalc extends IdParser {
     const troopDef = this.findTroopDef(payload.id);
     troopDef.updatePercent(toBig(payload.value));
     this.updateCountsFromPercents();
-    // this.updatePercentsFromCounts();
-    // tierDef.updateTroopDefPercent(troopDef, +action.payload.value);
-    // this.recalculateCountsThenPercents();
   }
 
   handleUpdateTroopCountLock(payload:IdBoolean) {
@@ -148,7 +140,6 @@ class MFormCalc extends IdParser {
     troopDef.updateCountLock(payload.boolean);
     this.resolveLockStates();
     this.updatePercentsFromCounts();
-    // this.recalculatePercentsThenCounts();
   }
 
   handleUpdateTierCapcityLock(payload:IdBoolean) {
@@ -310,16 +301,6 @@ class MFormCalc extends IdParser {
       tierDef.calculateAndUpdateCap(this.marchCap);
       tierDef.calculateAndUpdateTroopCounts();
     });
-  }
-
-  recalculateCountsThenPercents() {
-    this.updateCountsFromPercents();
-    this.updatePercentsFromCounts();
-  }
-
-  recalculatePercentsThenCounts() {
-    this.updatePercentsFromCounts();
-    this.updateCountsFromPercents();
   }
 
 };

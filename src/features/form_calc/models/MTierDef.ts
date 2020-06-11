@@ -13,7 +13,6 @@ class MTierDef {
   capacity:Big = toBig(0);
   percent:Big = toBig(0);
   capacityLocked:boolean = false;
-  percentLocked:boolean = false;
 
   constructor(tierNum:TierNum) {
     this.tierNum = tierNum;
@@ -25,7 +24,6 @@ class MTierDef {
     obj.capacity = this.capacity;
     obj.percent = this.percent;
     obj.capacityLocked = this.capacityLocked;
-    obj.percentLocked = this.percentLocked;
     obj.troopDefs = this.troopDefs.map( troopDef => {
       return troopDef.asJsonObject();
     });
@@ -64,7 +62,6 @@ class MTierDef {
   }
 
   updateCap(capacity:Big) {
-    if( this.percentLocked ) return;
     const max = toInt(99999999);
     const zero = toInt(0);
     if( capacity.gt(max) ) { capacity = max; };
@@ -86,12 +83,6 @@ class MTierDef {
     if( state ) {
       this.troopDefs.forEach( troopDef => troopDef.updateCountLock(state) );
     }
-    this.percentLocked = this.percentLocked && !this.capacityLocked;
-  }
-
-  updatePercentLock(state: boolean) {
-    this.percentLocked = state;
-    this.capacityLocked = this.capacityLocked && !this.percentLocked;
   }
 
   resolveLockStates() {
@@ -137,20 +128,6 @@ class MTierDef {
     if( newPercent.lt(zero) ) { newPercent = zero; }
     if( newPercent.gt(hundred) ) { newPercent = hundred; }
     troopDef.percent = newPercent;
-  }
-
-  getLockedTroopPercent():Big {
-    let lockedPercent = toBig(0);
-    this.troopDefs.forEach( troopDef => {
-      if( troopDef.percentLocked ) {
-        lockedPercent = lockedPercent.plus(troopDef.percent);
-      }
-    });
-    return lockedPercent;
-  }
-
-  getUnlockedPercent():Big {
-    return toBig(100).minus(this.getLockedTroopPercent());
   }
 
   calculateAndUpdateTroopPercents(fixDelta:boolean = true) {
