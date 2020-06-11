@@ -22,17 +22,7 @@ export const updateMarchCap = createAction('UPDATE_MARCH_CAP', (id: string, valu
   value: value
 }))<IdString>();
 
-export const updateTierPercentLock = createAction('UPDATE_TIER_PERCENT_LOCK', (id: string, boolean: boolean) => ({
-  id: id,
-  boolean: boolean
-}))<IdBoolean>();
-
 export const updateTierCapacityLock = createAction('UPDATE_TIER_CAPCITY_LOCK', (id: string, boolean: boolean) => ({
-  id: id,
-  boolean: boolean
-}))<IdBoolean>();
-
-export const updateTroopPercentLock = createAction('UPDATE_TROOP_PERCENT_LOCK', (id: string, boolean: boolean) => ({
   id: id,
   boolean: boolean
 }))<IdBoolean>();
@@ -57,8 +47,7 @@ export const fixTierPercent = createAction('FIX_TIER_PERCENT', (id:string) => ({
 export type UpdateIdValueAction = typeof updateTroopCount | typeof updateTroopPercent |
   typeof updateMarchCap | typeof updateTierPercent;
 
-export type UpdateIdBooleanAction = typeof updateTierPercentLock | typeof updateTierCapacityLock |
-  typeof updateTroopCountLock | typeof updateTroopPercentLock;
+export type UpdateIdBooleanAction = typeof updateTierCapacityLock | typeof updateTroopCountLock;
 
 export type IdOnlyAction = typeof fixTroopPercent | typeof fixTierPercent | typeof toggleFormCalcDebug;
 

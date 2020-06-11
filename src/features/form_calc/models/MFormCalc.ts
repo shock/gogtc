@@ -64,127 +64,81 @@ class MFormCalc extends IdParser {
     return this.tierDefs;
   }
 
-  tierPercentSum():Big {
-    let sum = toBig(0);
-    this.tierDefs.forEach( tierDef => sum = sum.plus(tierDef.percent) );
-    return sum;
-  }
-
-  tierPercentDelta() {
-    return this.tierPercentSum().minus(100);
-  }
-
-  hasTierPercentDelta() {
-    return this.tierPercentDelta().abs().gt(PercentDeltaEpsilon);
-  }
-
-  fixTierPercent(tierDef:MTierDef) {
-    let newPercent = tierDef.percent.minus(this.tierPercentDelta());
-    const zero = toInt(0);
-    const hundred = toInt(100);
-    if( newPercent.lt(zero) ) { newPercent = zero; }
-    if( newPercent.gt(hundred) ) { newPercent = hundred; }
-    tierDef.percent = newPercent;
-  }
-
   //
   // ACTION HANDLERS
   //
 
   // Handles change to main march cap.
   // should update entire formation based on new march cap
-  handleUpdateMarchCap(payload:IdString) {
+  updateMarchCapHandler(payload:IdString) {
     this.updateMarchCap(toInt(payload.value));
     this.updateCountsFromPercents();
+    return this.getState();
   }
 
   // Updates the tier percent and corespondingly the troop defs' counts
   // and the tier cap
-  handleUpdateTierPercent(payload:IdString) {
+  updateTierPercentHandler(payload:IdString) {
     const tierDef = this.findTierDef(payload.id);
     tierDef.updatePercent(toBig(payload.value));
     this.updateCountsFromPercents();
+    return this.getState();
   }
 
   // Updates an individual troop def's count
   // if the troop def's count is not locked, updates the unlocked troop def percentages
   // without changing the sibling troop def counts
-  handleUpdateTroopCount(payload:IdString) {
+  updateTroopCountHandler(payload:IdString) {
     const troopDef = this.findTroopDef(payload.id);
     troopDef.updateCount(toBig(payload.value));
     this.updateMarchCap(this.getCapFromTierDefs());
     this.updatePercentsFromCounts();
+    return this.getState();
   }
 
   // updates the troop def percentage if it's not count-locked
   // updates the troop count accordingly which, in turn, updates the tier defs' cap
-  handleUpdateTroopPercent(payload:IdString) {
+  updateTroopPercentHandler(payload:IdString) {
     const troopDef = this.findTroopDef(payload.id);
     troopDef.updatePercent(toBig(payload.value));
     this.updateCountsFromPercents();
+    return this.getState();
   }
 
-  handleUpdateTroopCountLock(payload:IdBoolean) {
+  updateTroopCountLockHandler(payload:IdBoolean) {
     const troopDef = this.findTroopDef(payload.id);
     troopDef.updateCountLock(payload.boolean);
     this.resolveLockStates();
     this.updatePercentsFromCounts();
+    return this.getState();
   }
 
-  handleUpdateTierCapcityLock(payload:IdBoolean) {
+  updateTierCapacityLockHandler(payload:IdBoolean) {
     const tierDef = this.findTierDef(payload.id);
     tierDef.updateCapacityLock(payload.boolean);
     this.resolveLockStates();
     this.updatePercentsFromCounts();
     // this.recalculatePercentsThenCounts();
+    return this.getState();
   }
 
-  handleFixTroopPercent(payload:IdOnly) {
+  fixTroopPercentHandler(payload:IdOnly) {
     const tierDef = this.findTierDef(payload.id);
     const troopDef = this.findTroopDef(payload.id);
-    tierDef.fixTroopPercent(troopDef);
+    tierDef.fixTroopPercent(troopDef, tierDef.troopPercentDelta());
     this.updateCountsFromPercents();
+    return this.getState();
   }
 
-  handleFixTierPercent(payload:IdOnly) {
+  fixTierPercentHandler(payload:IdOnly) {
     const tierDef = this.findTierDef(payload.id);
-    this.fixTierPercent(tierDef);
+    this.fixTierPercent(tierDef, this.tierPercentDelta());
     this.updateCountsFromPercents();
+    return this.getState();
   }
 
-  handleToggleFormCalcDebug(payload:IdOnly) {
+  toggleFormCalcDebugHandler(payload:IdOnly) {
     this.debug = !this.debug;
-  }
-
-  handleAction( state:FCState, action:FormCalcAction ) {
-    switch (action.type) {
-      case getType(actions.updateMarchCap) :
-        this.handleUpdateMarchCap(action.payload);
-        break;
-      case getType(actions.updateTierPercent) :
-        this.handleUpdateTierPercent(action.payload);
-        break;
-      case getType(actions.updateTroopCount) :
-        this.handleUpdateTroopCount(action.payload);
-        break;
-      case getType(actions.updateTroopPercent) :
-        this.handleUpdateTroopPercent(action.payload);
-        break;
-      case getType(actions.updateTroopCountLock) :
-        this.handleUpdateTroopCountLock(action.payload);
-        break;
-      case getType(actions.updateTierCapacityLock) :
-        this.handleUpdateTierCapcityLock(action.payload);
-        break;
-      case getType(actions.fixTroopPercent) :
-        this.handleFixTroopPercent(action.payload);
-        break;
-      case getType(actions.fixTierPercent) :
-        this.handleFixTierPercent(action.payload);
-        break;
-      case getType(actions.toggleFormCalcDebug) :
-        this.handleToggleFormCalcDebug(action.payload);
-    }
     return this.getState();
   }
 
@@ -204,6 +158,29 @@ class MFormCalc extends IdParser {
   /*
     COMPUTATION FUNCTIONS
   */
+
+  tierPercentSum():Big {
+    let sum = toBig(0);
+    this.tierDefs.forEach( tierDef => sum = sum.plus(tierDef.percent) );
+    return sum;
+  }
+
+  tierPercentDelta() {
+    return this.tierPercentSum().minus(100);
+  }
+
+  hasTierPercentDelta() {
+    return this.tierPercentDelta().abs().gt(PercentDeltaEpsilon);
+  }
+
+  fixTierPercent(tierDef:MTierDef, delta:Big) {
+    let newPercent = tierDef.percent.minus(delta);
+    const zero = toInt(0);
+    const hundred = toInt(100);
+    if( newPercent.lt(zero) ) { newPercent = zero; }
+    if( newPercent.gt(hundred) ) { newPercent = hundred; }
+    tierDef.percent = newPercent;
+  }
 
   // gets the tier cap using the existing troop def counts
   // does not change anything
@@ -260,7 +237,7 @@ class MFormCalc extends IdParser {
         }
       }
       if( firstUnlockedTierDef ) {
-        this.fixTierPercent(firstUnlockedTierDef);
+        this.fixTierPercent(firstUnlockedTierDef, this.tierPercentDelta());
       }
     }
   }

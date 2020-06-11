@@ -121,8 +121,8 @@ class MTierDef {
     return this.troopPercentDelta().abs().gt(PercentDeltaEpsilon);
   }
 
-  fixTroopPercent(troopDef:MTroopDef) {
-    let newPercent = troopDef.percent.minus(this.troopPercentDelta());
+  fixTroopPercent(troopDef:MTroopDef, delta:Big) {
+    let newPercent = troopDef.percent.minus(delta);
     const hundred = toBig(100);
     const zero = toBig(0);
     if( newPercent.lt(zero) ) { newPercent = zero; }
@@ -143,7 +143,7 @@ class MTierDef {
         }
       }
       if( firstUnlockedTroopDef ) {
-        this.fixTroopPercent(firstUnlockedTroopDef);
+        this.fixTroopPercent(firstUnlockedTroopDef, this.troopPercentDelta());
       }
     }
   }
