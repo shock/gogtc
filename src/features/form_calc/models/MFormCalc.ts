@@ -269,7 +269,7 @@ class MFormCalc extends IdParser {
     this.tierDefs.forEach( tierDef => {
       tierDef.calculateAndUpdatePercent(this.marchCap);
     });
-    if( fixDelta && this.tierPercentDelta() !== 0 ) {
+    if( fixDelta && this.hasTierPercentDelta() ) {
       let firstUnlockedTierDef:MTierDef|null = null;
       for( let i=0; i<this.tierDefs.length; i++ ) {
         if( !this.tierDefs[i].capacityLocked ) {
