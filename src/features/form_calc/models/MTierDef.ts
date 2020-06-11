@@ -2,6 +2,7 @@ import { TierNum, TroopType, Int, toInt } from '../types';
 import { MTroopDef } from '.';
 
 const PercentPrecision = 4;
+const PercentDeltaEpsilon = parseFloat((0.1**(PercentPrecision+1)).toFixed(PercentPrecision+1));
 
 class MTierDef {
   tierNum: TierNum;
@@ -103,6 +104,10 @@ class MTierDef {
 
   troopPercentDelta() {
     return this.troopPercentSum() - 100;
+  }
+
+  hasTroopPercentDelta() {
+    return Math.abs(this.troopPercentDelta()) > PercentDeltaEpsilon;
   }
 
   troopPercentSumOver():boolean {

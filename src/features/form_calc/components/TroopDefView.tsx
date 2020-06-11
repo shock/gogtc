@@ -28,7 +28,7 @@ type TroopDefViewProps = {
   tierDef: MTierDef,
   id: string,
   debug: boolean,
-  troopPercentDelta: number
+  hasTroopPercentDelta: boolean
 }
 
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & TroopDefViewProps;
@@ -69,7 +69,7 @@ class TroopDefViewBase extends React.Component<Props> {
 
   fixThisPercent() {
     const tierDef = this.props.tierDef;
-    if( !this.data().countLocked && (this.props.troopPercentDelta !== 0) ) {
+    if( !this.data().countLocked && this.props.hasTroopPercentDelta ) {
       return (
         <div className="PercentDelta delta inline" >
           <FontAwesomeIcon
@@ -106,7 +106,7 @@ class TroopDefViewBase extends React.Component<Props> {
     if( !troopDef ) return <div/>;
     const tierDef = this.props.tierDef;
     const locked = troopDef.countLocked ? "locked" : '';
-    const hasDelta = (this.props.troopPercentDelta !== 0) && !troopDef.countLocked ? 'hasDelta' : '';
+    const hasDelta = this.props.hasTroopPercentDelta && !troopDef.countLocked ? 'hasDelta' : '';
     return (
       <div className="TroopDefView">
         <label>{this.data().type}</label>

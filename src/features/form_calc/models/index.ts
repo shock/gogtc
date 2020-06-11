@@ -36,6 +36,7 @@ function buildFormCalc(name:string) {
     tierDefs.push(buildTierDefWithTroopDefs(tierNum as TierNum, formCalc));
   }
   formCalc.tierDefs = tierDefs;
+  formCalc.updateMarchCap(formCalc.getCapFromTierDefs());
   formCalc.updatePercentsFromCounts();
   return formCalc;
 }
@@ -67,7 +68,7 @@ export const TestLibrary:FormCalcDictionary = {
   }
 };
 
-export const PercentPrecision = 4;
+export const PercentPrecision = 3;
 
 export * from './MTierDef';
 export * from './MTroopDef';

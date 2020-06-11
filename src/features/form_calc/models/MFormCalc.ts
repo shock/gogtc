@@ -1,11 +1,13 @@
 import { ActionType, getType } from 'typesafe-actions';
 import { MTierDef, MTroopDef, TierDefDictionary } from '.';
 import { IdParser } from './IdParser';
-import { TierNum, TroopType, Int, toInt, IdString, IdBoolean, IdOnly } from '../types';
+import { Int, toInt, IdString, IdBoolean, IdOnly } from '../types';
 import * as actions from '../actions';
-import { FCState, BlankFCState, TroopDefDictionary, FormCalcDictionary } from '.';
+import { FCState, BlankFCState, FormCalcDictionary } from '.';
 export type FormCalcAction = ActionType<typeof actions>;
 
+const PercentPrecision = 4;
+const PercentDeltaEpsilon = parseFloat((0.1**(PercentPrecision+1)).toFixed(PercentPrecision+1));
 
 class MFormCalc extends IdParser {
   name: string;
@@ -69,6 +71,10 @@ class MFormCalc extends IdParser {
     return this.tierPercentSum() - 100;
   }
 
+  hasTierPercentDelta() {
+    return Math.abs(this.tierPercentDelta()) > PercentDeltaEpsilon;
+  }
+
   fixTierPercent(tierDef:MTierDef) {
     let newPercent = tierDef.percent - this.tierPercentDelta();
     if( newPercent < 0 ) { newPercent = 0; }
@@ -85,6 +91,7 @@ class MFormCalc extends IdParser {
   handleUpdateMarchCap(payload:IdString) {
     this.updateMarchCap(toInt(payload.value));
     this.updateCountsFromPercents();
+    // this.updateTierPercentsFromCounts();
     // this.recalculateCountsThenPercents();
   }
 
@@ -95,6 +102,7 @@ class MFormCalc extends IdParser {
     tierDef.troopDefs.forEach( troopDef => {
       troopDef.calculateAndUpdateCount(tierDef.capacity);
     });
+    this.updateMarchCap(this.getCapFromTierDefs());
     this.updatePercentsFromCounts();
     // this.recalculatePercentsThenCounts();
   }
@@ -114,6 +122,7 @@ class MFormCalc extends IdParser {
   handleUpdateTroopCount(payload:IdString) {
     const troopDef = this.findTroopDef(payload.id);
     troopDef.updateCount(payload.value);
+    this.updateMarchCap(this.getCapFromTierDefs());
     this.updatePercentsFromCounts();
     // this.recalculatePercentsThenCounts();
   }
@@ -258,7 +267,7 @@ class MFormCalc extends IdParser {
 
   calculateAndUpdateTierPercents(fixDelta:boolean = true) {
     this.tierDefs.forEach( tierDef => {
-      tierDef.calculateAndUpdatePercent(this.getUnlockedCapacity());
+      tierDef.calculateAndUpdatePercent(this.marchCap);
     });
     if( fixDelta && this.tierPercentDelta() !== 0 ) {
       let firstUnlockedTierDef:MTierDef|null = null;
@@ -274,14 +283,21 @@ class MFormCalc extends IdParser {
     }
   }
 
-  updatePercentsFromCounts() {
-    this.updateMarchCap(this.getCapFromTierDefs());
+  updatePercentsFromCounts(fixPercent:boolean=true) {
     this.tierDefs.forEach( tierDef => {
       tierDef.updateCap( toInt(tierDef.getCapFromTroopDefs()) );
       tierDef.calculateAndUpdatePercent(this.marchCap);
       tierDef.calculateAndUpdateTroopPercents(true);
     });
-    this.calculateAndUpdateTierPercents();
+    this.calculateAndUpdateTierPercents(fixPercent);
+  }
+
+  updateTierPercentsFromCounts(fixPercent:boolean=true) {
+    this.tierDefs.forEach( tierDef => {
+      tierDef.updateCap( toInt(tierDef.getCapFromTroopDefs()) );
+      tierDef.calculateAndUpdatePercent(this.marchCap);
+    });
+    this.calculateAndUpdateTierPercents(fixPercent);
   }
 
   updateCountsFromPercents() {

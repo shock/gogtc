@@ -30,7 +30,7 @@ type TierDefViewProps = {
   index: number,
   id: string,
   debug: boolean,
-  tierPercentDelta: number
+  hasTierPercentDelta: boolean
 }
 
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & TierDefViewProps;
@@ -68,7 +68,7 @@ class TierDefViewBase extends React.Component<Props> {
           tierDef={this.data()}
           id={`${this.props.id}:${troopDef.type}`}
           debug={this.props.debug}
-          troopPercentDelta={this.data().troopPercentDelta()}
+          hasTroopPercentDelta={this.data().hasTroopPercentDelta()}
         />
       // </Col>
     ));
@@ -133,7 +133,7 @@ class TierDefViewBase extends React.Component<Props> {
   }
 
   fixThisPercent() {
-    if( !this.data().capacityLocked && (this.props.tierPercentDelta !== 0) ) {
+    if( !this.data().capacityLocked && this.props.hasTierPercentDelta ) {
       return (
         <div className="PercentDelta delta inline" >
           <FontAwesomeIcon
@@ -157,7 +157,7 @@ class TierDefViewBase extends React.Component<Props> {
     let classNames = ['TierDefView'];
     const cycle = this.props.index%2===1 ? 'odd' : 'even';
     classNames.push(cycle);
-    const hasDelta = (this.props.tierPercentDelta !== 0) && !this.data().capacityLocked ? 'hasDelta' : '';
+    const hasDelta = this.props.hasTierPercentDelta && !this.data().capacityLocked ? 'hasDelta' : '';
     return (
       <Row className={classNames.join(' ')}>
         <div className="TierNum">

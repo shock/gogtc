@@ -65,7 +65,7 @@ class FormCalcViewBase extends React.Component<Props> {
       return (
         <TierDefView
           id={`${this.id()}:${tierDef.tierNum}`}
-          tierPercentDelta={this.props.formCalc.tierPercentDelta()}
+          hasTierPercentDelta={this.props.formCalc.hasTierPercentDelta()}
           key={index}
           tierDef={tierDef}
           index={index}
