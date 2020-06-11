@@ -164,7 +164,7 @@ class MTierDef {
   }
 
   calculateAndUpdatePercent(marchCap:Int) {
-    if(marchCap === 0 || this.capacityLocked && false) {
+    if((marchCap === 0) || this.capacityLocked) {
       this.percent = 0;
     } else {
       const strVal = (Math.round(this.capacity * (10**(PercentPrecision+2)) / marchCap) / (10**PercentPrecision)).toFixed(PercentPrecision);

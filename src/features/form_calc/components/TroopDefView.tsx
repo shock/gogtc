@@ -68,7 +68,6 @@ class TroopDefViewBase extends React.Component<Props> {
   }
 
   fixThisPercent() {
-    const tierDef = this.props.tierDef;
     if( !this.data().countLocked && this.props.hasTroopPercentDelta ) {
       return (
         <div className="PercentDelta delta inline" >
@@ -104,7 +103,6 @@ class TroopDefViewBase extends React.Component<Props> {
   render() {
     const troopDef = this.data();
     if( !troopDef ) return <div/>;
-    const tierDef = this.props.tierDef;
     const locked = troopDef.countLocked ? "locked" : '';
     const hasDelta = this.props.hasTroopPercentDelta && !troopDef.countLocked ? 'hasDelta' : '';
     return (

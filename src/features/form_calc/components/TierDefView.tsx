@@ -1,7 +1,7 @@
 import { RootState } from 'typesafe-actions';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Row, Col } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 import NumericInput from 'react-numeric-input';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 

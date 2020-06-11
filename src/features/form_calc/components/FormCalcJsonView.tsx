@@ -2,9 +2,7 @@ import { RootState } from 'typesafe-actions';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Row, Col, Form, Button } from 'react-bootstrap';
-import ReactJson from 'react-json-view';
 
-import { FormCalcView } from './FormCalcView';
 import { TestLibrary, MFormCalc } from '../models';
 
 const mapStateToProps = (state: RootState) => ({

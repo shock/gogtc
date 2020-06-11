@@ -1,5 +1,5 @@
 import { ActionType, getType } from 'typesafe-actions';
-import { MTierDef, MTroopDef, TierDefDictionary } from '.';
+import { MTierDef, MTroopDef } from '.';
 import { IdParser } from './IdParser';
 import { Int, toInt, IdString, IdBoolean, IdOnly } from '../types';
 import * as actions from '../actions';
