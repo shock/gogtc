@@ -73,6 +73,7 @@ class TroopDefViewBase extends React.Component<Props> {
         <div className="PercentDelta delta inline" >
           <FontAwesomeIcon
             icon={'wrench'}
+            fixedWidth
             onClick={this.handleFixPercentClick}
           />
         </div>
@@ -80,9 +81,7 @@ class TroopDefViewBase extends React.Component<Props> {
     } else {
       return (
         <div className="PercentDelta no-delta inline" >
-          <FontAwesomeIcon
-            icon={'check'}
-          />
+          <FontAwesomeIcon fixedWidth icon={'check'} />
         </div>
       );
     }

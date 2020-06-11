@@ -99,7 +99,7 @@ class FormCalcViewBase extends React.Component<Props> {
           </div>
           <div className="NumCell inline nobr">
             <label>Tier % Sum</label>
-            <span className="sum">{this.data().getTierDefPercentsSum().toFixed(3)}</span>
+            <span className="sum">{this.data().getTierDefPercentsSum().toFixed(4)}</span>
           </div>
           {button}
         </Col>
@@ -123,6 +123,7 @@ class FormCalcViewBase extends React.Component<Props> {
             <label>March Cap</label>&nbsp;
             <NumericInput
               step={1000}
+              snap
               min={0}
               max={999999}
               value={this.props.formCalc.marchCap.toString()}

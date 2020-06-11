@@ -27,7 +27,7 @@ export class LockState extends React.Component<Props> {
   }
 
   renderLock() {
-    return <FontAwesomeIcon icon={this.icon()} onClick={this.props.onClick}/>;
+    return <FontAwesomeIcon icon={this.icon()} fixedWidth onClick={this.props.onClick}/>;
   }
 
   render() {

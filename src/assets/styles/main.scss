@@ -108,8 +108,13 @@ $troopDefSpace: 1rem;
           background-color: $troopPercentErrorColor;
         }
       }
+      &.locked {
+        input {
+          background-color: $troopLockedColor;
+        }
+      }
     }
-    }
+  }
   .TierDefs {
     min-width: 28rem;
   }
@@ -135,7 +140,7 @@ $icon-unlocked: rgb(100, 223, 100);
 $icon-action: rgb(250, 234, 90);
 .LockState {
   cursor: pointer;
-  margin: 0 0.4rem 0 0 ;
+  margin: 0 0.3rem 0 0 ;
   &.locked {
     color: $icon-red;
   }
