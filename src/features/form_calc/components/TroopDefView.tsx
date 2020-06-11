@@ -116,7 +116,7 @@ class TroopDefViewBase extends React.Component<Props> {
             className={troopDef.type}
             min={0}
             max={100}
-            value={troopDef.countLocked ? '' : troopDef.percent}
+            value={troopDef.countLocked ? '' : troopDef.percent.toString()}
             format={NumEntry.formatPercent}
             parse={NumEntry.parsePercent}
             onChange={this.handlePercentChange}
@@ -133,7 +133,7 @@ class TroopDefViewBase extends React.Component<Props> {
             className={troopDef.type}
             min={0}
             max={999999}
-            value={troopDef.count}
+            value={troopDef.count.toString()}
             format={NumEntry.formatInteger}
             parse={NumEntry.parseInteger}
             onChange={this.handleCountChange}

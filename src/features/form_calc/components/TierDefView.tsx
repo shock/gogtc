@@ -74,14 +74,6 @@ class TierDefViewBase extends React.Component<Props> {
     ));
   }
 
-  getActualTroopDefPercentsSum() {
-    let sum = 0;
-    this.data().troopDefs.forEach( troopDef => {
-      sum += troopDef.getActualPercent(this.data().capacity)
-    })
-    return sum;
-  }
-
   renderSums() {
     if( this.props.debug ) { return (
       <div className="TroopDefView">
@@ -100,10 +92,10 @@ class TierDefViewBase extends React.Component<Props> {
             color={'transparent'}
             fixedWidth
           />
-          <span className="sum">{this.data().getCapFromTroopDefs()}</span>
+          <span className="sum">{this.data().getCapFromTroopDefs().toString()}</span>
         </div>
         <div className={'inline nobr troopPercCalculated'}>
-          <span>{this.getActualTroopDefPercentsSum().toFixed(3)+'%'}</span>
+          <span>{this.data().getActualTroopDefPercentSum().toFixed(3)+'%'}</span>
         </div>
       </div>
     ) } else return null;
@@ -122,7 +114,7 @@ class TierDefViewBase extends React.Component<Props> {
           onClick={this.handleCapLockClick}
         />
         <div className="nobr inline">
-          <span className="sum">{this.data().capacity}</span>
+          <span className="sum">{this.data().capacity.toString()}</span>
         </div>
       </div>
     );
@@ -173,7 +165,7 @@ class TierDefViewBase extends React.Component<Props> {
                 snap
                 min={0}
                 max={100}
-                value={this.data().percent}
+                value={this.data().percent.toString()}
                 format={NumEntry.formatPercent}
                 parse={NumEntry.parsePercent}
                 onChange={this.handleTierPercentChange}

@@ -95,7 +95,7 @@ class FormCalcViewBase extends React.Component<Props> {
         <Col>
           <div className="NumCell inline nobr">
             <label>Troops Sum</label>
-            <span className="sum">{this.data().getCapFromTierDefs()}</span>
+            <span className="sum">{this.data().getCapFromTierDefs().toString()}</span>
           </div>
           <div className="NumCell inline nobr">
             <label>Tier % Sum</label>
@@ -125,7 +125,7 @@ class FormCalcViewBase extends React.Component<Props> {
               step={1000}
               min={0}
               max={999999}
-              value={this.props.formCalc.marchCap}
+              value={this.props.formCalc.marchCap.toString()}
               format={NumEntry.formatInteger}
               parse={NumEntry.parseInteger}
               onChange={this.handleMarchCapChange}

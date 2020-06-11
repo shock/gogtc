@@ -3,8 +3,9 @@ import { Big } from 'big.js';
 import { TierNum, TroopType, toInt, toBig } from '../types';
 import { MTroopDef } from '.';
 
-const PercentPrecision = 4;
-const PercentDeltaEpsilon = toBig(parseFloat((0.1**(PercentPrecision+1)).toFixed(PercentPrecision+1)));
+const PercentPrecision = 20;
+// const PercentDeltaEpsilon = toBig(parseFloat((0.1**(PercentPrecision+1)).toFixed(PercentPrecision+1)));
+const PercentDeltaEpsilon = 0;
 
 class MTierDef {
   tierNum: TierNum;
@@ -42,6 +43,15 @@ class MTierDef {
   /*
     COMPUTATION FUNCTIONS
   */
+
+  getActualTroopDefPercentSum() {
+    let sum = toInt(0);
+    this.troopDefs.forEach( troopDef => {
+      sum = sum.plus(troopDef.getActualPercent(this.capacity))
+    })
+    return sum;
+  }
+
 
   // gets the tier cap using the existing troop def counts
   // does not set this.capacity

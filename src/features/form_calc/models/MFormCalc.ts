@@ -9,7 +9,8 @@ import { FCState, BlankFCState, FormCalcDictionary } from '.';
 export type FormCalcAction = ActionType<typeof actions>;
 
 const PercentPrecision = 4;
-const PercentDeltaEpsilon = toBig(parseFloat((0.1**(PercentPrecision+1)).toFixed(PercentPrecision+1)));
+// const PercentDeltaEpsilon = toBig(parseFloat((0.1**(PercentPrecision+1)).toFixed(PercentPrecision+1)));
+const PercentDeltaEpsilon = 0;
 
 class MFormCalc extends IdParser {
   name: string;
@@ -125,7 +126,7 @@ class MFormCalc extends IdParser {
   // without changing the sibling troop def counts
   handleUpdateTroopCount(payload:IdString) {
     const troopDef = this.findTroopDef(payload.id);
-    troopDef.updateCount(payload.value);
+    troopDef.updateCount(toBig(payload.value));
     this.updateMarchCap(this.getCapFromTierDefs());
     this.updatePercentsFromCounts();
     // this.recalculatePercentsThenCounts();
@@ -135,7 +136,7 @@ class MFormCalc extends IdParser {
   // updates the troop count accordingly which, in turn, updates the tier defs' cap
   handleUpdateTroopPercent(payload:IdString) {
     const troopDef = this.findTroopDef(payload.id);
-    troopDef.updatePercent(payload.value);
+    troopDef.updatePercent(toBig(payload.value));
     this.updateCountsFromPercents();
     // this.updatePercentsFromCounts();
     // tierDef.updateTroopDefPercent(troopDef, +action.payload.value);

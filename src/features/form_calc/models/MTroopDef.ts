@@ -1,7 +1,7 @@
 import { Big } from 'big.js';
 import { toInt, toBig, TroopType } from '../types';
 
-const PercentPrecision = 4;
+const PercentPrecision = 20;
 
 export class MTroopDef {
   type: TroopType;
