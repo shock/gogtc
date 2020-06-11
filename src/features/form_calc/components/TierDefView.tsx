@@ -19,7 +19,6 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const dispatchProps = {
-  updateTierCap: actions.updateTierCap,
   updateTierPercent: actions.updateTierPercent,
   updateTierCapacityLock: actions.updateTierCapacityLock,
   fixTierPercent: actions.fixTierPercent
@@ -39,7 +38,6 @@ class TierDefViewBase extends React.Component<Props> {
   constructor(props:Props) {
     super(props);
     this.handleTierPercentChange = this.handleTierPercentChange.bind(this);
-    this.handleTierCapChange = this.handleTierCapChange.bind(this);
     this.handleCapLockClick = this.handleCapLockClick.bind(this);
     this.handleFixPercentClick = this.handleFixPercentClick.bind(this);
   }
@@ -50,10 +48,6 @@ class TierDefViewBase extends React.Component<Props> {
 
   data() {
     return this.props.tierDef
-  }
-
-  handleTierCapChange(numVal:number|null, strVal:string, target:HTMLInputElement) {
-    this.props.updateTierCap(this.props.id, ''+numVal);
   }
 
   handleTierPercentChange(numVal:number|null, strVal:string, target:HTMLInputElement) {

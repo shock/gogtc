@@ -98,17 +98,6 @@ class MFormCalc extends IdParser {
     this.updateCountsFromPercents();
   }
 
-  // We're not supporting this for now.
-  handleUpdateTierCap(payload:IdString) {
-    const tierDef = this.findTierDef(payload.id);
-    tierDef.updateCap(toInt(payload.value));
-    tierDef.troopDefs.forEach( troopDef => {
-      troopDef.calculateAndUpdateCount(tierDef.capacity);
-    });
-    this.updateMarchCap(this.getCapFromTierDefs());
-    this.updatePercentsFromCounts();
-  }
-
   // Updates the tier percent and corespondingly the troop defs' counts
   // and the tier cap
   handleUpdateTierPercent(payload:IdString) {
@@ -171,9 +160,6 @@ class MFormCalc extends IdParser {
     switch (action.type) {
       case getType(actions.updateMarchCap) :
         this.handleUpdateMarchCap(action.payload);
-        break;
-      case getType(actions.updateTierCap) :
-        this.handleUpdateTierCap(action.payload);
         break;
       case getType(actions.updateTierPercent) :
         this.handleUpdateTierPercent(action.payload);

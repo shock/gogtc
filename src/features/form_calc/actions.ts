@@ -12,11 +12,6 @@ export const updateTroopPercent = createAction('UPDATE_TROOP_PERCENT', (id: stri
   value: value
 }))<IdString>();
 
-export const updateTierCap = createAction('UPDATE_TIER_CAP', (id: string, value: string) => ({
-  id: id,
-  value: value
-}))<IdString>();
-
 export const updateTierPercent = createAction('UPDATE_TIER_PERCENT', (id: string, value: string) => ({
   id: id,
   value: value
@@ -60,7 +55,7 @@ export const fixTierPercent = createAction('FIX_TIER_PERCENT', (id:string) => ({
 }))<IdOnly>();
 
 export type UpdateIdValueAction = typeof updateTroopCount | typeof updateTroopPercent |
-  typeof updateMarchCap | typeof updateTierCap | typeof updateTierPercent;
+  typeof updateMarchCap | typeof updateTierPercent;
 
 export type UpdateIdBooleanAction = typeof updateTierPercentLock | typeof updateTierCapacityLock |
   typeof updateTroopCountLock | typeof updateTroopPercentLock;
