@@ -64,9 +64,9 @@ class MFormCalc extends IdParser {
     return this.tierDefs;
   }
 
-  //
+  ////////////////////
   // ACTION HANDLERS
-  //
+  ////////////////////
 
   // Handles change to main march cap.
   // should update entire formation based on new march cap
@@ -263,7 +263,7 @@ class MFormCalc extends IdParser {
 
   updateCountsFromPercents() {
     this.tierDefs.forEach( tierDef => {
-      tierDef.calculateAndUpdateCap(this.marchCap);
+      tierDef.calculateAndUpdateCap(this.getUnlockedCapacity());
       tierDef.calculateAndUpdateTroopCounts();
     });
   }

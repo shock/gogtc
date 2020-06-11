@@ -70,6 +70,7 @@ export class MTroopDef {
   // returns the actual percent of the supplied tierCapacity for this troopDef's count
   // no attribute are mutated
   getActualPercent(tierCapacity:Big):Big {
+    if( tierCapacity.eq(0) ) { return toBig(0); }
     return this.count.div(tierCapacity);
   }
 
