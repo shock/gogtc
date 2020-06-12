@@ -1,5 +1,6 @@
 import { toInt, toBig, TroopType } from '../../types';
 import { MTroopDef } from '../';
+import config from '../../../../config';
 
 describe( 'MTroopDef', () => {
 
@@ -17,14 +18,14 @@ describe( 'MTroopDef', () => {
 
   describe('calculateAndUpdatePercent()', () => {
     describe('when tier capacity is greater than 0', () => {
-      it('should calculate and set the proper percentage with 20 decimal places', () => {
+      it('should calculate and set the proper percentage with configured decimal places', () => {
         const troopDef = new MTroopDef(TroopType.Infantry, toInt(1000));
         expect(troopDef.count).toEqual(toInt(1000));
         troopDef.calculateAndUpdatePercent(toInt(3000));
-        expect(troopDef.percent.toString()).toEqual('33.33333333333333333333');
+        expect(troopDef.percent.toString()).toEqual(toBig('33.333333333333333333333').round(config.calcPrecision).toString());
         troopDef.count = toInt(2000);
         const returnedPercent = troopDef.calculateAndUpdatePercent(toInt(3000));
-        expect(troopDef.percent.toString()).toEqual('66.66666666666666666667');
+        expect(troopDef.percent.toString()).toEqual(toBig('66.666666666666666666666').round(config.calcPrecision).toString());
         expect(troopDef.percent.toString()).toEqual(returnedPercent.toString());
       });
     });

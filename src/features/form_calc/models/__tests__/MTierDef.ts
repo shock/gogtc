@@ -1,6 +1,7 @@
 import { toInt, toBig, TierNum, TroopType } from '../../types';
 import { MTroopDef, MTierDef } from '..';
 import { buildTierWithTroopDefs } from '../test_helper';
+import config from '../../../../config';
 
 describe( 'MTierDef', () => {
 
@@ -60,9 +61,9 @@ describe( 'MTierDef', () => {
         expect(tierCap).toEqual(toInt(6000));
         tierDef.updateCap(tierCap);
         tierDef.calculateAndUpdatePercent(toInt(18000));
-        expect(tierDef.percent.toString()).toEqual('33.33333333333333333333');
+        expect(tierDef.percent.toString()).toEqual(toBig('33.333333333333333333333').round(config.calcPrecision).toString());
         const returnedPercent = tierDef.calculateAndUpdatePercent(toInt(9000));
-        expect(tierDef.percent.toString()).toEqual('66.66666666666666666667');
+        expect(tierDef.percent.toString()).toEqual(toBig('66.666666666666666666666').round(config.calcPrecision).toString());
         expect(tierDef.percent.toString()).toEqual(returnedPercent.toString());
       });
     });
