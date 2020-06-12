@@ -5,16 +5,12 @@ import NumericInput from 'react-numeric-input';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import * as NumEntry from '../../../lib/num-entry';
-import * as selectors from '../selectors';
 import * as actions from '../actions';
 import { MTroopDef, MTierDef } from '../models';
 import { LockState } from '../../../components/LockState';
 import config from '../../../config';
 
 const mapStateToProps = (state: RootState) => ({
-  // hack to trigger re-rendering any time the formCalc changes
-  // TODO: figure out an efficient way to trigger selective, partial re-rendering
-  formCalcs: selectors.getFormCalcs(state.formCalc)
 });
 
 const dispatchProps = {

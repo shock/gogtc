@@ -8,12 +8,9 @@ import * as NumEntry from '../../../lib/num-entry';
 import * as actions from '../actions';
 import * as selectors from '../selectors';
 import { TierDefView } from './TierDefView';
-import { MFormCalc } from '../models/MFormCalc';
 import config from '../../../config';
 
 const mapStateToProps = (state: RootState) => ({
-  // hack to trigger re-rendering any time the formCalc changes
-  // TODO: figure out an efficient way to trigger selective, partial re-rendering
   formCalcs: selectors.getFormCalcs(state.formCalc)
 });
 
@@ -24,7 +21,7 @@ const dispatchProps = {
 };
 
 interface FormCalcViewProps {
-  formCalc: MFormCalc;
+  id: string;
 }
 
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & FormCalcViewProps;
@@ -37,36 +34,24 @@ class FormCalcViewBase extends React.Component<Props> {
   }
 
   id():string {
-    return this.props.formCalc.name;
-  }
-
-  componentDidMount() {
-    this.resetReduxState();
-  }
-
-  componentDidUpdate(prevProps:Props) {
-    if( prevProps.formCalc !== this.props.formCalc && this.hasModel() )
-      { this.resetReduxState(); };
-  }
-
-  resetReduxState() {
-    this.props.resetState(this.props.formCalc.name, this.props.formCalc.clone());
-  }
-
-  hasModel() {
-    return this.props.formCalc;
+    return this.props.id;
   }
 
   data() {
-    return this.hasModel();
+    const formCalc = this.props.formCalcs[this.props.id];
+    return formCalc;
+  }
+
+  hasModel() {
+    return this.data() !== undefined;
   }
 
   buildTierDefViews() {
-    return this.props.formCalc.tierDefs.map( (tierDef, index) => {
+    return this.data().tierDefs.map( (tierDef, index) => {
       return (
         <TierDefView
           id={`${this.id()}:${tierDef.tierNum}`}
-          hasTierPercentDelta={this.props.formCalc.hasTierPercentDelta()}
+          hasTierPercentDelta={this.data().hasTierPercentDelta()}
           key={index}
           tierDef={tierDef}
           index={index}
@@ -85,22 +70,24 @@ class FormCalcViewBase extends React.Component<Props> {
   }
 
   renderDebug() {
+    if( !this.data() ) return (null);
+    const formCalc = this.data();
     const button = (
       <Button
-        variant={this.data().debug ? "primary" : "secondary"}
+        variant={formCalc.debug ? "primary" : "secondary"}
         onClick={this.handleDebugClick}
       >DEBUG</Button>
     );
-    if( this.data().debug ) {
+    if( formCalc.debug ) {
       return (
         <Col>
           <div className="NumCell inline nobr">
             <label>Troops Sum</label>
-            <span className="sum">{this.data().getCapFromTierDefs().toString()}</span>
+            <span className="sum">{formCalc.getCapFromTierDefs().toString()}</span>
           </div>
           <div className="NumCell inline nobr">
             <label>Tier % Sum</label>
-            <span className="sum">{this.data().getTierDefPercentsSum().toFixed(config.calcPrecision)}</span>
+            <span className="sum">{formCalc.getTierDefPercentsSum().toFixed(config.calcPrecision)}</span>
           </div>
           {button}
         </Col>
@@ -113,11 +100,13 @@ class FormCalcViewBase extends React.Component<Props> {
   }
 
   render() {
+    if( !this.data() ) return (null);
+    const formCalc = this.data();
     return (
       <React.Fragment>
         <Row>
           <Col sm={3}>
-            <h3>{this.props.formCalc?.name}</h3>
+            <h3>{formCalc.name}</h3>
           </Col>
           {this.renderDebug()}
           <Col >
@@ -127,7 +116,7 @@ class FormCalcViewBase extends React.Component<Props> {
               snap
               min={0}
               max={999999}
-              value={this.props.formCalc.marchCap.toString()}
+              value={formCalc.marchCap.toString()}
               format={NumEntry.formatInteger}
               parse={NumEntry.parseInteger}
               onChange={this.handleMarchCapChange}

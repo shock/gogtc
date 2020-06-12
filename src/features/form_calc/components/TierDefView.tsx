@@ -7,16 +7,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import * as NumEntry from '../../../lib/num-entry';
 import * as actions from '../actions';
-import * as selectors from '../selectors';
 import { TroopDefView } from './TroopDefView';
 import { LockState } from '../../../components/LockState';
 import { MTierDef } from '../models';
 import config from '../../../config';
 
 const mapStateToProps = (state: RootState) => ({
-  // hack to trigger re-rendering any time the formCalc changes
-  // TODO: figure out an efficient way to trigger selective, partial re-rendering
-  formCalcs: selectors.getFormCalcs(state.formCalc)
 });
 
 const dispatchProps = {

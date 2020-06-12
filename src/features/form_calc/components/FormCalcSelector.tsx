@@ -3,6 +3,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 
+import * as actions from '../actions';
 import { FormCalcView } from './FormCalcView';
 import { TestLibrary, MFormCalc } from '../models';
 
@@ -10,6 +11,7 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const dispatchProps = {
+  resetState: actions.resetState,
 };
 
 interface FormCalcSelectorProps {
@@ -34,6 +36,14 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
     this.handleNameSubmit = this.handleNameSubmit.bind(this);
   }
 
+  componentDidMount() {
+    if( this.state.formCalc ) { this.resetReduxState() }
+  }
+
+  resetReduxState() {
+    this.props.resetState(this.state.formCalc.name, this.state.formCalc.objectForState());
+  }
+
   handleNameChange(event: React.ChangeEvent<HTMLInputElement>) {
     this.setState({
       formName: event.target.value
@@ -43,11 +53,14 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
   handleNameSubmit(event: any) {
     event.preventDefault();
     const formCalc = TestLibrary.formCalcs[this.state.formName];
-    if( !formCalc )
+    if( !formCalc ) {
       alert(`Couldn't find model with name: '${this.state.formName}'`);
+      return;
+    }
     this.setState({
       formCalc: formCalc
-    })
+    });
+    this.resetReduxState();
   }
 
   render() {
@@ -66,7 +79,7 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
         </Form>
         <Row>
           <Col>
-            <FormCalcView formCalc={this.state.formCalc} />
+            <FormCalcView id={this.state.formCalc.name} />
           </Col>
         </Row>
       </React.Fragment>
