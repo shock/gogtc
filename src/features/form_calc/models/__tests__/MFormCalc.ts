@@ -15,16 +15,6 @@ describe( 'MTierDef', () => {
     });
   });
 
-  describe('getState()', () => {
-    it('should return the appropriate state', () => {
-      const formCalc = new MFormCalc('test');
-      let tierDef = buildTierWithTroopDefs(TierNum.T12, formCalc);
-      formCalc.tierDefs = [tierDef];
-      const testState:FCState = BlankFCState;
-      const state = formCalc.getState();
-    });
-  });
-
   describe('findTierDef()', () => {
     describe('with no tierDefs', () => {
       it('should throw an Error', () => {

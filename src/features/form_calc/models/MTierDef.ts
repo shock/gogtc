@@ -18,6 +18,17 @@ class MTierDef {
     this.tierNum = tierNum;
   }
 
+  clone():MTierDef {
+    const clone = new MTierDef(this.tierNum);
+    clone.troopDefs = this.troopDefs.map( troopDef => {
+      return troopDef.clone();
+    });
+    clone.capacity = this.capacity;
+    clone.percent = this.percent;
+    clone.capacityLocked = this.capacityLocked;
+    return clone;
+  }
+
   asJsonObject() {
     let obj:any = {};
     obj.tierNum = this.tierNum;

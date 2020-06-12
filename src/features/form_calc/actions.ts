@@ -1,6 +1,11 @@
 import { IdString, IdBoolean, IdOnly } from './types';
 import { createAction } from 'typesafe-actions';
-import { FCState } from './models';
+import { MFormCalc } from './models';
+
+export type IdFormCalc = {
+  id: string,
+  formCalc: MFormCalc
+}
 
 export const updateTroopCount = createAction('UPDATE_TROOP_COUNT', (id: string, value: string) => ({
   id: id,
@@ -51,6 +56,7 @@ export type UpdateIdBooleanAction = typeof updateTierCapacityLock | typeof updat
 
 export type IdOnlyAction = typeof fixTroopPercent | typeof fixTierPercent | typeof toggleFormCalcDebug;
 
-export const resetState = createAction('RESET_STATE', (state:FCState) => ({
-  ...state
-}))<FCState>();
+export const resetState = createAction('RESET_STATE', (id:string, formCalc:MFormCalc) => ({
+  id: id,
+  formCalc: formCalc
+}))<IdFormCalc>();

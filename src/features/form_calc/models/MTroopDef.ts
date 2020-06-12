@@ -14,6 +14,13 @@ export class MTroopDef {
     this.countLocked = false;
   }
 
+  clone():MTroopDef {
+    const clone = new MTroopDef(this.type, this.count);
+    clone.percent = this.percent;
+    clone.countLocked = this.countLocked;
+    return clone;
+  }
+
   asJsonObject() {
     let obj:any = {};
     obj.type = this.type;

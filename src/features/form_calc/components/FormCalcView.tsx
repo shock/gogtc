@@ -50,7 +50,7 @@ class FormCalcViewBase extends React.Component<Props> {
   }
 
   resetReduxState() {
-    this.props.resetState(this.props.formCalc.getState());
+    this.props.resetState(this.props.formCalc.name, this.props.formCalc.clone());
   }
 
   hasModel() {

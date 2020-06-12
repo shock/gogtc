@@ -3,7 +3,6 @@ import { Big } from 'big.js';
 import { MTierDef, MTroopDef } from '.';
 import { IdParser } from './IdParser';
 import { toInt, toBig, IdString, IdBoolean, IdOnly } from '../types';
-import { FCState, BlankFCState, FormCalcDictionary } from '.';
 import config from '../../../config';
 
 const PercentDeltaEpsilon = toBig(0.1).pow(config.viewPrecision);
@@ -18,6 +17,16 @@ class MFormCalc extends IdParser {
   constructor(name:string) {
     super();
     this.name = name;
+  }
+
+  clone():MFormCalc {
+    const clone = new MFormCalc(this.name);
+    clone.tierDefs = this.tierDefs.map( tierDef => {
+      return tierDef.clone();
+    });
+    clone.marchCap = this.marchCap;
+    clone.debug = this.debug;
+    return clone;
   }
 
   asJsonObject() {
@@ -70,7 +79,7 @@ class MFormCalc extends IdParser {
   updateMarchCapHandler(payload:IdString) {
     this.updateMarchCap(toInt(payload.value));
     this.updateCountsFromPercents();
-    return this.getState();
+    return this.clone();
   }
 
   // Updates the tier percent and corespondingly the troop defs' counts
@@ -79,7 +88,7 @@ class MFormCalc extends IdParser {
     const tierDef = this.findTierDef(payload.id);
     tierDef.updatePercent(toBig(payload.value));
     this.updateCountsFromPercents();
-    return this.getState();
+    return this.clone();
   }
 
   // Updates an individual troop def's count
@@ -90,7 +99,7 @@ class MFormCalc extends IdParser {
     troopDef.updateCount(toBig(payload.value));
     this.updateMarchCap(this.getCapFromTierDefs());
     this.updatePercentsFromCounts();
-    return this.getState();
+    return this.clone();
   }
 
   // updates the troop def percentage if it's not count-locked
@@ -99,7 +108,7 @@ class MFormCalc extends IdParser {
     const troopDef = this.findTroopDef(payload.id);
     troopDef.updatePercent(toBig(payload.value));
     this.updateCountsFromPercents();
-    return this.getState();
+    return this.clone();
   }
 
   updateTroopCountLockHandler(payload:IdBoolean) {
@@ -107,7 +116,7 @@ class MFormCalc extends IdParser {
     troopDef.updateCountLock(payload.boolean);
     this.resolveLockStates();
     this.updatePercentsFromCounts();
-    return this.getState();
+    return this.clone();
   }
 
   updateTierCapacityLockHandler(payload:IdBoolean) {
@@ -116,7 +125,7 @@ class MFormCalc extends IdParser {
     this.resolveLockStates();
     this.updatePercentsFromCounts();
     // this.recalculatePercentsThenCounts();
-    return this.getState();
+    return this.clone();
   }
 
   fixTroopPercentHandler(payload:IdOnly) {
@@ -124,32 +133,19 @@ class MFormCalc extends IdParser {
     const troopDef = this.findTroopDef(payload.id);
     tierDef.fixTroopPercent(troopDef, tierDef.troopPercentDelta());
     this.updateCountsFromPercents();
-    return this.getState();
+    return this.clone();
   }
 
   fixTierPercentHandler(payload:IdOnly) {
     const tierDef = this.findTierDef(payload.id);
     this.fixTierPercent(tierDef, this.tierPercentDelta());
     this.updateCountsFromPercents();
-    return this.getState();
+    return this.clone();
   }
 
   toggleFormCalcDebugHandler(payload:IdOnly) {
     this.debug = !this.debug;
-    return this.getState();
-  }
-
-  getState(state:FCState = BlankFCState) {
-
-    const formCalcDictionary:FormCalcDictionary = {
-      formCalcs: {}
-    };
-    formCalcDictionary.formCalcs[this.name] = this;
-    const returnState = {
-      ...state,
-      ...formCalcDictionary,
-    }
-    return returnState;
+    return this.clone();
   }
 
   /*
