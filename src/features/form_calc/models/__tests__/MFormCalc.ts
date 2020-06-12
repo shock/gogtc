@@ -1,6 +1,6 @@
 import { TierNum, toInt } from '../../types';
-import { MFormCalc, MTierDef, FCState, BlankFCState } from '..';
-import { buildTierWithTroopDefs, buildFormCalcWithTiers } from '../test_helper';
+import { MFormCalc, MTierDef} from '..';
+import { buildFormCalcWithTiers } from '../test_helper';
 
 describe( 'MTierDef', () => {
 
