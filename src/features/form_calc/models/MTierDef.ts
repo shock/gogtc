@@ -2,10 +2,10 @@ import { Big } from 'big.js';
 
 import { TierNum, TroopType, toInt, toBig } from '../types';
 import { MTroopDef } from '.';
+import config from '../../../config';
 
-const PercentPrecision = 20;
-// const PercentDeltaEpsilon = toBig(parseFloat((0.1**(PercentPrecision+1)).toFixed(PercentPrecision+1)));
-const PercentDeltaEpsilon = 0;
+// const PercentDeltaEpsilon = toBig('0.001');
+const PercentDeltaEpsilon = toBig(0.1).pow(config.viewPrecision);
 
 class MTierDef {
   tierNum: TierNum;
@@ -160,8 +160,7 @@ class MTierDef {
     if((marchCap.eq(0)) || this.capacityLocked) {
       this.percent = toBig(0);
     } else {
-      // const strVal = (Math.round(this.capacity * (10**(PercentPrecision+2)) / marchCap) / (10**PercentPrecision)).toFixed(PercentPrecision);
-      this.percent = this.capacity.times(100).div(marchCap).round(PercentPrecision);
+      this.percent = this.capacity.times(100).div(marchCap);
     }
     return this.percent;
   }

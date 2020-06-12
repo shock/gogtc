@@ -9,6 +9,7 @@ import * as actions from '../actions';
 import * as selectors from '../selectors';
 import { TierDefView } from './TierDefView';
 import { MFormCalc } from '../models/MFormCalc';
+import config from '../../../config';
 
 const mapStateToProps = (state: RootState) => ({
   // hack to trigger re-rendering any time the formCalc changes
@@ -99,7 +100,7 @@ class FormCalcViewBase extends React.Component<Props> {
           </div>
           <div className="NumCell inline nobr">
             <label>Tier % Sum</label>
-            <span className="sum">{this.data().getTierDefPercentsSum().toFixed(4)}</span>
+            <span className="sum">{this.data().getTierDefPercentsSum().toFixed(config.calcPrecision)}</span>
           </div>
           {button}
         </Col>

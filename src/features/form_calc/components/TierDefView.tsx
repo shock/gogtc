@@ -10,7 +10,8 @@ import * as actions from '../actions';
 import * as selectors from '../selectors';
 import { TroopDefView } from './TroopDefView';
 import { LockState } from '../../../components/LockState';
-import { MTierDef, PercentPrecision } from '../models';
+import { MTierDef } from '../models';
+import config from '../../../config';
 
 const mapStateToProps = (state: RootState) => ({
   // hack to trigger re-rendering any time the formCalc changes
@@ -79,7 +80,7 @@ class TierDefViewBase extends React.Component<Props> {
             color={'transparent'}
             fixedWidth
           />
-          <span className="sum">{this.data().troopPercentSum().toFixed(6)}%</span>
+          <span className="sum">{this.data().troopPercentSum().toFixed(config.calcPrecision)}%</span>
         </div>
         <div className={`TroopCount NumCell inline nobr`}>
           <FontAwesomeIcon
@@ -90,7 +91,7 @@ class TierDefViewBase extends React.Component<Props> {
           <span className="sum">{this.data().getCapFromTroopDefs().toString()}</span>
         </div>
         <div className={'inline nobr troopPercCalculated'}>
-          <span>{this.data().getActualTroopDefPercentSum().toFixed(3)+'%'}</span>
+          <span>{this.data().getActualTroopDefPercentSum().toFixed(config.calcPrecision)+'%'}</span>
         </div>
       </div>
     ) } else return null;
@@ -161,7 +162,7 @@ class TierDefViewBase extends React.Component<Props> {
             <div className="nobr inline">
               { this.fixThisPercent() }
               <NumericInput
-                step={1} precision={PercentPrecision}
+                step={1} precision={config.viewPrecision}
                 snap
                 min={0}
                 max={100}

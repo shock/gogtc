@@ -5,15 +5,15 @@ function buildTroopDefs(tierDef:MTierDef):MTroopDef[] {
   const troopDefs =  [
     new MTroopDef(
       TroopType.Infantry,
-      toBig(1000),
-    ),
-    new MTroopDef(
-      TroopType.Cavalry,
       toBig(2000),
     ),
     new MTroopDef(
+      TroopType.Cavalry,
+      toBig(4000),
+    ),
+    new MTroopDef(
       TroopType.Distance,
-      toBig(3000),
+      toBig(6000),
     ),
   ];
   // troopDefs.forEach( (troopDef) => {
@@ -67,8 +67,6 @@ export const TestLibrary:FormCalcDictionary = {
     fc1: buildFormCalc('fc1')
   }
 };
-
-export const PercentPrecision = 3;
 
 export * from './MTierDef';
 export * from './MTroopDef';

@@ -1,8 +1,6 @@
 import { Big } from 'big.js';
 import { toInt, toBig, TroopType } from '../types';
 
-const PercentPrecision = 20;
-
 export class MTroopDef {
   type: TroopType;
   count: Big;
@@ -61,8 +59,7 @@ export class MTroopDef {
     if(tierCapacity.eq(0) || this.countLocked) {
       this.percent = toBig(0);
     } else {
-      // const strVal = (Math.round(this.count * (10**(PercentPrecision+2)) / tierCapacity) / (10**PercentPrecision)).toFixed(PercentPrecision);
-      this.percent = this.count.times(100).div(tierCapacity).round(PercentPrecision);
+      this.percent = this.count.times(100).div(tierCapacity);
     }
     return this.percent;
   }
@@ -71,7 +68,7 @@ export class MTroopDef {
   // no attribute are mutated
   getActualPercent(tierCapacity:Big):Big {
     if( tierCapacity.eq(0) ) { return toBig(0); }
-    return this.count.div(tierCapacity);
+    return this.count.times(100).div(tierCapacity);
   }
 
   calculateAndUpdateCount(capacity:Big) {

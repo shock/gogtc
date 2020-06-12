@@ -7,8 +7,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as NumEntry from '../../../lib/num-entry';
 import * as selectors from '../selectors';
 import * as actions from '../actions';
-import { MTroopDef, MTierDef, PercentPrecision } from '../models';
+import { MTroopDef, MTierDef } from '../models';
 import { LockState } from '../../../components/LockState';
+import config from '../../../config';
 
 const mapStateToProps = (state: RootState) => ({
   // hack to trigger re-rendering any time the formCalc changes
@@ -93,7 +94,7 @@ class TroopDefViewBase extends React.Component<Props> {
       const tierDef = this.props.tierDef;
       return (
         <div className={'inline nobr troopPercCalculated'}>
-          <span>{troopDef.getActualPercent(tierDef.capacity).toFixed(3)+'%'}</span>
+          <span>{troopDef.getActualPercent(tierDef.capacity).toFixed(config.calcPrecision)+'%'}</span>
         </div>
       )
     } else return null;
@@ -110,7 +111,7 @@ class TroopDefViewBase extends React.Component<Props> {
         <div className={`TroopPercent NumCell PercEntry inline nobr ${hasDelta} ${locked}`}>
           { this.fixThisPercent() }
           <NumericInput
-            step={1} precision={PercentPrecision}
+            step={1} precision={config.viewPrecision}
             snap
             className={troopDef.type}
             min={0}

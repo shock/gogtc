@@ -1,16 +1,13 @@
-import { ActionType, getType } from 'typesafe-actions';
 import { Big } from 'big.js';
 
 import { MTierDef, MTroopDef } from '.';
 import { IdParser } from './IdParser';
 import { toInt, toBig, IdString, IdBoolean, IdOnly } from '../types';
-import * as actions from '../actions';
 import { FCState, BlankFCState, FormCalcDictionary } from '.';
-export type FormCalcAction = ActionType<typeof actions>;
+import config from '../../../config';
 
-const PercentPrecision = 4;
-// const PercentDeltaEpsilon = toBig(parseFloat((0.1**(PercentPrecision+1)).toFixed(PercentPrecision+1)));
-const PercentDeltaEpsilon = 0;
+const PercentDeltaEpsilon = toBig(0.1).pow(config.viewPrecision);
+// const PercentDeltaEpsilon = 0;
 
 class MFormCalc extends IdParser {
   name: string;
@@ -245,6 +242,7 @@ class MFormCalc extends IdParser {
   }
 
   updatePercentsFromCounts(fixPercent:boolean=true) {
+    Big.DP = config.calcPrecision;
     this.tierDefs.forEach( tierDef => {
       tierDef.updateCap( toInt(tierDef.getCapFromTroopDefs()) );
       tierDef.calculateAndUpdatePercent(this.marchCap);
