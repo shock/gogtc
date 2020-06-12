@@ -3,6 +3,7 @@ import { Big } from 'big.js';
 import { TierNum, TroopType, toInt, toBig } from '../types';
 import { MTroopDef } from '.';
 import config from '../../../config';
+import cuid from 'cuid';
 
 // const PercentDeltaEpsilon = toBig('0.001');
 const PercentDeltaEpsilon = toBig(0.1).pow(config.viewPrecision);
@@ -13,6 +14,7 @@ class MTierDef {
   capacity:Big = toBig(0);
   percent:Big = toBig(0);
   capacityLocked:boolean = false;
+  key:string = cuid();
 
   constructor(tierNum:TierNum) {
     this.tierNum = tierNum;
@@ -27,6 +29,14 @@ class MTierDef {
     clone.percent = this.percent;
     clone.capacityLocked = this.capacityLocked;
     return clone;
+  }
+
+  markForUpdate() {
+    this.key = cuid();
+  }
+
+  objectForState() {
+    return this;
   }
 
   asJsonObject() {
@@ -78,6 +88,7 @@ class MTierDef {
     if( capacity.gt(max) ) { capacity = max; };
     if( capacity.lt(zero) ) { capacity = zero; };
     this.capacity = capacity;
+    this.markForUpdate();
   }
 
   updatePercent(percent:Big) {
@@ -87,10 +98,12 @@ class MTierDef {
     if( percent.gt(max) ) { percent = max; };
     if( percent.lt(zero) ) { percent = zero; };
     this.percent = percent;
+    this.markForUpdate();
   }
 
   updateCapacityLock(state: boolean) {
     this.capacityLocked = state;
+    this.markForUpdate();
     if( state ) {
       this.troopDefs.forEach( troopDef => troopDef.updateCountLock(state) );
     }
@@ -102,6 +115,7 @@ class MTierDef {
       allTroopDefsLocked = allTroopDefsLocked && troopDef.countLocked;
     });
     this.updateCapacityLock(allTroopDefsLocked);
+    this.markForUpdate();
   }
 
   getLockedTroopCount():Big {
@@ -139,6 +153,7 @@ class MTierDef {
     if( newPercent.lt(zero) ) { newPercent = zero; }
     if( newPercent.gt(hundred) ) { newPercent = hundred; }
     troopDef.percent = newPercent;
+    this.markForUpdate();
   }
 
   calculateAndUpdateTroopPercents(fixDelta:boolean = true) {
@@ -159,6 +174,7 @@ class MTierDef {
         this.fixTroopPercent(firstUnlockedTierDef, this.troopPercentDelta());
       }
     }
+    this.markForUpdate();
   }
 
   calculateAndUpdateTroopCounts() {
@@ -173,6 +189,7 @@ class MTierDef {
     } else {
       this.percent = this.capacity.times(100).div(marchCap);
     }
+    this.markForUpdate();
     return this.percent;
   }
 
@@ -180,6 +197,7 @@ class MTierDef {
     if( !this.capacityLocked ) {
       this.capacity = this.percent.times(marchCap).div(100).round();
     }
+    this.markForUpdate();
     return this.capacity;
   }
 

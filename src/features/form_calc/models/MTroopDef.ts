@@ -1,3 +1,5 @@
+import cuid from 'cuid';
+
 import { Big } from 'big.js';
 import { toInt, toBig, TroopType } from '../types';
 
@@ -6,6 +8,7 @@ export class MTroopDef {
   count: Big;
   percent: Big;
   countLocked: boolean;
+  key:string = cuid();
 
   constructor(type:TroopType, count:Big) {
     this.type = type;
@@ -19,6 +22,14 @@ export class MTroopDef {
     clone.percent = this.percent;
     clone.countLocked = this.countLocked;
     return clone;
+  }
+
+  markForUpdate() {
+    this.key = cuid();
+  }
+
+  objectForState() {
+    return this;
   }
 
   asJsonObject() {
@@ -38,6 +49,7 @@ export class MTroopDef {
     if( count.gt(max) ) { count = max; };
     if( count.lt(zero) ) { count = zero; };
     this.count = count;
+    this.markForUpdate();
   }
 
   // updates the percentage unless the count is locked
@@ -53,10 +65,12 @@ export class MTroopDef {
       percent = zero;
     }
     this.percent = percent;
+    this.markForUpdate();
   }
 
   updateCountLock(state: boolean) {
     this.countLocked = state;
+    this.markForUpdate();
   }
 
   // calculates the percentage of this troopDefs's count of the supplied tier capcity
@@ -68,6 +82,7 @@ export class MTroopDef {
     } else {
       this.percent = this.count.times(100).div(tierCapacity);
     }
+    this.markForUpdate();
     return this.percent;
   }
 
@@ -82,6 +97,7 @@ export class MTroopDef {
     if( !this.countLocked ) {
       this.count = this.percent.times(capacity).div(100).round();
     }
+    this.markForUpdate();
     return this.count;
   }
 
