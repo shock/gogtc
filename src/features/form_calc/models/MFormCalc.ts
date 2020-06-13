@@ -13,7 +13,6 @@ class MFormCalc extends IdParser {
   name: string;
   tierDefs: MTierDef[] = [];
   marchCap:Big = toInt(0);
-  debug:boolean = true;
   key:string = cuid();
 
   constructor(name:string) {
@@ -27,7 +26,6 @@ class MFormCalc extends IdParser {
       return tierDef.clone();
     });
     clone.marchCap = this.marchCap;
-    clone.debug = this.debug;
     return clone;
   }
 
@@ -43,7 +41,6 @@ class MFormCalc extends IdParser {
     let obj:any = {};
     obj.name = this.name;
     obj.marchCap = this.marchCap;
-    obj.debug = this.debug;
     obj.tierDefs = this.tierDefs.map( tierDef => {
       return tierDef.asJsonObject();
     });
@@ -152,11 +149,11 @@ class MFormCalc extends IdParser {
     return this.objectForState();
   }
 
-  toggleFormCalcDebugHandler(payload:IdOnly) {
-    this.debug = !this.debug;
-    this.markForUpdate();
-    return this.objectForState();
-  }
+  // toggleFormCalcDebugHandler(payload:IdOnly) {
+  //   this.debug = !this.debug;
+  //   this.markForUpdate();
+  //   return this.objectForState();
+  // }
 
   /*
     COMPUTATION FUNCTIONS

@@ -49,15 +49,12 @@ const formCalc = createReducer(BlankFCState)
   .handleAction(actions.fixTierPercent, (state, action) => {
     return fcReturnState(state, getFormationById(action.payload.id).fixTierPercentHandler(action.payload));
   })
-  .handleAction(actions.toggleFormCalcDebug, (state, action) => {
-    return fcReturnState(state, getFormationById(action.payload.id).toggleFormCalcDebugHandler(action.payload));
-  })
   .handleAction(actions.resetState, (state, action) => {
     return fcReturnState(state, action.payload.formCalc);
   });
 
 const formCalcReducer = undoable(formCalc, {
-  filter: excludeAction(getType(actions.toggleFormCalcDebug)),
+  filter: excludeAction([]),
   groupBy: groupByActionTypes(
     [actions.updateMarchCap, actions.updateTroopCount,
       actions.updateTroopPercent, actions.updateTierPercent,

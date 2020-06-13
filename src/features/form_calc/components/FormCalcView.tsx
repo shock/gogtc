@@ -18,11 +18,11 @@ const mapStateToProps = (state: RootState) => ({
 const dispatchProps = {
   resetState: actions.resetState,
   updateMarchCap: actions.updateMarchCap,
-  toggleFormCalcDebug: actions.toggleFormCalcDebug
 };
 
 interface FormCalcViewProps {
   id: string;
+  debug: boolean;
 }
 
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & FormCalcViewProps;
@@ -31,7 +31,10 @@ class FormCalcViewBase extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
     this.handleMarchCapChange = this.handleMarchCapChange.bind(this);
-    this.handleDebugClick = this.handleDebugClick.bind(this);
+  }
+
+  static defaultProps = {
+    debug: false
   }
 
   id():string {
@@ -56,7 +59,7 @@ class FormCalcViewBase extends React.Component<Props> {
           key={index}
           tierDef={tierDef}
           index={index}
-          debug={this.data().debug}
+          debug={this.props.debug}
         />
       );
     });
@@ -66,20 +69,10 @@ class FormCalcViewBase extends React.Component<Props> {
     this.props.updateMarchCap(this.data().id(), ''+numVal);
   }
 
-  handleDebugClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-    this.props.toggleFormCalcDebug(this.data().id());
-  }
-
   renderDebug() {
     if( !this.data() ) return (null);
     const formCalc = this.data();
-    const button = (
-      <Button
-        variant={formCalc.debug ? "primary" : "secondary"}
-        onClick={this.handleDebugClick}
-      >DEBUG</Button>
-    );
-    if( formCalc.debug ) {
+    if( this.props.debug ) {
       return (
         <Col>
           <div className="NumCell inline nobr">
@@ -90,14 +83,9 @@ class FormCalcViewBase extends React.Component<Props> {
             <label>Tier % Sum</label>
             <span className="sum">{formCalc.getTierDefPercentsSum().toFixed(config.calcPrecision)}</span>
           </div>
-          {button}
         </Col>
       );
-    } else return (
-      <Col>
-        {button}
-      </Col>
-    );
+    } else return null;
   }
 
   render() {
@@ -110,9 +98,6 @@ class FormCalcViewBase extends React.Component<Props> {
             <h3>{formCalc.name}</h3>
           </Col>
           {this.renderDebug()}
-          <Col sm={2}>
-            <UndoRedo/>
-          </Col>
           <Col >
             <label>March Cap</label>&nbsp;
             <NumericInput
@@ -125,6 +110,9 @@ class FormCalcViewBase extends React.Component<Props> {
               parse={NumEntry.parseInteger}
               onChange={this.handleMarchCapChange}
             />
+          </Col>
+          <Col sm={2}>
+            <UndoRedo/>
           </Col>
         </Row>
         <Row>

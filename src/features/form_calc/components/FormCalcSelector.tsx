@@ -23,7 +23,8 @@ interface FormCalcSelectorProps {
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & FormCalcSelectorProps;
 type State = {
   formCalc: MFormCalc,
-  formName: string
+  formName: string,
+  debug: boolean
 }
 
 class FormCalcSelectorBase extends React.Component<Props, State> {
@@ -32,10 +33,12 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
     super(props);
     this.state = {
       formCalc: TestLibrary.formCalcs[this.props.name],
-      formName: ''
+      formName: '',
+      debug: false
     }
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleNameSubmit = this.handleNameSubmit.bind(this);
+    this.handleDebugClick = this.handleDebugClick.bind(this);
   }
 
   componentDidMount() {
@@ -45,6 +48,10 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
   resetReduxState() {
     this.props.resetState(this.state.formCalc.name, this.state.formCalc.objectForState());
     this.props.clearUndoHistory();
+  }
+
+  handleDebugClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    this.setState({debug: !this.state.debug});
   }
 
   handleNameChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -67,22 +74,33 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
   }
 
   render() {
+    const button = (
+      <Button
+        variant={this.state.debug ? "secondary" : "info"}
+        onClick={this.handleDebugClick}
+      >DEBUG</Button>
+    );
     return (
       <React.Fragment>
-        <Form onSubmit={this.handleNameSubmit}>
-          <Form.Group as={Row} controlId="formBasicEmail">
-            <Form.Label column sm={2}> Form Name</Form.Label>
-            <Col sm={4}>
-              <Form.Control type="text" placeholder="form name" value={this.state.formName} onChange={this.handleNameChange}/>
-            </Col>
-            <Col sm={2}>
-              <Button variant="primary" onClick={this.handleNameSubmit}>Submit</Button>
-            </Col>
-          </Form.Group>
-        </Form>
         <Row>
           <Col>
-            <FormCalcView id={this.state.formCalc.name} />
+            <Form onSubmit={this.handleNameSubmit}>
+              <Form.Group as={Row} controlId="formBasicEmail">
+                <Form.Label column sm={2}>Form Name</Form.Label>
+                <Col sm={4}>
+                  <Form.Control type="text" placeholder="form name" value={this.state.formName} onChange={this.handleNameChange}/>
+                </Col>
+                <Col sm={2}>
+                  <Button variant="primary" onClick={this.handleNameSubmit}>Submit</Button>
+                </Col>
+              </Form.Group>
+            </Form>
+          </Col>
+          <Col sm={3}>{button}</Col>
+        </Row>
+        <Row>
+          <Col>
+            <FormCalcView id={this.state.formCalc.name} debug={this.state.debug}/>
           </Col>
         </Row>
       </React.Fragment>
