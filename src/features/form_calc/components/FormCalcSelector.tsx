@@ -2,6 +2,7 @@ import { RootState } from 'typesafe-actions';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Row, Col, Form, Button } from 'react-bootstrap';
+import { ActionCreators as UndoActionCreators } from 'redux-undo'
 
 import * as actions from '../actions';
 import { FormCalcView } from './FormCalcView';
@@ -12,6 +13,7 @@ const mapStateToProps = (state: RootState) => ({
 
 const dispatchProps = {
   resetState: actions.resetState,
+  clearUndoHistory: UndoActionCreators.clearHistory
 };
 
 interface FormCalcSelectorProps {
@@ -42,6 +44,7 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
 
   resetReduxState() {
     this.props.resetState(this.state.formCalc.name, this.state.formCalc.objectForState());
+    this.props.clearUndoHistory();
   }
 
   handleNameChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -57,10 +60,10 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
       alert(`Couldn't find model with name: '${this.state.formName}'`);
       return;
     }
+    setTimeout( ()  => this.resetReduxState(), 1);
     this.setState({
       formCalc: formCalc
     });
-    this.resetReduxState();
   }
 
   render() {

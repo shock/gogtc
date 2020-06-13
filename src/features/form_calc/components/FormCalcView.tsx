@@ -9,6 +9,7 @@ import * as actions from '../actions';
 import * as selectors from '../selectors';
 import { TierDefView } from './TierDefView';
 import config from '../../../config';
+import UndoRedo from './UndoRedo';
 
 const mapStateToProps = (state: RootState) => ({
   formCalcs: selectors.getFormCalcs(state.formCalc)
@@ -109,6 +110,9 @@ class FormCalcViewBase extends React.Component<Props> {
             <h3>{formCalc.name}</h3>
           </Col>
           {this.renderDebug()}
+          <Col sm={2}>
+            <UndoRedo/>
+          </Col>
           <Col >
             <label>March Cap</label>&nbsp;
             <NumericInput

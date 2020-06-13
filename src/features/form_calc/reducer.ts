@@ -1,5 +1,5 @@
-import { combineReducers } from 'redux';
-import { createReducer } from 'typesafe-actions';
+import undoable, { excludeAction, groupByActionTypes } from 'redux-undo';
+import { createReducer, getType } from 'typesafe-actions';
 import * as actions from './actions';
 import { TestLibrary, MFormCalc, FCState, BlankFCState, FormCalcDictionary } from './models';
 import { getFormCalcName } from './models/IdParser';
@@ -56,9 +56,14 @@ const formCalc = createReducer(BlankFCState)
     return fcReturnState(state, action.payload.formCalc);
   });
 
-const formCalcReducer = combineReducers({
-  formCalc
-});
-
+const formCalcReducer = undoable(formCalc, {
+  filter: excludeAction(getType(actions.toggleFormCalcDebug)),
+  groupBy: groupByActionTypes(
+    [actions.updateMarchCap, actions.updateTroopCount,
+      actions.updateTroopPercent, actions.updateTierPercent,
+      actions.fixTierPercent, actions.fixTroopPercent]
+      .map( a => { return getType(a)} )
+  )
+})
 export default formCalcReducer;
 export type FormCalcState = ReturnType<typeof formCalcReducer>;
