@@ -1,9 +1,9 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
 import { ActionCreators as UndoActionCreators } from 'redux-undo'
 import { RootState } from 'typesafe-actions';
 import { connect} from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import TT from '../../../lib/tooltips';
 
 type cH = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 type bT = () => boolean;
@@ -26,23 +26,27 @@ type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchT
 
 class _UndoRedo extends React.Component<Props> {
   render () {
-    const undoDisabled = !this.props.canUndo ? 'disabled' : '';
-    const redoDisabled = !this.props.canUndo ? 'disabled' : '';
+    const undoDisabled = !this.props.canUndo;
+    const redoDisabled = !this.props.canRedo;
     return (
       <p>
-        <button className='icon-button' onClick={this.props.onUndo} disabled={!this.props.canUndo}>
-          <FontAwesomeIcon
-            icon={'undo-alt'}
-            fixedWidth
-          />
-        </button>
+        <TT tip='Undo' show={!undoDisabled}>
+          <button className='icon-button' onClick={this.props.onUndo} disabled={undoDisabled}>
+            <FontAwesomeIcon
+              icon={'undo-alt'}
+              fixedWidth
+            />
+          </button>
+        </TT>
         &nbsp;
-        <button className='icon-button' onClick={this.props.onRedo} disabled={!this.props.canRedo}>
-          <FontAwesomeIcon
-            icon={'redo-alt'}
-            fixedWidth
-          />
-        </button>
+        <TT tip='Redo' show={!redoDisabled}>
+          <button className='icon-button' onClick={this.props.onRedo} disabled={redoDisabled}>
+            <FontAwesomeIcon
+              icon={'redo-alt'}
+              fixedWidth
+            />
+          </button>
+        </TT>
       </p>
     );
   }

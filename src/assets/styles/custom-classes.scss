@@ -1,0 +1,34 @@
+button.button.btn-xs.btn {
+  padding: 0.0rem 0.4rem;
+  position: relative;
+  top: -0.08rem;
+}
+
+$iconButtonColor: rgb(255, 82, 203);
+$iconButtonBgColor: rgba(255, 255, 255, 0);
+
+button.icon-button {
+  border-radius: 2px;
+  border: none;
+  outline: none;
+  padding: 0 0.11em;
+  font-size: 1.2rem;
+  background-color: $iconButtonBgColor;
+  color: $iconButtonColor;
+  &:disabled {
+    background-color: darken($iconButtonBgColor, 15%);
+    color: desaturate(darken($iconButtonColor, 20%), 60);
+  }
+}
+
+.nobr {
+  white-space: nowrap;
+}
+
+.inline {
+  display: inline-block;
+}
+
+.relative {
+  position: relative;
+}
