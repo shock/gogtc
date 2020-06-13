@@ -1,10 +1,14 @@
 import React, { FunctionComponent } from 'react'; // importing FunctionComponent
 import { Link } from "react-router-dom";
-import { LayoutProps } from './layout.types';
 import { Container, Row, Col, Navbar, Nav, NavDropdown, Form, FormControl,
   Button } from 'react-bootstrap';
 
-const Layout: FunctionComponent<LayoutProps> = ({ title, paragraph, children }) => {
+export interface LayoutProps {
+  title: string,
+  paragraph?: string
+}
+
+export const Layout: FunctionComponent<LayoutProps> = ({ title, paragraph, children }) => {
   return (
     <main>
       <Container fluid>
@@ -63,5 +67,3 @@ const Layout: FunctionComponent<LayoutProps> = ({ title, paragraph, children }) 
     </main>
   )
 }
-
-export { Layout };
