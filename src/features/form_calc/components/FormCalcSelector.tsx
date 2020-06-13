@@ -1,8 +1,9 @@
 import { RootState } from 'typesafe-actions';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Row, Col, Form, Button } from 'react-bootstrap';
+import { Row, Col, Form, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { ActionCreators as UndoActionCreators } from 'redux-undo'
+import cuid from 'cuid';
 
 import * as actions from '../actions';
 import { FormCalcView } from './FormCalcView';
@@ -72,13 +73,26 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
       formCalc: formCalc
     });
   }
+  renderTooltip(content:string, props:any) {
+    return (
+      <Tooltip id={cuid} {...props}>
+        {content}
+      </Tooltip>
+    );
+  }
 
   render() {
     const button = (
-      <Button
-        variant={this.state.debug ? "secondary" : "info"}
-        onClick={this.handleDebugClick}
-      >DEBUG</Button>
+      <OverlayTrigger
+        placement="top"
+        delay={{ show: 250, hide: 400 }}
+        overlay={this.renderTooltip('Toggle Debug', {})}
+      >
+        <Button
+          variant={this.state.debug ? "secondary" : "info"}
+          onClick={this.handleDebugClick}
+        >Debug</Button>
+      </OverlayTrigger>
     );
     return (
       <React.Fragment>

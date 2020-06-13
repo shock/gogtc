@@ -1,7 +1,7 @@
 import { RootState } from 'typesafe-actions';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import NumericInput from 'react-numeric-input';
 import * as NumEntry from '../../../lib/num-entry';
 
