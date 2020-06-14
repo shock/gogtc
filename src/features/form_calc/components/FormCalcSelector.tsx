@@ -1,7 +1,7 @@
 import { RootState } from 'typesafe-actions';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Row, Col, Form, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Row, Col, Form, Button } from 'react-bootstrap';
 import { ActionCreators as UndoActionCreators } from 'redux-undo'
 
 import * as actions from '../actions';
@@ -90,12 +90,6 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
       >Debug</Button>
     );
     const msg = this.state.debug ? 'Hide Debug Info' : 'Show Debug Info';
-    const selectData = Object.keys((TestLibrary.formCalcs)).map( name => {
-      return ({
-        value: name,
-        label: name
-      });
-    });
 
     return (
       <React.Fragment>

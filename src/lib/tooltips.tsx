@@ -15,6 +15,8 @@ export const renderTooltip = (content:string, props?:any) => {
   );
 }
 
+type Blah = ReturnType<typeof renderTooltip>;
+
 export const renderWithTooltip = (children:any, tip:any, placement:Placement='top') => {
   return (
     <OverlayTrigger
@@ -34,10 +36,6 @@ type EasyToolTipProps = {
 }
 
 export default class EasyToolTip extends React.Component<EasyToolTipProps> {
-  constructor(props:EasyToolTipProps) {
-    super(props);
-  }
-
   static defaultProps = {
     placement: 'top',
     show: true
