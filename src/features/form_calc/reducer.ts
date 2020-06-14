@@ -53,9 +53,30 @@ const formCalc = createReducer(BlankFCState)
     return fcReturnState(state, action.payload.formCalc);
   });
 
+
+const parseActions = (rawActions:string[] | string, defaultValue=[]):string[] => {
+  if (Array.isArray(rawActions)) {
+    return rawActions
+  } else if (typeof rawActions === 'string') {
+    return [rawActions]
+  }
+  return defaultValue
+}
+
+const groupByActionTypeAndId = (rawActions:string[] | string) => {
+  const actions = parseActions(rawActions);
+  return (action:any) =>  {
+    if(actions.indexOf(action.type) >= 0)
+      return action.type+action.payload.id
+    else
+      return null
+  }
+
+}
+
 const formCalcReducer = undoable(formCalc, {
   filter: excludeAction([]),
-  groupBy: groupByActionTypes(
+  groupBy: groupByActionTypeAndId(
     [actions.updateMarchCap, actions.updateTroopCount,
       actions.updateTroopPercent, actions.updateTierPercent,
       actions.fixTierPercent, actions.fixTroopPercent]
