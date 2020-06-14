@@ -34,7 +34,7 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
     super(props);
     this.state = {
       formCalc: TestLibrary.formCalcs[this.props.name],
-      formName: '',
+      formName: this.props.name,
       debug: false
     }
     this.handleNameChange = this.handleNameChange.bind(this);
@@ -74,6 +74,14 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
     });
   }
 
+  selectOptions() {
+    const options = Object.keys(TestLibrary.formCalcs).map( name => {
+      const selected = this.state.formName === name;
+      return (<option selected={selected}>{name}</option>);
+    });
+    return options;
+  }
+
   render() {
     const debugButton = (
       <Button
@@ -82,6 +90,12 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
       >Debug</Button>
     );
     const msg = this.state.debug ? 'Hide Debug Info' : 'Show Debug Info';
+    const selectData = Object.keys((TestLibrary.formCalcs)).map( name => {
+      return ({
+        value: name,
+        label: name
+      });
+    });
 
     return (
       <React.Fragment>
@@ -91,7 +105,14 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
               <Form.Group as={Row} controlId="formBasicEmail">
                 <Form.Label column sm={2}>Form Name</Form.Label>
                 <Col sm={4}>
-                  <Form.Control type="text" placeholder="form name" value={this.state.formName} onChange={this.handleNameChange}/>
+                  {/* <Form.Control type="text" placeholder="form name" value={this.state.formName} onChange={this.handleNameChange}/> */}
+                  <Form.Control
+                    as="select"
+                    custom
+                    onChange={this.handleNameChange}
+                  >
+                    {this.selectOptions()}
+                  </Form.Control>
                 </Col>
                 <Col sm={2}>
                   <Button variant="primary" onClick={this.handleNameSubmit}>Submit</Button>

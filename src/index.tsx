@@ -12,7 +12,7 @@ import { Provider } from 'react-redux';
 import Router from './router';
 import store from './store';
 import './assets/styles/main.scss';
-import './fontawesome'
+import './fontawesome';
 
 // setting this to true will enable some components
 // to render as though they were on a touch device.
