@@ -5,7 +5,6 @@ import { MTroopDef } from '.';
 import config from '../../../config';
 import cuid from 'cuid';
 
-// const PercentDeltaEpsilon = toBig('0.001');
 const PercentDeltaEpsilon = toBig(0.1).pow(config.viewPrecision);
 
 class MTierDef {

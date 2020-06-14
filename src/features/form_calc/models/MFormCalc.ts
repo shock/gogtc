@@ -7,7 +7,6 @@ import { toInt, toBig, IdString, IdBoolean, IdOnly } from '../types';
 import config from '../../../config';
 
 const PercentDeltaEpsilon = toBig(0.1).pow(config.viewPrecision);
-// const PercentDeltaEpsilon = 0;
 
 class MFormCalc extends IdParser {
   name: string;
