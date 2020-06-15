@@ -19,8 +19,16 @@ export type IdOnly = {
 // Model Types
 
 // https://spin.atomicobject.com/2018/11/05/using-an-int-type-in-typescript/
-export const toInt = (value:any) => (new Big(value).round());
-export const toBig = (value:any) => (new Big(value));
+export const toInt = (value:any) => {
+  let num = parseFloat(value);
+  if( isNaN(num) ) { num = 0 }
+  return new Big(num).round()
+};
+export const toBig = (value:any) => {
+  let num = parseFloat(value);
+  if( isNaN(num) ) { num = 0 }
+  return new Big(num)
+};
 
 export enum TierNum {
   T12 = 'T12',
