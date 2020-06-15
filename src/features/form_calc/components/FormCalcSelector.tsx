@@ -101,9 +101,8 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
   }
 
   selectOptions() {
-    const options = Object.keys(TestLibrary.formCalcs).map( name => {
-      const selected = this.state.formName === name;
-      return (<option selected={selected}>{name}</option>);
+    const options = Object.keys(TestLibrary.formCalcs).map( (name, index) => {
+      return (<option key={index}>{name}</option>);
     });
     return options;
   }
@@ -187,6 +186,7 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
                     as="select"
                     custom
                     onChange={this.handleNameChange}
+                    defaultValue={this.state.formName}
                   >
                     {this.selectOptions()}
                   </Form.Control>
