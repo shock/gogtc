@@ -56,6 +56,9 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
   }
 
   componentDidMount() {
+    if( !this.formCalc() ) {
+      this.resetReduxState();
+    }
   }
 
   resetReduxState() {
