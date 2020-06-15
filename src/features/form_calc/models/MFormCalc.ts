@@ -33,7 +33,7 @@ class MFormCalc extends IdParser {
   }
 
   objectForState() {
-    return this.clone();
+    return this;
   }
 
   asJsonObject() {

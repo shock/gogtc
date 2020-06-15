@@ -1,12 +1,15 @@
-import undoable, { excludeAction, groupByActionTypes } from 'redux-undo';
+import undoable, { excludeAction } from 'redux-undo';
 import { createReducer, getType } from 'typesafe-actions';
 import * as actions from './actions';
-import { TestLibrary, MFormCalc, FCState, BlankFCState, FormCalcDictionary } from './models';
+import { MFormCalc, FCState, BlankFCState, FormCalcDictionary } from './models';
 import { getFormCalcName } from './models/IdParser';
 
-const getFormationById = (id: string) => {
+const getFormationById = (state:FCState, id: string) => {
   const formationName = getFormCalcName(id);
-  const formCalcModel = TestLibrary.formCalcs[formationName];
+
+  // NOTE: we have to clone the formCalc here, otherwise the UNDO history won't be preserved
+  const formCalcModel = state.formCalcs[formationName].clone();
+
   if( !(formCalcModel instanceof MFormCalc) )
     throw new Error(`Can't find formation with name: ${formationName}`);
   return formCalcModel;
@@ -26,28 +29,28 @@ const fcReturnState = (state:FCState, formCalc:MFormCalc) => {
 
 const formCalc = createReducer(BlankFCState)
   .handleAction(actions.updateTroopCount, (state, action) => {
-    return fcReturnState(state, getFormationById(action.payload.id).updateTroopCountHandler(action.payload));
+    return fcReturnState(state, getFormationById(state, action.payload.id).updateTroopCountHandler(action.payload));
   })
   .handleAction(actions.updateTroopPercent, (state, action) => {
-    return fcReturnState(state, getFormationById(action.payload.id).updateTroopPercentHandler(action.payload));
+    return fcReturnState(state, getFormationById(state, action.payload.id).updateTroopPercentHandler(action.payload));
   })
   .handleAction(actions.updateTroopCountLock, (state, action) => {
-    return fcReturnState(state, getFormationById(action.payload.id).updateTroopCountLockHandler(action.payload));
+    return fcReturnState(state, getFormationById(state, action.payload.id).updateTroopCountLockHandler(action.payload));
   })
   .handleAction(actions.updateTierPercent, (state, action) => {
-    return fcReturnState(state, getFormationById(action.payload.id).updateTierPercentHandler(action.payload));
+    return fcReturnState(state, getFormationById(state, action.payload.id).updateTierPercentHandler(action.payload));
   })
   .handleAction(actions.updateTierCapacityLock, (state, action) => {
-    return fcReturnState(state, getFormationById(action.payload.id).updateTierCapacityLockHandler(action.payload));
+    return fcReturnState(state, getFormationById(state, action.payload.id).updateTierCapacityLockHandler(action.payload));
   })
   .handleAction(actions.updateMarchCap, (state, action) => {
-    return fcReturnState(state, getFormationById(action.payload.id).updateMarchCapHandler(action.payload));
+    return fcReturnState(state, getFormationById(state, action.payload.id).updateMarchCapHandler(action.payload));
   })
   .handleAction(actions.fixTroopPercent, (state, action) => {
-    return fcReturnState(state, getFormationById(action.payload.id).fixTroopPercentHandler(action.payload));
+    return fcReturnState(state, getFormationById(state, action.payload.id).fixTroopPercentHandler(action.payload));
   })
   .handleAction(actions.fixTierPercent, (state, action) => {
-    return fcReturnState(state, getFormationById(action.payload.id).fixTierPercentHandler(action.payload));
+    return fcReturnState(state, getFormationById(state, action.payload.id).fixTierPercentHandler(action.payload));
   })
   .handleAction(actions.resetState, (state, action) => {
     return fcReturnState(state, action.payload.formCalc);
@@ -75,7 +78,7 @@ const groupByActionTypeAndId = (rawActions:string[] | string) => {
 }
 
 const formCalcReducer = undoable(formCalc, {
-  filter: excludeAction([]),
+  filter: excludeAction([getType(actions.resetState)]),
   groupBy: groupByActionTypeAndId(
     [actions.updateMarchCap, actions.updateTroopCount,
       actions.updateTroopPercent, actions.updateTierPercent,

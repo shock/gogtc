@@ -5,11 +5,13 @@ import { Row, Col, Form, Button } from 'react-bootstrap';
 import { ActionCreators as UndoActionCreators } from 'redux-undo'
 
 import * as actions from '../actions';
+import * as selectors from '../selectors';
 import { FormCalcView } from './FormCalcView';
-import { TestLibrary, MFormCalc } from '../models';
+import { TestLibrary } from '../models';
 import TT from '../../../lib/tooltips';
 
 const mapStateToProps = (state: RootState) => ({
+  formCalcs: selectors.getFormCalcs(state.formCalc)
 });
 
 const dispatchProps = {
@@ -23,7 +25,6 @@ interface FormCalcSelectorProps {
 
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & FormCalcSelectorProps;
 type State = {
-  formCalc: MFormCalc,
   formName: string,
   debug: boolean,
   showJson: boolean,
@@ -35,7 +36,6 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      formCalc: TestLibrary.formCalcs[this.props.name],
       formName: this.props.name,
       debug: false,
       showJson: false,
@@ -48,25 +48,25 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
     this.handleStateClick = this.handleStateClick.bind(this);
   }
 
+  formCalc() {
+    return this.props.formCalcs[this.state.formName];
+  }
+
   componentDidUpdate(prevProps:Props) {
-    const formCalc = this.props.formCalcs[this.state.formName];
-    if( this.state.formCalc !== formCalc ) {
-      console.log('here');
-      this.setState({formCalc: formCalc})
-      if( TestLibrary.formCalcs[this.state.formName] !== formCalc ) {
-        console.log('here too')
-        // TestLibrary.formCalcs[this.state.formName] = formCalc;
-      }
-    }
   }
 
   componentDidMount() {
-    if( this.state.formCalc ) { this.resetReduxState() }
   }
 
   resetReduxState() {
-    this.props.resetState(this.state.formCalc.name, this.state.formCalc.objectForState());
-    this.props.clearUndoHistory();
+    const formCalc = TestLibrary.formCalcs[this.state.formName];
+    if( formCalc ) {
+      console.log(`MFormCalc found with name '${this.state.formName}'`);
+      this.props.resetState(this.state.formName, formCalc.clone());
+      this.props.clearUndoHistory();
+      return;
+    }
+    console.log(`No MFormCalc found with name '${this.state.formName}'`);
   }
 
   handleDebugClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -85,6 +85,7 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
     this.setState({
       formName: event.target.value
     })
+    setTimeout( () => this.handleNameSubmit(event), 0);
   }
 
   handleNameSubmit(event: any) {
@@ -94,10 +95,7 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
       alert(`Couldn't find model with name: '${this.state.formName}'`);
       return;
     }
-    setTimeout( ()  => this.resetReduxState(), 1);
-    this.setState({
-      formCalc: formCalc
-    });
+    setTimeout( ()  => this.resetReduxState(), 0);
   }
 
   selectOptions() {
@@ -128,7 +126,7 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
 
   renderJsonView() {
     const obj = this.state.jsonState
-      ? this.state.formCalc.asJsonObject()
+      ? this.formCalc().asJsonObject()
       : TestLibrary.formCalcs[this.state.formName].asJsonObject();
     const json = JSON.stringify(obj, null, 2);
     return (
@@ -144,7 +142,7 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
     return (
       <Row>
         <Col>
-          <FormCalcView id={this.state.formCalc.name} debug={this.state.debug}/>
+          <FormCalcView id={this.state.formName} debug={this.state.debug}/>
         </Col>
       </Row>
     )
