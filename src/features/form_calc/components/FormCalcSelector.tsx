@@ -199,8 +199,8 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
             </Form>
           </Col>
           <Col sm={4}>
-            <TT tip={sMsg}>{stateButton}</TT>
-            &nbsp;&nbsp;&nbsp;
+            {/* <TT tip={sMsg}>{stateButton}</TT> */}
+            {/* &nbsp;&nbsp;&nbsp; */}
             <TT tip={jMsg}>{jsonButton}</TT>
             &nbsp;&nbsp;&nbsp;
             <TT tip={dMsg}>{debugButton}</TT>
