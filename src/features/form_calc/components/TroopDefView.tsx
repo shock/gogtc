@@ -116,6 +116,7 @@ class TroopDefViewBase extends React.Component<Props> {
             format={NumEntry.formatPercent}
             parse={NumEntry.parsePercent}
             onChange={this.handlePercentChange}
+            tabIndex={2}
           />
         </div>
         <div className={`TroopCount NumCell inline nobr`}>
@@ -133,6 +134,7 @@ class TroopDefViewBase extends React.Component<Props> {
             format={NumEntry.formatInteger}
             parse={NumEntry.parseInteger}
             onChange={this.handleCountChange}
+            tabIndex={3}
           />
         </div>
         { this.renderDebug() }
