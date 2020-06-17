@@ -75,5 +75,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "express-generator-typescript": "^1.6.5"
   }
 }
