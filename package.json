@@ -7,7 +7,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "backend": "ts-node-dev --respawn --transpileOnly -P server/tsconfig.json server/src/server.ts"
+    "backend": "cd server && yarn start"
   },
   "proxy": "http://localhost:8080",
   "dependencies": {

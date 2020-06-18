@@ -1,0 +1,24 @@
+{
+  "name": "gogs",
+  "version": "0.0.0",
+  "description": "Gog Server",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node-dev --respawn --transpileOnly src/server.ts",
+    "tsc": "tsc",
+    "build": "node build.js"
+  },
+  "author": "WDD",
+  "license": "MIT",
+  "dependencies": {
+    "@types/express": "^4.17.6",
+    "@types/knex": "^0.16.1",
+    "express": "^4.17.1",
+    "knex": "^0.21.1",
+    "objection": "^2.2.0",
+    "pg": "^8.2.1",
+    "ts-node-dev": "^1.0.0-pre.49",
+    "typescript": "^3.9.5"
+  }
+}
