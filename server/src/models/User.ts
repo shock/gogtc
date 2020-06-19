@@ -51,7 +51,8 @@ export default class User extends BaseModel {
   // QUERY SHORTCUTS
   ////////////////////
 
-  static findByEmail (email: string) {
-    return this.query().where({email:email})
+  static async findByEmail (email: string) {
+    const response = await this.query().where({email:email})
+    return response[0]
   }
 }
