@@ -8,7 +8,8 @@
     "console": "ts-node-dev --respawn --transpileOnly console.ts",
     "start": "ts-node-dev --respawn --transpileOnly src/index.ts",
     "tsc": "tsc",
-    "build": "node build.js"
+    "build": "node build.js",
+    "db:seed": "yarn run ts-node src/db/seeds.ts"
   },
   "author": "WDD",
   "license": "MIT",
