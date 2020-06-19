@@ -1,10 +1,12 @@
 import { Model, Modifiers } from 'objection'
+import { BaseModel } from './BaseModel'
 
-export default class User extends Model {
+export default class User extends BaseModel {
   id!: number
   name!: string
   email!: string
   role!: number
+  pwdHash!: string
 
 
   // Table name is the only required property.
@@ -21,6 +23,7 @@ export default class User extends Model {
       id: { type: 'integer' },
       name: { type: 'string', minLength: 1, maxLength: 255 },
       email: { type: 'string', minLength: 1, maxLength: 255 },
+      pwdHash: { type: 'string', minLength: 1, maxLength: 255 },
       role: { type: 'integer' },
     }
   }
@@ -42,5 +45,13 @@ export default class User extends Model {
         }
       })
     }
+  }
+
+  ////////////////////
+  // QUERY SHORTCUTS
+  ////////////////////
+
+  static findByEmail (email: string) {
+    return this.query().where({email:email})
   }
 }
