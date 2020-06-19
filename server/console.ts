@@ -29,7 +29,7 @@ import repl from 'repl';
 import * as models from './src/models';
 import Knex from 'knex'
 import { Model, ForeignKeyViolationError, ValidationError } from 'objection'
-import knexConfig from './knexfile'
+import knexConfig from './src/db/knexfile'
 const replHistory = require('repl.history')
 
 // replHistory(repl, process.env.HOME + '/.node_history')

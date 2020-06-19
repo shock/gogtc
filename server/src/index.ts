@@ -7,7 +7,7 @@ import logger from './shared/Logger';
 
 import Knex from 'knex'
 import { Model } from 'objection'
-import knexConfig from '../knexfile'
+import knexConfig from './db/knexfile'
 
 // Initialize knex.
 const knex = Knex(knexConfig.development)

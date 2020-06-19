@@ -1,7 +1,7 @@
 import * as models from '../models';
 import Knex from 'knex'
 import { Model, ForeignKeyViolationError, ValidationError } from 'objection'
-import knexConfig from '../../knexfile'
+import knexConfig from './knexfile'
 
 // Initialize knex.
 const knex = Knex(knexConfig.development)
