@@ -1,6 +1,8 @@
+import 'ts-node/register'
+
 // Update with your config settings.
 
-module.exports = {
+const config = {
 
   development: {
     client: "postgresql",
@@ -51,3 +53,6 @@ module.exports = {
   }
 
 };
+
+export default config;
+module.exports = config;
