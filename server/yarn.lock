@@ -113,6 +113,13 @@
   dependencies:
     "@types/express" "*"
 
+"@types/http-status-codes@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@types/http-status-codes/-/http-status-codes-1.2.0.tgz#6e5244835aaf7164dd306f1d4d2dfdbb2159d909"
+  integrity sha512-vjpjevMaxtrtdrrV/TQNIFT7mKL8nvIKG7G/LjMDZdVvqRxRg5SNfGkeuSaowVc0rbK8xDA2d/Etunyb5GyzzA==
+  dependencies:
+    http-status-codes "*"
+
 "@types/jasmine@^3.5.10":
   version "3.5.10"
   resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-3.5.10.tgz#a1a41012012b5da9d4b205ba9eba58f6cce2ab7b"
@@ -141,6 +148,13 @@
   integrity sha512-9bVao7LvyorRGZCw0VmH/dr7Og+NdjYSsKAxB43OQoComFbBgsEpoR9JW6+qSq/ogwVBg8GI2MfAlk4SYI4OLg==
   dependencies:
     "@types/node" "*"
+
+"@types/knex@^0.16.1":
+  version "0.16.1"
+  resolved "https://registry.yarnpkg.com/@types/knex/-/knex-0.16.1.tgz#619678407265c675463c563ed38323461a49515d"
+  integrity sha512-54gWD1HWwdVx5iLHaJ1qxH3I6KyBsj5fFqzRpXFn7REWiEB2jwspeVCombNsocSrqPd7IRPqKrsIME7/cD+TFQ==
+  dependencies:
+    knex "*"
 
 "@types/mime@*":
   version "2.0.2"
@@ -2052,7 +2066,7 @@ http-errors@~1.7.2:
     statuses ">= 1.5.0 < 2"
     toidentifier "1.0.0"
 
-http-status-codes@^1.4.0:
+http-status-codes@*, http-status-codes@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/http-status-codes/-/http-status-codes-1.4.0.tgz#6e4c15d16ff3a9e2df03b89f3a55e1aae05fb477"
   integrity sha512-JrT3ua+WgH8zBD3HEJYbeEgnuQaAnUeRRko/YojPAJjGmIfGD3KPU/asLdsLwKjfxOmQe5nXMQ0pt/7MyapVbQ==
@@ -2550,7 +2564,7 @@ kind-of@^6.0.0, kind-of@^6.0.2:
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.3.tgz#07c05034a6c349fa06e24fa35aa76db4580ce4dd"
   integrity sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==
 
-knex@^0.21.1:
+knex@*, knex@^0.21.1:
   version "0.21.1"
   resolved "https://registry.yarnpkg.com/knex/-/knex-0.21.1.tgz#4fba7e6c58c9f459846c3090be157a732fc75e41"
   integrity sha512-uWszXC2DPaLn/YznGT9wFTWUG9+kqbL4DMz+hCH789GLcLuYzq8werHPDKBJxtKvxrW/S1XIXgrTWdMypiVvsw==
