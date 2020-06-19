@@ -2,7 +2,8 @@ import { Request, Response, Router } from 'express';
 import { BAD_REQUEST, CREATED, OK } from 'http-status-codes';
 import { ParamsDictionary } from 'express-serve-static-core';
 
-import UserDao from '../daos/User/UserDao.mock';
+// import UserDao from '../daos/User/UserDao.mock';
+import User from '../models/User';
 import { paramMissingError } from '../shared/constants';
 import { adminMW } from './middleware';
 import { UserRoles } from '../entities/User';
@@ -10,7 +11,7 @@ import { UserRoles } from '../entities/User';
 
 // Init shared
 const router = Router().use(adminMW);
-const userDao = new UserDao();
+// const userDao = new UserDao();
 
 
 /******************************************************************************
@@ -18,7 +19,7 @@ const userDao = new UserDao();
  ******************************************************************************/
 
 router.get('/all', async (req: Request, res: Response) => {
-    const users = await userDao.getAll();
+    const users = await User.findAll();
     return res.status(OK).json({users});
 });
 
@@ -37,7 +38,7 @@ router.post('/add', async (req: Request, res: Response) => {
     }
     // Add new user
     user.role = UserRoles.Standard;
-    await userDao.add(user);
+    await User.create(user);
     return res.status(CREATED).end();
 });
 
@@ -54,9 +55,7 @@ router.put('/update', async (req: Request, res: Response) => {
             error: paramMissingError,
         });
     }
-    // Update user
-    user.id = Number(user.id);
-    await userDao.update(user);
+    await User.update(Number(user.id), user);
     return res.status(OK).end();
 });
 
@@ -67,7 +66,7 @@ router.put('/update', async (req: Request, res: Response) => {
 
 router.delete('/delete/:id', async (req: Request, res: Response) => {
     const { id } = req.params as ParamsDictionary;
-    await userDao.delete(Number(id));
+    await User.delete(Number(id));
     return res.status(OK).end();
 });
 

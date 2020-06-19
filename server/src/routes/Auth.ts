@@ -2,13 +2,13 @@ import bcrypt from 'bcrypt';
 import { Request, Response, Router } from 'express';
 import { BAD_REQUEST, OK, UNAUTHORIZED } from 'http-status-codes';
 
-import UserDao from '../daos/User/UserDao.mock';
+// import UserDao from '../daos/User/UserDao.mock';
+import User from '../models/User';
 import { JwtService } from '../shared/JwtService';
 import { paramMissingError, loginFailedErr, cookieProps } from '../shared/constants';
 
 
 const router = Router();
-const userDao = new UserDao();
 const jwtService = new JwtService();
 
 
@@ -25,7 +25,7 @@ router.post('/login', async (req: Request, res: Response) => {
         });
     }
     // Fetch user
-    const user = await userDao.getOne(email);
+    const user = await User.findByEmail(email);
     if (!user) {
         return res.status(UNAUTHORIZED).json({
             error: loginFailedErr,
