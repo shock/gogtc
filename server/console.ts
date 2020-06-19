@@ -46,6 +46,13 @@ const knex = Knex(knexConfig.development)
 // the Model.bindKnex() method.
 Model.knex(knex)
 
+global['logp'] = (it:Promise<any>) => {
+  it.then((resp) => console.log(resp))
+}
+
+const setupQuery = (model:any):Promise<any> => model.query()
+
+global['q'] = setupQuery
 
 const replServer = repl.start({
   prompt: 'server > '
