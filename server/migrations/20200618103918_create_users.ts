@@ -8,7 +8,7 @@ export async function up(knex: Knex): Promise<any> {
       table.string('name')
       table.string('email')
       table.string('pwdHash')
-      table.string('role')
+      table.integer('role')
     })
 }
 
