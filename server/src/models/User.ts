@@ -4,7 +4,7 @@ export default class User extends Model {
   id!: number
   name!: string
   email!: string
-  role!: string
+  role!: number
 
 
   // Table name is the only required property.

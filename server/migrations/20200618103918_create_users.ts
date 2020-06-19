@@ -9,6 +9,8 @@ export async function up(knex: Knex): Promise<any> {
       table.string('email')
       table.string('pwdHash')
       table.integer('role')
+      table.unique(['name'])
+      table.unique(['email'])
     })
 }
 
