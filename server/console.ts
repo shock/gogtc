@@ -50,6 +50,14 @@ global['logp'] = (it:Promise<any>) => {
   it.then((resp) => console.log(resp))
 }
 
+global['a'] = { v: null }
+global['av'] = (it:Promise<any>) => {
+  it.then((resp) => {
+    console.log(resp)
+    global['a'].v = resp
+  })
+}
+
 const setupQuery = (model:any):Promise<any> => model.query()
 
 global['q'] = setupQuery
