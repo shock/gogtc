@@ -5,6 +5,18 @@ import path from 'path';
 import app from './server';
 import logger from './shared/Logger';
 
+import Knex from 'knex'
+import { Model } from 'objection'
+import knexConfig from '../knexfile'
+
+// Initialize knex.
+const knex = Knex(knexConfig.development)
+
+// Bind all Models to a knex instance. If you only have one database in
+// your server this is all you have to do. For multi database systems, see
+// the Model.bindKnex() method.
+Model.knex(knex)
+
 const rootPath = path.join(__dirname, '../..');
 app.use(express.static(path.join(rootPath, 'build')));
 
