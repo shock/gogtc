@@ -34,7 +34,7 @@ function getUserDisplayEle(user) {
                 Delete
             </button>
         </div>
-        
+
         <div class="edit-view">
             <div>
                 Name: <input class="name-edit-input" value="${user.name}">
@@ -116,11 +116,10 @@ function submitEdit(ele) {
     var data = {
         user: {
             name: nameInput.value,
-            email: emailInput.value,
-            id: id
+            email: emailInput.value
         }
     };
-	Http.Put('/api/users/update', data)
+	Http.Put('/api/users/update/' + id, data)
         .then(() => {
             displayUsers();
         })

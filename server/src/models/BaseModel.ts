@@ -19,6 +19,10 @@ export class BaseModel extends Model {
     return this.findOne(id).update(data)
   }
 
+  static patch (id:number, data:Object) {
+    return this.findOne(id).patch(data)
+  }
+
   static delete (id:number) {
     return this.findOne(id).delete()
   }

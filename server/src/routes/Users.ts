@@ -44,18 +44,19 @@ router.post('/add', async (req: Request, res: Response) => {
 
 
 /******************************************************************************
- *                       Update - "PUT /api/users/update"
+ *                       Update - "PUT /api/users/update/:id"
  ******************************************************************************/
 
-router.put('/update', async (req: Request, res: Response) => {
+router.put('/update/:id', async (req: Request, res: Response) => {
     // Check Parameters
+    const { id } = req.params as ParamsDictionary;
     const { user } = req.body;
     if (!user) {
         return res.status(BAD_REQUEST).json({
             error: paramMissingError,
         });
     }
-    await User.update(Number(user.id), user);
+    await User.patch(Number(id), user);
     return res.status(OK).end();
 });
 
