@@ -20,7 +20,7 @@ export const Layout: FunctionComponent<LayoutProps> = ({ title, paragraph, child
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
                   <Link to="/" className='nav-link'>Calc</Link>
-                  <Link to="/json" className='nav-link'>Json</Link>
+                  <Link to="/login" className='nav-link'>Login</Link>
                   <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                     <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                     <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
