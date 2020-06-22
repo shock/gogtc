@@ -46,8 +46,10 @@ class LoginPageBase extends React.Component<Props, State> {
     switch(name) {
       case 'username' :
         this.setState({ username: value })
+        break;
       case 'password' :
         this.setState({ password: value })
+        break;
     }
   }
 

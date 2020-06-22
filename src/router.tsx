@@ -6,6 +6,7 @@ import {
 } from "react-router-dom"
 import Calc from './routes/calc'
 import LoginView from './routes/login'
+import RegisterView from './routes/register'
 
 export default function App() {
   return (
@@ -13,12 +14,9 @@ export default function App() {
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-          <Route path="/login">
-            <LoginView />
-          </Route>
-          <Route path="/">
-            <Calc />
-          </Route>
+          <Route path="/login" component={LoginView} />
+          <Route path="/register" component={RegisterView} />
+          <Route path="/" component={Calc} />
         </Switch>
     </Router>
   )
