@@ -46,7 +46,7 @@ router.post('/login', async (req: Request, res: Response) => {
     const { key, options } = cookieProps;
     res.cookie(key, jwt, options);
     // Return
-    return res.status(OK).end();
+    return res.status(OK).json({user});
 });
 
 
