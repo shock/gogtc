@@ -1,6 +1,10 @@
-import { combineEpics } from 'redux-observable';
+import { combineEpics, Epic } from 'redux-observable';
 
-import * as todosEpics from '../features/todos/epics';
-import * as usersEpics from '../features/users/epics';
+import { loadTodosEpic, saveTodosEpic } from '../features/todos/epics';
+import { loginUserEpic } from '../features/users/epics';
 
-export default combineEpics(todosEpics, usersEpics);
+export default combineEpics(
+  loadTodosEpic,
+  saveTodosEpic,
+  loginUserEpic
+);

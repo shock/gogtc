@@ -1,32 +1,30 @@
-import { Todo } from 'MyModels';
-import { combineReducers } from 'redux';
-import { createReducer } from 'typesafe-actions';
+import { combineReducers } from 'redux'
+import { createReducer } from 'typesafe-actions'
 
-import { loadTodosAsync, addTodo, removeTodo } from './actions';
+import * as actions from './actions'
+import User from './models/MUser'
 
-export const isLoadingTodos = createReducer(false as boolean)
-  .handleAction([loadTodosAsync.request], (state, action) => true)
-  .handleAction(
-    [loadTodosAsync.success, loadTodosAsync.failure],
-    (state, action) => false
-  );
+const { request, success, failure } = actions.loginUserAsync;
 
-export const todos = createReducer([
-  {
-    id: '0',
-    title: 'You can add new todos using the form or load saved snapshot...',
-  },
-] as Todo[])
-  .handleAction(loadTodosAsync.success, (state, action) => action.payload)
-  .handleAction(addTodo, (state, action) => [...state, action.payload])
-  .handleAction(removeTodo, (state, action) =>
-    state.filter(i => i.id !== action.payload)
-  );
+export const isLoggingIn = createReducer(false as boolean)
+  .handleAction(request, (state, action) => ( true ))
+  .handleAction([success,failure], (state, action) => ( false ))
 
-const todosReducer = combineReducers({
-  isLoadingTodos,
-  todos,
+const initialState = {
+  users: [] as User[]
+}
+
+export const users = createReducer(initialState)
+  .handleAction(success, (state, action) => (
+    {
+      ...state
+    }
+  ))
+
+const usersReducer = combineReducers({
+  isLoggingIn,
+  users,
 });
 
-export default todosReducer;
-export type TodosState = ReturnType<typeof todosReducer>;
+export default usersReducer
+export type UsersState = ReturnType<typeof usersReducer>

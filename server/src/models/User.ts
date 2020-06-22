@@ -1,7 +1,8 @@
 import { Model, Modifiers } from 'objection'
 import { BaseModel } from './BaseModel'
+import IUser from '../client_server/interfaces/User'
 
-export default class User extends BaseModel {
+export default class User extends BaseModel implements IUser {
   id!: number
   name!: string
   email!: string

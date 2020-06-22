@@ -14,7 +14,7 @@ export const loginUserEpic: Epic<
   action$.pipe(
     filter(isActionOf(loginUserAsync.request)),
     switchMap((action) =>
-      from(api.users.loginUser()).pipe(
+      from(api.users.loginUser(action.payload.username, action.payload.password)).pipe(
         map(loginUserAsync.success),
         catchError((message: string) => of(loginUserAsync.failure(message)))
       )

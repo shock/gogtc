@@ -1,5 +1,5 @@
 // import { createSelector } from 'reselect';
 
-import { TodosState } from './reducer';
+import { UsersState } from './reducer';
 
-export const getTodos = (state: TodosState) => state.todos;
+export const getUsers = (state: UsersState) => state.users;

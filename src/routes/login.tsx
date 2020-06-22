@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Row, Col, Form, Button } from 'react-bootstrap'
 import { Layout } from '../components/layout'
-
+import { LoginPage } from '../features/users/components/LoginPage'
 
 class LoginView extends React.Component {
   render () {
@@ -43,5 +43,5 @@ export default () =>
 <Layout
   title="GOG Troop Calculator"
 >
-  <LoginView />
+  <LoginPage />
 </Layout>
