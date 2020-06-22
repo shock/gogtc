@@ -30,6 +30,7 @@ import * as models from './src/models';
 import Knex from 'knex'
 import { Model, ForeignKeyViolationError, ValidationError } from 'objection'
 import knexConfig from './src/db/knexfile'
+import bcrypt from 'bcrypt';
 const replHistory = require('repl.history')
 
 // replHistory(repl, process.env.HOME + '/.node_history')
