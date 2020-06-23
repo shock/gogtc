@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "console": "ts-node-dev --respawn --transpileOnly console.ts",
+    "console": "ts-node-dev --experimental-repl-await --respawn --transpileOnly console.ts",
     "start": "ts-node-dev --respawn --transpileOnly src/index.ts",
     "tsc": "tsc",
     "build": "node build.js",
