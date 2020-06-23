@@ -1,6 +1,7 @@
 import { Request, Response, Router } from 'express';
 import { BAD_REQUEST, CREATED, OK } from 'http-status-codes';
 import { ParamsDictionary } from 'express-serve-static-core';
+import bcrypt from 'bcrypt';
 
 // import UserDao from '../daos/User/UserDao.mock';
 import User from '../models/User';
@@ -30,6 +31,7 @@ router.get('/all', async (req: Request, res: Response) => {
 
 router.post('/add', async (req: Request, res: Response) => {
     // Check parameters
+    console.log(req.body)
     const { user } = req.body;
     if (!user) {
         return res.status(BAD_REQUEST).json({
@@ -38,6 +40,9 @@ router.post('/add', async (req: Request, res: Response) => {
     }
     // Add new user
     user.role = UserRoles.Standard;
+    user.pwdHash = await bcrypt.hash(user.password, 10)
+    console.log('pwdHash: ', user.pwdHash)
+    delete user.password
     await User.create(user);
     return res.status(CREATED).end();
 });
