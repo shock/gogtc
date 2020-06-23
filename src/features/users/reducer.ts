@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import { createReducer } from 'typesafe-actions'
 
 import * as actions from './actions'
-import User from './models/MUser'
+import User from '../../client_server/interfaces/User'
 
 const { loginUserAsync, createUserAsync } = actions;
 

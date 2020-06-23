@@ -1,7 +1,5 @@
 import { createAction, createAsyncAction } from 'typesafe-actions';
-import User from './models/MUser'
-import { LoginUser } from '../../client_server/interfaces/User'
-import { CreateUser } from '../../client_server/interfaces/User'
+import User, { LoginUser, CreateUser } from '../../client_server/interfaces/User'
 
 export const loginUser = (loginUser:LoginUser) => (
   loginUserAsync.request(loginUser)

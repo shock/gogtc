@@ -1,5 +1,4 @@
-import User from '../features/users/models/MUser'
-import { LoginUser, CreateUser } from '../client_server/interfaces/User'
+import User, { LoginUser, CreateUser } from '../client_server/interfaces/User'
 const authEndpoint = '/api/auth/login'
 
 export function loginUser(loginUser:LoginUser): Promise<LoginUser> {
