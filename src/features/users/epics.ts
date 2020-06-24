@@ -4,6 +4,13 @@ import { filter, switchMap, map, catchError } from 'rxjs/operators';
 import { RootAction, RootState, Services, isActionOf } from 'typesafe-actions';
 
 import { loginUserAsync, logoutUserAsync, createUserAsync } from './actions';
+import User from '../../client_server/interfaces/User'
+import history from '../../lib/history'
+
+const dothatSuccessThang = (payload:User) => {
+  history.push('/')
+  return loginUserAsync.success(payload)
+}
 
 export const loginUserEpic: Epic<
   RootAction,
@@ -15,7 +22,7 @@ export const loginUserEpic: Epic<
     filter(isActionOf(loginUserAsync.request)),
     switchMap((action) =>
       from(api.users.loginUser(action.payload)).pipe(
-        map(loginUserAsync.success),
+        map(dothatSuccessThang),
         catchError((message: string) => of(loginUserAsync.failure(message)))
       )
     )

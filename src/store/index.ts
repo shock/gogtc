@@ -6,6 +6,7 @@ import { composeEnhancers } from './utils';
 import rootReducer from './root-reducer';
 import rootEpic from './root-epic';
 import services from '../services';
+import history from '../lib/history'
 
 export const epicMiddleware = createEpicMiddleware<
   RootAction,
@@ -25,7 +26,7 @@ const enhancer = composeEnhancers(applyMiddleware(...middlewares));
 const initialState = {};
 
 // create store
-const store = createStore(rootReducer, initialState, enhancer);
+const store = createStore(rootReducer(history), initialState, enhancer);
 
 epicMiddleware.run(rootEpic);
 
