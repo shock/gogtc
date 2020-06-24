@@ -5,6 +5,7 @@ import formCalcReducer from '../features/form_calc/reducer';
 import usersReducer from '../features/users/reducer'
 import { connectRouter } from 'connected-react-router'
 import { History } from 'history'
+import history from '../lib/history'
 
 const createRootReducer = (history:History) => combineReducers({
   router: connectRouter(history),
@@ -13,4 +14,4 @@ const createRootReducer = (history:History) => combineReducers({
   formCalc: formCalcReducer
 })
 
-export default createRootReducer
+export default createRootReducer(history)
