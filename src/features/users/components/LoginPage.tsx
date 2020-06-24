@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import * as actions from '../actions'
 import { RootState } from 'typesafe-actions';
-import { LoginUser } from '../../../client_server/interfaces/User'
 
 const mapState = (state: RootState) => ({
   loggingIn: state.users.isLoggingIn
@@ -30,7 +29,7 @@ class LoginPageBase extends React.Component<Props, State> {
     super(props);
 
     // reset login status
-    this.props.logout();
+    // this.props.logout();
 
     this.state = {
       username: '',

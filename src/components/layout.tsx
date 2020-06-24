@@ -26,16 +26,21 @@ type Props = ReturnType<typeof mapState> & typeof mapDispatch & LayoutProps;
 class Layout extends React.Component<Props> {
   constructor(props:Props) {
     super(props)
+    this.handleLogout = this.handleLogout.bind(this)
   }
 
   currentUser() {
     return this.props.currentUser
   }
 
+  handleLogout(event:React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
+    this.props.logoutUser()
+  }
+
   loginLogout() {
     if( this.currentUser() ) {
       return (
-        <Link to="/login" className='nav-link'>Logout</Link>
+        <Link to="/login" className='nav-link' onClick={this.handleLogout}>Logout</Link>
       )
     } else {
       return (
