@@ -1,6 +1,7 @@
 import React from "react"
 import { Switch, Route } from "react-router-dom"
 import { ConnectedRouter } from 'connected-react-router'
+import PrivateRoute from './components/PrivateRoute'
 import Calc from './routes/calc'
 import LoginView from './routes/login'
 import RegisterView from './routes/register'
@@ -14,7 +15,7 @@ export default function App() {
         <Switch>
           <Route path="/login" component={LoginView} />
           <Route path="/register" component={RegisterView} />
-          <Route path="/" component={Calc} />
+          <PrivateRoute exact path="/" component={Calc} />
         </Switch>
     </ConnectedRouter>
   )
