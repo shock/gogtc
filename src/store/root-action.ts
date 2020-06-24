@@ -5,5 +5,5 @@ import * as userActions from '../features/users/actions';
 export default {
   todos: todosActions,
   formCalc: formCalcActions,
-  users: userActions
+  users: userActions,
 };
