@@ -5,6 +5,7 @@ import { Container, Row, Col, Navbar, Nav, NavDropdown, Form, FormControl,
   Button } from 'react-bootstrap';
 import { RootState } from 'typesafe-actions';
 import * as actions from '../features/users/actions'
+import * as usersSelector from '../features/users/selectors'
 
 export interface LayoutProps {
   title: string,
@@ -13,6 +14,7 @@ export interface LayoutProps {
 }
 
 const mapState = (state:RootState) => ({
+  currentUser: usersSelector.currentUser(state.users)
 })
 
 const mapDispatch = {
@@ -24,12 +26,22 @@ type Props = ReturnType<typeof mapState> & typeof mapDispatch & LayoutProps;
 class Layout extends React.Component<Props> {
   constructor(props:Props) {
     super(props)
-    this.handleLogout = this.handleLogout.bind(this)
   }
 
-  handleLogout = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    event.preventDefault()
-    this.props.logoutUser()
+  currentUser() {
+    return this.props.currentUser
+  }
+
+  loginLogout() {
+    if( this.currentUser() ) {
+      return (
+        <Link to="/login" className='nav-link'>Logout</Link>
+      )
+    } else {
+      return (
+        <Link to="/login" className='nav-link'>Login</Link>
+      )
+    }
   }
 
   render () {
@@ -39,13 +51,12 @@ class Layout extends React.Component<Props> {
           <Row>
             <Col md={12}>
               <Navbar bg="primary" expand="lg" className="navbar-dark">
-                <Navbar.Brand href="/">Divine</Navbar.Brand>
+                <Link to="/" className='navbar-brand'>Divine</Link>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                   <Nav className="mr-auto">
                     <Link to="/" className='nav-link'>Calc</Link>
-                    <Link to="#" className='nav-link' onClick={this.handleLogout}>Logout</Link>
-                    <Link to="/login" className='nav-link'>Login</Link>
+                    {this.loginLogout()}
                     <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                       <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                       <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>

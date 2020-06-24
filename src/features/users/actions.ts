@@ -1,5 +1,5 @@
-import { createAction, createAsyncAction } from 'typesafe-actions';
-import User, { LoginUser, CreateUser } from '../../client_server/interfaces/User'
+import { createAsyncAction } from 'typesafe-actions';
+import { User, LoginUser, CreateUser } from '../../client_server/interfaces/User'
 
 export const loginUser = (loginUser:LoginUser) => (
   loginUserAsync.request(loginUser)
@@ -17,7 +17,7 @@ export const loginUserAsync = createAsyncAction(
   'LOGIN_USER_REQUEST',
   'LOGIN_USER_SUCCESS',
   'LOGIN_USER_FAILURE'
-)<LoginUser, undefined, string>();
+)<LoginUser, User, string>();
 
 export const logoutUserAsync = createAsyncAction(
   'LOGOUT_USER_REQUEST',

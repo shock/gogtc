@@ -1,7 +1,7 @@
 import User, { LoginUser, CreateUser } from '../client_server/interfaces/User'
 const authEndpoint = '/api/auth/login'
 
-export function loginUser(loginUser:LoginUser): Promise<LoginUser> {
+export function loginUser(loginUser:LoginUser): Promise<User> {
   return new Promise((resolve, reject) => {
     console.log('email :' + loginUser.email)
     console.log('password :' + loginUser.password)

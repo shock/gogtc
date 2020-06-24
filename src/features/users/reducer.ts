@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
 import { createReducer } from 'typesafe-actions'
-
+import { setCurrentUser, clearCurrentUser, currentUser } from '../../lib/common'
 import * as actions from './actions'
 import User from '../../client_server/interfaces/User'
 
-const { loginUserAsync, createUserAsync } = actions;
+const { loginUserAsync, logoutUserAsync, createUserAsync } = actions;
 
 export const isLoggingIn = createReducer(false as boolean)
   .handleAction(loginUserAsync.request, (state, action) => ( true ))
@@ -15,11 +15,25 @@ export const isRegistering = createReducer(false as boolean)
   .handleAction([createUserAsync.success,createUserAsync.failure], (state, action) => ( false ))
 
 const initialState = {
+  currentUser: currentUser(),
   users: [] as User[]
 }
 
 export const users = createReducer(initialState)
-  .handleAction(loginUserAsync.success, (state, action) => (state))
+  .handleAction(loginUserAsync.success, (state, action) => {
+    setCurrentUser(action.payload)
+    return {
+      ...state,
+      currentUser: currentUser()
+    }
+  })
+  .handleAction(logoutUserAsync.success, (state, action) => {
+    clearCurrentUser()
+    return {
+      ...state,
+      currentUser: undefined
+    }
+  })
   .handleAction(createUserAsync.success, (state, action) => (state))
 
 const usersReducer = combineReducers({

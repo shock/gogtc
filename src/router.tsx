@@ -1,16 +1,14 @@
 import React from "react"
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-} from "react-router-dom"
+import { Switch, Route } from "react-router-dom"
+import { ConnectedRouter } from 'connected-react-router'
 import Calc from './routes/calc'
 import LoginView from './routes/login'
 import RegisterView from './routes/register'
+import history from './lib/history'
 
 export default function App() {
   return (
-    <Router>
+    <ConnectedRouter history={history}>
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
@@ -18,6 +16,6 @@ export default function App() {
           <Route path="/register" component={RegisterView} />
           <Route path="/" component={Calc} />
         </Switch>
-    </Router>
+    </ConnectedRouter>
   )
 }
