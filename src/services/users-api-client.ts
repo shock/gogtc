@@ -20,7 +20,10 @@ export function loginUser(loginUser:LoginUser): Promise<LoginUser> {
         // referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
         body: JSON.stringify(data) // body data type must match "Content-Type" header
       });
-      return response.json(); // parses JSON response into native JavaScript objects
+      if( response.status === 200 )
+        return response.json(); // parses JSON response into native JavaScript objects
+      else
+        throw `received status code ${response.status}`
     }
     postData(authEndpoint, loginUser).then(
       resp => {
@@ -28,9 +31,39 @@ export function loginUser(loginUser:LoginUser): Promise<LoginUser> {
         resolve(resp)
       }
     ).catch(error => reject(error))
-    // setTimeout(() => {
-    //   resolve(undefined);
-    // }, 500);
+  });
+}
+
+const logoutEndpoint = '/api/auth/logout'
+
+export function logoutUser() {
+  return new Promise((resolve, reject) => {
+    async function getData(url:string) {
+      // Default options are marked with *
+      const response = await fetch(url, {
+        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        // mode: 'cors', // no-cors, *cors, same-origin
+        // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+        // credentials: 'same-origin', // include, *same-origin, omit
+        headers: {
+          'Content-Type': 'application/json'
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        // redirect: 'follow', // manual, *follow, error
+        // referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        // body: JSON.stringify(data) // body data type must match "Content-Type" header
+      });
+      if( response.status === 200 )
+        return response
+      else
+        throw `received status code ${response.status}`
+    }
+    getData(logoutEndpoint).then(
+      resp => {
+        console.log('logoutUser resp: ', resp)
+        resolve(resp)
+      }
+    ).catch(error => reject(error))
   });
 }
 
@@ -56,7 +89,10 @@ export function createUser(createUser:CreateUser): Promise<CreateUser> {
         // referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
         body: JSON.stringify(data) // body data type must match "Content-Type" header
       });
-      return response.json(); // parses JSON response into native JavaScript objects
+      if( response.status === 200 )
+        return response.json() // parses JSON response into native JavaScript objects
+      else
+        throw `received status code ${response.status}`
     }
     postData(createUserEndpoint, {user: createUser}).then(
       resp => {
@@ -64,8 +100,5 @@ export function createUser(createUser:CreateUser): Promise<CreateUser> {
         resolve(resp)
       }
     ).catch(error => reject(error))
-    // setTimeout(() => {
-    //   resolve(undefined);
-    // }, 500);
   });
 }

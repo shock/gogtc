@@ -1,69 +1,98 @@
-import React, { FunctionComponent } from 'react'; // importing FunctionComponent
+import React, { ReactNode } from 'react'; // importing FunctionComponent
+import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
 import { Container, Row, Col, Navbar, Nav, NavDropdown, Form, FormControl,
   Button } from 'react-bootstrap';
+import { RootState } from 'typesafe-actions';
+import * as actions from '../features/users/actions'
 
 export interface LayoutProps {
   title: string,
-  paragraph?: string
+  paragraph?: string,
+  children: ReactNode
 }
 
-export const Layout: FunctionComponent<LayoutProps> = ({ title, paragraph, children }) => {
-  return (
-    <main>
-      <Container fluid>
-        <Row>
-          <Col md={12}>
-            <Navbar bg="primary" expand="lg" className="navbar-dark">
-              <Navbar.Brand href="#home">Divine</Navbar.Brand>
-              <Navbar.Toggle aria-controls="basic-navbar-nav" />
-              <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="mr-auto">
-                  <Link to="/" className='nav-link'>Calc</Link>
-                  <Link to="/login" className='nav-link'>Login</Link>
-                  <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                    <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                    <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                    <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-                  </NavDropdown>
-                </Nav>
-                <Form inline>
-                  <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                  <Button variant="outline-success">Search</Button>
-                </Form>
-              </Navbar.Collapse>
-            </Navbar>
-          </Col>
-          <Col md={12}>
-            <h2>{title}</h2>
-            <p>{paragraph}</p>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={12}>
-            {children}
-          </Col>
-        </Row>
-        <Row>
-          <div style={{marginBottom: '10rem'}}></div>
-        </Row>
-        <Row>
-          <Col md={2}>
-            <h3>Col1</h3>
-            <p>Col md=2</p>
-          </Col>
-          <Col md={4}>
-            <h3>Col2</h3>
-            <p>Col md=4</p>
-          </Col>
-          <Col md={6}>
-            <h3>Col3</h3>
-            <p>Col md=6</p>
-          </Col>
-        </Row>
-      </Container>
-    </main>
-  )
+const mapState = (state:RootState) => ({
+})
+
+const mapDispatch = {
+  logoutUser: actions.logoutUser
 }
+
+type Props = ReturnType<typeof mapState> & typeof mapDispatch & LayoutProps;
+
+class Layout extends React.Component<Props> {
+  constructor(props:Props) {
+    super(props)
+    this.handleLogout = this.handleLogout.bind(this)
+  }
+
+  handleLogout = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    event.preventDefault()
+    this.props.logoutUser()
+  }
+
+  render () {
+    return (
+      <main>
+        <Container fluid>
+          <Row>
+            <Col md={12}>
+              <Navbar bg="primary" expand="lg" className="navbar-dark">
+                <Navbar.Brand href="/">Divine</Navbar.Brand>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                  <Nav className="mr-auto">
+                    <Link to="/" className='nav-link'>Calc</Link>
+                    <Link to="#" className='nav-link' onClick={this.handleLogout}>Logout</Link>
+                    <Link to="/login" className='nav-link'>Login</Link>
+                    <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+                      <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+                      <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+                      <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+                      <NavDropdown.Divider />
+                      <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+                    </NavDropdown>
+                  </Nav>
+                  <Form inline>
+                    <FormControl type="text" placeholder="Search" className="mr-sm-2" />
+                    <Button variant="outline-success">Search</Button>
+                  </Form>
+                </Navbar.Collapse>
+              </Navbar>
+            </Col>
+            <Col md={12}>
+              <h2>{this.props.title}</h2>
+              <p>{this.props.paragraph}</p>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={12}>
+              {this.props.children}
+            </Col>
+          </Row>
+          <Row>
+            <div style={{marginBottom: '10rem'}}></div>
+          </Row>
+          <Row>
+            <Col md={2}>
+              <h3>Col1</h3>
+              <p>Col md=2</p>
+            </Col>
+            <Col md={4}>
+              <h3>Col2</h3>
+              <p>Col md=4</p>
+            </Col>
+            <Col md={6}>
+              <h3>Col3</h3>
+              <p>Col md=6</p>
+            </Col>
+          </Row>
+        </Container>
+      </main>
+    )
+  }
+}
+
+const connectedLayout = connect(mapState, mapDispatch)(Layout);
+export { connectedLayout as Layout };

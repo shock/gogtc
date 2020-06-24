@@ -6,17 +6,24 @@ export const loginUser = (loginUser:LoginUser) => (
 )
 
 export const createUser = (createUser:CreateUser) => {
-  console.log('here')
   return createUserAsync.request(createUser)
 }
 
-export const logoutUser = createAction('LOGOUT_USER')<void>();
+export const logoutUser = () => {
+  return logoutUserAsync.request()
+}
 
 export const loginUserAsync = createAsyncAction(
   'LOGIN_USER_REQUEST',
   'LOGIN_USER_SUCCESS',
   'LOGIN_USER_FAILURE'
 )<LoginUser, undefined, string>();
+
+export const logoutUserAsync = createAsyncAction(
+  'LOGOUT_USER_REQUEST',
+  'LOGOUT_USER_SUCCESS',
+  'LOGOUT_USER_FAILURE'
+)<undefined, undefined, string>();
 
 export const createUserAsync = createAsyncAction(
   'CREATE_USER_REQUEST',
