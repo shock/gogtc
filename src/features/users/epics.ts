@@ -1,6 +1,6 @@
 import { Epic } from 'redux-observable';
 import { from, of } from 'rxjs';
-import { filter, switchMap, map, catchError } from 'rxjs/operators';
+import { filter, switchMap, map, catchError, tap } from 'rxjs/operators';
 import { RootAction, RootState, Services, isActionOf } from 'typesafe-actions';
 
 import { loginUserAsync, logoutUserAsync, createUserAsync } from './actions';
@@ -20,9 +20,14 @@ export const loginUserEpic: Epic<
 > = (action$, state$, { api }) =>
   action$.pipe(
     filter(isActionOf(loginUserAsync.request)),
+    // emits only loginUserAsync.request
     switchMap((action) =>
       from(api.users.loginUser(action.payload)).pipe(
-        map(dothatSuccessThang),
+        map(loginUserAsync.success),
+        tap( () => {
+          console.log('tapped')
+          history.push('/')
+        }),
         catchError((message: string) => of(loginUserAsync.failure(message)))
       )
     )
