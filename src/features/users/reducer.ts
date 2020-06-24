@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import { createReducer } from 'typesafe-actions'
-import { setCurrentUser, clearCurrentUser, currentUser } from '../../lib/common'
+import { setCurrentUser, clearCurrentUser, currentUser } from '../../lib/user'
 import * as actions from './actions'
 import User from '../../client_server/interfaces/User'
 

@@ -8,7 +8,7 @@ import * as actions from '../actions';
 import * as selectors from '../selectors';
 import { FormCalcView } from './FormCalcView';
 import { TestLibrary } from '../models';
-import TT from '../../../lib/tooltips';
+import TT from '../../../components/tooltips';
 
 const mapStateToProps = (state: RootState) => ({
   formCalcs: selectors.getFormCalcs(state.formCalc)
@@ -19,11 +19,11 @@ const dispatchProps = {
   clearUndoHistory: UndoActionCreators.clearHistory
 };
 
-interface FormCalcSelectorProps {
+interface FormCalcPageProps {
   name: string
 }
 
-type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & FormCalcSelectorProps;
+type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & FormCalcPageProps;
 type State = {
   formName: string,
   debug: boolean,
@@ -31,7 +31,7 @@ type State = {
   jsonState: boolean
 }
 
-class FormCalcSelectorBase extends React.Component<Props, State> {
+class FormCalcPageBase extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
@@ -216,9 +216,9 @@ class FormCalcSelectorBase extends React.Component<Props, State> {
   }
 }
 
-const FormCalcSelector = connect(
+const FormCalcPage = connect(
   mapStateToProps,
   dispatchProps
-)(FormCalcSelectorBase);
+)(FormCalcPageBase);
 
-export { FormCalcSelector };
+export { FormCalcPage };

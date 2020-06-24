@@ -2,7 +2,7 @@ import undoable, { excludeAction } from 'redux-undo';
 import { createReducer, getType } from 'typesafe-actions';
 import * as actions from './actions';
 import { MFormCalc, FCState, BlankFCState, FormCalcDictionary } from './models';
-import { getFormCalcName } from './models/IdParser';
+import { getFormCalcName } from './lib/IdParser';
 
 const getFormationById = (state:FCState, id: string) => {
   const formationName = getFormCalcName(id);

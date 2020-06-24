@@ -1,9 +1,9 @@
-import React, { ReactNode } from 'react'; // importing FunctionComponent
+import React, { ReactNode } from 'react' // importing FunctionComponent
 import { connect } from 'react-redux'
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 import { Container, Row, Col, Navbar, Nav, NavDropdown, Form, FormControl,
-  Button } from 'react-bootstrap';
-import { RootState } from 'typesafe-actions';
+  Button } from 'react-bootstrap'
+import { RootState } from 'typesafe-actions'
 import * as actions from '../features/users/actions'
 import * as usersSelector from '../features/users/selectors'
 

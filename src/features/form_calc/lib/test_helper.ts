@@ -1,6 +1,6 @@
 import { Big } from 'big.js';
 
-import { MTierDef, MTroopDef, MFormCalc } from '.';
+import { MTierDef, MTroopDef, MFormCalc } from '../models';
 import { TroopType, TierNum, toInt } from '../types';
 import formCalcReducer from '../reducer';
 

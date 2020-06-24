@@ -53,16 +53,14 @@ class TierDefViewBase extends React.Component<Props> {
 
   buildTroopDefViews() {
     return this.data().troopDefs.map( (troopDef, index) => (
-      // <Col key={index}>
-        <TroopDefView
-          troopDef={troopDef}
-          tierDef={this.data()}
-          key={index}
-          id={`${this.props.id}:${troopDef.type}`}
-          debug={this.props.debug}
-          hasTroopPercentDelta={this.data().hasTroopPercentDelta()}
-        />
-      // </Col>
+      <TroopDefView
+        troopDef={troopDef}
+        tierDef={this.data()}
+        key={index}
+        id={`${this.props.id}:${troopDef.type}`}
+        debug={this.props.debug}
+        hasTroopPercentDelta={this.data().hasTroopPercentDelta()}
+      />
     ));
   }
 

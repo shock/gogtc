@@ -3,10 +3,7 @@ import { ActionCreators as UndoActionCreators } from 'redux-undo'
 import { RootState } from 'typesafe-actions';
 import { connect} from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import TT from '../../../lib/tooltips';
-
-type cH = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-type bT = () => boolean;
+import TT from '../../../components/tooltips';
 
 const mapStateToProps = (state:RootState) => {
   return {
@@ -51,17 +48,6 @@ class _UndoRedo extends React.Component<Props> {
     );
   }
 }
-
-// let UndoRedo = (canUndo:bT, canRedo:bT, onUndo:cH, onRedo:cH) => (
-//   <p>
-//     <Button onClick={onUndo} disabled={!canUndo}>
-//       Undo
-//     </Button>
-//     <Button onClick={onRedo} disabled={!canRedo}>
-//       Redo
-//     </Button>
-//   </p>
-// )
 
 const UndoRedo = connect(mapStateToProps, mapDispatchToProps)(_UndoRedo)
 

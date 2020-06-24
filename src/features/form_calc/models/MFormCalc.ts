@@ -2,7 +2,7 @@ import { Big } from 'big.js';
 import cuid from 'cuid';
 
 import { MTierDef, MTroopDef } from '.';
-import { IdParser } from './IdParser';
+import { IdParser } from '../lib/IdParser';
 import { toInt, toBig, IdString, IdBoolean, IdOnly } from '../types';
 import config from '../../../config';
 

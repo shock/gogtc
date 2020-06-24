@@ -1,6 +1,6 @@
 import { toInt, toBig, TierNum, TroopType } from '../../types';
 import { MTroopDef, MTierDef } from '..';
-import { buildTierWithTroopDefs } from '../test_helper';
+import { buildTierWithTroopDefs } from '../../lib/test_helper';
 import config from '../../../../config';
 
 describe( 'MTierDef', () => {

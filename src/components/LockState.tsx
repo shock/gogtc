@@ -7,14 +7,12 @@ type LockStateProps = {
   onClick: (event: React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
 }
 
-type Props = LockStateProps;
-
 const IconForState = {
   locked: 'lock',
   unlocked: 'unlock'
 }
 
-export class LockState extends React.Component<Props> {
+export class LockState extends React.Component<LockStateProps> {
 
   lockState() {
     return this.props.locked ? 'locked' : 'unlocked'
