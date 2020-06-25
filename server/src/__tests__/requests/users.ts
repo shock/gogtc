@@ -1,13 +1,15 @@
 import request from 'supertest'
 import app from '../../Server'
-import { bindKnex, destroyKnex } from '../helpers/knex'
+import { setupKnex, teardownKnex } from '../helpers/knex'
+import User from '../../models/User'
+import { UserRoles } from '../../client_server/interfaces/User'
 
-beforeAll( () => {
-  bindKnex()
+beforeAll( async () => {
+  await setupKnex()
 })
 
 afterAll( async (done) => {
-  await destroyKnex();
+  await teardownKnex();
   done();
 });
 
@@ -26,7 +28,14 @@ describe('hello world', () => {
 
 describe('Auth routes', () => {
   describe('POST /api/auth/login', () => {
-    it('should work', (done) => {
+    it('should work', async (done) => {
+      const user = await User.query().insert({
+        name: 'Admin',
+        email: 'admin@example.com',
+        password: 'password',
+        role: UserRoles.Admin
+      });
+
       request(app)
       .post('/api/auth/login')
       .send({

@@ -4,7 +4,7 @@ import knexConfig from '../../db/knexfile'
 
 let knex:Knex<any, unknown[]>;
 
-export const bindKnex = () => {
+export const setupKnex = async () => {
 
   // Initialize knex.
   knex = Knex(knexConfig.test)
@@ -13,9 +13,15 @@ export const bindKnex = () => {
   // your server this is all you have to do. For multi database systems, see
   // the Model.bindKnex() method.
   Model.knex(knex)
-
+  await cleanTables()
 }
 
-export const destroyKnex = async () => {
+export const teardownKnex = async () => {
+  await cleanTables()
   await knex.destroy()
+}
+
+export const cleanTables = async () => {
+  await knex.table('users').del()
+  await knex.table('form_calcs').del()
 }

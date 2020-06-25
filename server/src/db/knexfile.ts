@@ -12,7 +12,7 @@ const config = {
       password: "gog"
     },
     pool: {
-      min: 2,
+      min: 3,
       max: 10
     },
     migrations: {

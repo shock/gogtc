@@ -1,6 +1,8 @@
 import { Model, Modifiers } from 'objection'
 import { BaseModel } from './BaseModel'
 import IUser from '../client_server/interfaces/User'
+import Objection from 'objection'
+import bcrypt from 'bcrypt'
 
 export default class User extends BaseModel implements IUser {
   id!: number
@@ -18,7 +20,7 @@ export default class User extends BaseModel implements IUser {
   // is created it is checked against this schema. http://json-schema.org/.
   static jsonSchema = {
     type: 'object',
-    required: ['name', 'email', 'role'],
+    required: ['name', 'email', 'role', 'password'],
 
     properties: {
       id: { type: 'integer' },
@@ -26,6 +28,30 @@ export default class User extends BaseModel implements IUser {
       email: { type: 'string', minLength: 1, maxLength: 255 },
       password: { type: 'string', minLength: 1, maxLength: 255 },
       role: { type: 'integer' },
+    }
+  }
+
+  async $beforeInsert(queryContext: Objection.QueryContext) {
+    await super.$beforeInsert(queryContext)
+    await this.updatePassword()
+  }
+
+  async $beforeUpdate(opt: Objection.ModelOptions, queryContext: Objection.QueryContext) {
+    await super.$beforeUpdate(opt, queryContext)
+    await this.updatePasswordIfChanged(opt.old)
+  }
+
+  async updatePassword() {
+    const hash = await bcrypt.hash(this.password, 10);
+    this.password = hash;
+  }
+
+  async updatePasswordIfChanged(old:any) {
+    if (old?.password) {
+      const passwordMatches = await bcrypt.compare(this.password, old.password);
+      if (!passwordMatches) {
+        await this.updatePassword();
+      }
     }
   }
 

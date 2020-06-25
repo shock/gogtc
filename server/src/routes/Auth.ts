@@ -32,7 +32,7 @@ router.post('/login', async (req: Request, res: Response) => {
     });
   }
   // Check password
-  const pwdPassed = await bcrypt.compare(password, user.pwdHash);
+  const pwdPassed = await bcrypt.compare(password, user.password);
   if (!pwdPassed) {
     return res.status(UNAUTHORIZED).json({
       error: loginFailedErr,
