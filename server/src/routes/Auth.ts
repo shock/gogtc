@@ -46,7 +46,7 @@ router.post('/login', async (req: Request, res: Response) => {
   const { key, options } = cookieProps;
   res.cookie(key, jwt, options);
   // Return
-  delete user.pwdHash
+  delete user.password
   return res.status(OK).json({ user });
 });
 

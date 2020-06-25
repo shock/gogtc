@@ -7,7 +7,7 @@ export default class User extends BaseModel implements IUser {
   name!: string
   email!: string
   role!: number
-  pwdHash!: string
+  password!: string
 
 
   // Table name is the only required property.
@@ -24,7 +24,7 @@ export default class User extends BaseModel implements IUser {
       id: { type: 'integer' },
       name: { type: 'string', minLength: 1, maxLength: 255 },
       email: { type: 'string', minLength: 1, maxLength: 255 },
-      pwdHash: { type: 'string', minLength: 1, maxLength: 255 },
+      password: { type: 'string', minLength: 1, maxLength: 255 },
       role: { type: 'integer' },
     }
   }
