@@ -1,19 +1,13 @@
 import request from 'supertest'
 import app from '../../Server'
-import Knex from 'knex'
-import { Model } from 'objection'
-import knexConfig from '../../db/knexfile'
+import { bindKnex, destroyKnex } from '../helpers/knex'
 
-// Initialize knex.
-const knex = Knex(knexConfig.development)
+beforeAll( () => {
+  bindKnex()
+})
 
-// Bind all Models to a knex instance. If you only have one database in
-// your server this is all you have to do. For multi database systems, see
-// the Model.bindKnex() method.
-Model.knex(knex)
-
-afterAll((done) => {
-  knex.destroy();
+afterAll( async (done) => {
+  await destroyKnex();
   done();
 });
 
