@@ -86,4 +86,64 @@ describe( 'MTroopDef', () => {
 
   });
 
+  describe('serialization', () => {
+    describe('toJsonObject', () => {
+      it('should return an object', () => {
+        const troopDef = new MTroopDef(TroopType.Infantry, toInt(999), toBig(45.5), true)
+        let obj = troopDef.toJsonObject()
+        expect(obj instanceof Object).toBe(true)
+      });
+      it('should return an object with the same attributes', () => {
+        const troopDef = new MTroopDef(TroopType.Infantry, toInt(999), toBig(45.5), true)
+        let obj = troopDef.toJsonObject()
+        expect(obj.type).toStrictEqual(TroopType.Infantry as unknown as string)
+        expect(obj.count).toStrictEqual(toInt(999))
+        expect(obj.percent).toStrictEqual(toBig(45.5))
+        expect(obj.countLocked).toStrictEqual(true)
+      });
+    });
+
+    describe('static fromJsonObject', () => {
+      const makeObj = () => {
+        return {
+          type: "Infantry",
+          count: toInt(999),
+          percent: toBig(45.5),
+          countLocked: true
+        }
+      }
+      it('should return an MTroopDef instance', () => {
+        const obj = makeObj()
+        const troopDef = MTroopDef.fromJsonObject(obj)
+        expect(troopDef instanceof MTroopDef).toBe(true)
+      });
+      it('should return an object with the same attribute', () => {
+        const obj = makeObj()
+        const troopDef = MTroopDef.fromJsonObject(obj)
+        expect(troopDef.type).toStrictEqual(TroopType.Infantry)
+        expect(troopDef.count).toStrictEqual(toInt(999))
+        expect(troopDef.percent).toStrictEqual(toBig(45.5))
+        expect(troopDef.countLocked).toStrictEqual(true)
+      });
+      describe('with missing props', () => {
+        it('should throw an error', () => {
+          const obj = makeObj()
+          delete obj.countLocked
+          expect( () => MTroopDef.fromJsonObject(obj) ).toThrow(Error)
+        });
+      });
+    });
+
+    describe('round trip', () => {
+      it('should work', () => {
+        const origTroopDef = new MTroopDef(TroopType.Infantry, toInt(999), toBig(45.5), true)
+        const reconstructedTroopDef = MTroopDef.fromJsonObject(origTroopDef.toJsonObject())
+        origTroopDef.key = '1'
+        reconstructedTroopDef.key = '1'
+        expect( origTroopDef ).toEqual(reconstructedTroopDef)
+      });
+
+    });
+  });
+
 });

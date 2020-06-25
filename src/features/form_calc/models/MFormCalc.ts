@@ -14,9 +14,10 @@ class MFormCalc extends IdParser {
   marchCap:Big = toInt(0);
   key:string = cuid();
 
-  constructor(name:string) {
+  constructor(name:string, marchCap:Big = toInt(0)) {
     super();
     this.name = name;
+    this.marchCap = marchCap
   }
 
   clone():MFormCalc {
@@ -36,12 +37,12 @@ class MFormCalc extends IdParser {
     return this;
   }
 
-  asJsonObject() {
+  toJsonObject() {
     let obj:any = {};
     obj.name = this.name;
     obj.marchCap = this.marchCap;
     obj.tierDefs = this.tierDefs.map( tierDef => {
-      return tierDef.asJsonObject();
+      return tierDef.toJsonObject();
     });
     return obj;
   }

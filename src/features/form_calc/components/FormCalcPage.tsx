@@ -129,8 +129,8 @@ class FormCalcPageBase extends React.Component<Props, State> {
 
   renderJsonView() {
     const obj = this.state.jsonState
-      ? this.formCalc().asJsonObject()
-      : TestLibrary.formCalcs[this.state.formName].asJsonObject();
+      ? this.formCalc().toJsonObject()
+      : TestLibrary.formCalcs[this.state.formName].toJsonObject();
     const json = JSON.stringify(obj, null, 2);
     return (
       <Row>

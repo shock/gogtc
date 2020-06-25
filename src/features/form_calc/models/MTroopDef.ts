@@ -3,6 +3,13 @@ import cuid from 'cuid';
 import { Big } from 'big.js';
 import { toInt, toBig, TroopType } from '../types';
 
+type ITroopType = {
+  type: TroopType
+  count: Big
+  percent: Big
+  countLocked: boolean
+}
+
 export class MTroopDef {
   type: TroopType;
   count: Big;
@@ -10,11 +17,11 @@ export class MTroopDef {
   countLocked: boolean;
   key:string = cuid();
 
-  constructor(type:TroopType, count:Big) {
+  constructor(type:TroopType, count:Big, percent:Big = toBig(0), countLocked:boolean = false) {
     this.type = type;
     this.count = count;
-    this.percent = toBig(0);
-    this.countLocked = false;
+    this.percent = percent;
+    this.countLocked = countLocked;
   }
 
   clone():MTroopDef {
@@ -32,13 +39,27 @@ export class MTroopDef {
     return this;
   }
 
-  asJsonObject() {
+  toJsonObject() {
     let obj:any = {};
     obj.type = this.type;
     obj.count = this.count;
     obj.percent = this.percent;
     obj.countLocked = this.countLocked;
     return obj;
+  }
+
+  static fromJsonObject(obj:any) {
+    ['type', 'count', 'percent', 'countLocked'].forEach( prop => {
+      if( !obj.hasOwnProperty(prop) ) {
+        throw new Error(`must have property: ${prop}`)
+      }
+    })
+    return new MTroopDef(
+      obj.type,
+      obj.count,
+      obj.percent,
+      obj.countLocked
+    )
   }
 
   // updates the count unless the percentage is locked

@@ -15,8 +15,11 @@ class MTierDef {
   capacityLocked:boolean = false;
   key:string = cuid();
 
-  constructor(tierNum:TierNum) {
-    this.tierNum = tierNum;
+  constructor(tierNum:TierNum, capacity:Big = toBig(0), percent:Big = toBig(0), capacityLocked:boolean = false) {
+    this.tierNum = tierNum
+    this.capacity = capacity
+    this.percent = percent
+    this.capacityLocked = capacityLocked
   }
 
   clone():MTierDef {
@@ -38,16 +41,40 @@ class MTierDef {
     return this;
   }
 
-  asJsonObject() {
+  toJsonObject() {
     let obj:any = {};
     obj.tierNum = this.tierNum;
     obj.capacity = this.capacity;
     obj.percent = this.percent;
     obj.capacityLocked = this.capacityLocked;
     obj.troopDefs = this.troopDefs.map( troopDef => {
-      return troopDef.asJsonObject();
+      return troopDef.toJsonObject();
     });
     return obj;
+  }
+
+  static fromJsonObject(obj:any) {
+    ['tierNum', 'capacity', 'percent', 'capacityLocked'].forEach( prop => {
+      if( !obj.hasOwnProperty(prop) ) {
+        throw new Error(`must have property: ${prop}`)
+      }
+    })
+
+    const tierDef = new MTierDef(
+      obj.tierNum,
+      obj.capacity,
+      obj.percent,
+      obj.capacityLocked
+    )
+
+    const objTroopDefs = obj.troopDefs
+    if( objTroopDefs && (objTroopDefs instanceof Array)) {
+      const troopDefs:MTroopDef[] = objTroopDefs.map( (tdObj) => (
+        MTroopDef.fromJsonObject(tdObj)
+      ))
+      tierDef.troopDefs = troopDefs
+    }
+    return tierDef
   }
 
   findTroopDef( troopType: TroopType ) {

@@ -137,4 +137,79 @@ describe( 'MTierDef', () => {
 
   });
 
+  describe('serialization', () => {
+    describe('toJsonObject', () => {
+      it('should return an object', () => {
+        const tierDef = new MTierDef(TierNum.T12, toInt(999), toBig(45.5), true)
+        let obj = tierDef.toJsonObject()
+        expect(obj instanceof Object).toBe(true)
+      });
+      it('should return an object with the same attributes', () => {
+        const tierDef = new MTierDef(TierNum.T12, toInt(999), toBig(45.5), true)
+        let obj = tierDef.toJsonObject()
+        expect(obj.tierNum).toStrictEqual(TierNum.T12)
+        expect(obj.capacity).toStrictEqual(toInt(999))
+        expect(obj.percent).toStrictEqual(toBig(45.5))
+        expect(obj.capacityLocked).toStrictEqual(true)
+      });
+      it('serialize the troopDefs', () => {
+        const tierDef = buildTierWithTroopDefs(TierNum.T12)
+        let obj = tierDef.toJsonObject()
+        const troopDefs = obj.troopDefs
+        expect(troopDefs instanceof Array).toBe(true)
+        expect(troopDefs.length).toBe(3)
+      });
+    });
+
+    describe('static fromJsonObject', () => {
+      const makeObj = () => {
+        return {
+          tierNum: 'T12',
+          capacity: toInt(999),
+          percent: toBig(45.5),
+          capacityLocked: true
+        }
+      }
+      it('should return an MTierDef instance', () => {
+        const obj = makeObj()
+        const tierDef = MTierDef.fromJsonObject(obj)
+        expect(tierDef instanceof MTierDef).toBe(true)
+      });
+      it('should return an object with the same attributes', () => {
+        const obj = makeObj()
+        const tierDef = MTierDef.fromJsonObject(obj)
+        expect(tierDef.tierNum).toStrictEqual(TierNum.T12)
+        expect(tierDef.capacity).toStrictEqual(toInt(999))
+        expect(tierDef.percent).toStrictEqual(toBig(45.5))
+        expect(tierDef.capacityLocked).toStrictEqual(true)
+      });
+      it('should deserialize the troopDefs', () => {
+        const obj = makeObj()
+        const tierDef = MTierDef.fromJsonObject(obj)
+        expect(tierDef.tierNum).toStrictEqual(TierNum.T12)
+        expect(tierDef.capacity).toStrictEqual(toInt(999))
+        expect(tierDef.percent).toStrictEqual(toBig(45.5))
+        expect(tierDef.capacityLocked).toStrictEqual(true)
+      });
+      describe('with missing props', () => {
+        it('should throw an error', () => {
+          const obj = makeObj()
+          delete obj.capacityLocked
+          expect( () => MTierDef.fromJsonObject(obj) ).toThrow(Error)
+        });
+      });
+    });
+
+    describe('round trip', () => {
+      it('should work', () => {
+        const origTierDef = new MTierDef(TierNum.T12, toInt(999), toBig(45.5), true)
+        const reconstructedTierDef = MTierDef.fromJsonObject(origTierDef.toJsonObject())
+        origTierDef.key = '1'
+        reconstructedTierDef.key = '1'
+        expect( origTierDef ).toEqual(reconstructedTierDef)
+      });
+
+    });
+  });
+
 });
