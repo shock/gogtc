@@ -7,7 +7,7 @@ let knex:Knex<any, unknown[]>;
 export const bindKnex = () => {
 
   // Initialize knex.
-  knex = Knex(knexConfig.development)
+  knex = Knex(knexConfig.test)
 
   // Bind all Models to a knex instance. If you only have one database in
   // your server this is all you have to do. For multi database systems, see
