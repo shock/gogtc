@@ -34,8 +34,6 @@
     "exec": "ts-node -r tsconfig-paths/register ./src"
   },
   "_moduleAliases": {
-    "@daos": "dist/daos",
-    "@entities": "dist/entities",
     "@shared": "dist/shared",
     "@server": "dist/Server"
   },
