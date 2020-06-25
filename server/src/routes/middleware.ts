@@ -32,3 +32,22 @@ export const adminMW = async (req: Request, res: Response, next: NextFunction) =
         });
     }
 };
+
+// Middleware to verify if user is an admin
+export const userMW = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        // Get json-web-token
+        const jwt = req.signedCookies[cookieProps.key];
+        if (!jwt) {
+            throw Error('JWT not present in signed cookie.');
+        }
+        // we have a web token, set the userId in req.locals
+        const clientData = await jwtService.decodeJwt(jwt);
+        res.locals.userId = clientData.id;
+        next();
+    } catch (err) {
+        return res.status(UNAUTHORIZED).json({
+            error: err.message,
+        });
+    }
+};

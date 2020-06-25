@@ -1,2 +1,3 @@
 import User from './User'
-export { User }
+import FormCalc from './FormCalc'
+export { User, FormCalc }
