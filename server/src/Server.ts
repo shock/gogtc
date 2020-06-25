@@ -1,3 +1,4 @@
+import './loadEnv'; // Must be the first import
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import path from 'path';
@@ -30,6 +31,10 @@ if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
+if (process.env.NODE_ENV === 'test') {
+    app.use(morgan('dev'));
+}
+
 // Security
 if (process.env.NODE_ENV === 'production') {
     app.use(helmet());
@@ -59,6 +64,14 @@ app.use(express.static(staticDir));
 
 app.get('/', (req: Request, res: Response) => {
     res.sendFile('login.html', {root: viewsDir});
+});
+
+app.get('/hello', (req: Request, res: Response) => {
+    res.json({hello: 'world'});
+});
+
+app.get('/ping', function (req, res) {
+    return res.send('pong');
 });
 
 app.get('/users', (req: Request, res: Response) => {
