@@ -44,6 +44,9 @@ export const userMW = async (req: Request, res: Response, next: NextFunction) =>
         // we have a web token, set the userId in req.locals
         const clientData = await jwtService.decodeJwt(jwt);
         res.locals.userId = clientData.id;
+        if (clientData.role === UserRoles.Admin) {
+            res.locals.admin = true;
+        }
         next();
     } catch (err) {
         return res.status(UNAUTHORIZED).json({

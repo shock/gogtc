@@ -13,11 +13,22 @@ const router = Router().use(userMW);
 
 
 /******************************************************************************
- *                      Get All Users - "GET /api/form_calcs/all"
+ *                      Get All FormCalcs - "GET /api/form_calcs/all"
  ******************************************************************************/
 
 router.get('/all', async (req: Request, res: Response) => {
     const formCalcs = await FormCalc.findAll();
+    return res.status(OK).json({formCalcs});
+});
+
+
+/******************************************************************************
+ *              Get FormCalcs by user id - "GET /api/form_calcs/user"
+ ******************************************************************************/
+
+router.get('/user', async (req: Request, res: Response) => {
+    const user_id = res.locals.user_id
+    const formCalcs = await FormCalc.findByUserId(parseInt(user_id));
     return res.status(OK).json({formCalcs});
 });
 
@@ -30,6 +41,8 @@ router.post('/add', async (req: Request, res: Response) => {
     // Check parameters
     console.log(req.body)
     const { formCalc } = req.body;
+    const user_id = res.locals.user_id
+    formCalc.user_id = user_id
     if (!formCalc) {
         return res.status(BAD_REQUEST).json({
             error: paramMissingError,

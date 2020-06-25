@@ -6,7 +6,7 @@ export default class FormCalc extends BaseModel implements IFormCalc {
   id!: number
   name!: string
   description!: string
-  data!: string
+  json!: string
 
   // Table name is the only required property.
   static tableName = 'form_calcs'
@@ -16,7 +16,7 @@ export default class FormCalc extends BaseModel implements IFormCalc {
   // is created it is checked against this schema. http://json-schema.org/.
   static jsonSchema = {
     type: 'object',
-    required: ['name', 'data'],
+    required: ['name', 'json'],
 
     properties: {
       id: { type: 'integer' },
@@ -29,4 +29,7 @@ export default class FormCalc extends BaseModel implements IFormCalc {
   // QUERY SHORTCUTS
   ////////////////////
 
+  static findByUserId(userId:number) {
+    this.query().where('user_id', userId)
+  }
 }
