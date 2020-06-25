@@ -104,7 +104,7 @@ describe( 'MTroopDef', () => {
     });
 
     describe('static fromJsonObject', () => {
-      const makeObj = () => {
+      const makeTroopDefObj = () => {
         return {
           type: "Infantry",
           count: toInt(999),
@@ -113,12 +113,12 @@ describe( 'MTroopDef', () => {
         }
       }
       it('should return an MTroopDef instance', () => {
-        const obj = makeObj()
+        const obj = makeTroopDefObj()
         const troopDef = MTroopDef.fromJsonObject(obj)
         expect(troopDef instanceof MTroopDef).toBe(true)
       });
       it('should return an object with the same attribute', () => {
-        const obj = makeObj()
+        const obj = makeTroopDefObj()
         const troopDef = MTroopDef.fromJsonObject(obj)
         expect(troopDef.type).toStrictEqual(TroopType.Infantry)
         expect(troopDef.count).toStrictEqual(toInt(999))
@@ -127,7 +127,7 @@ describe( 'MTroopDef', () => {
       });
       describe('with missing props', () => {
         it('should throw an error', () => {
-          const obj = makeObj()
+          const obj = makeTroopDefObj()
           delete obj.countLocked
           expect( () => MTroopDef.fromJsonObject(obj) ).toThrow(Error)
         });

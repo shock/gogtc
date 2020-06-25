@@ -47,6 +47,25 @@ class MFormCalc extends IdParser {
     return obj;
   }
 
+  static fromJsonObject(obj:any) {
+    ['name', 'marchCap'].forEach( prop => {
+      if( !obj.hasOwnProperty(prop) ) {
+        throw new Error(`must have property: ${prop}`)
+      }
+    })
+
+    const formCalc = new MFormCalc( obj.name, obj.marchCap )
+
+    const objTierDefs = obj.tierDefs
+    if( objTierDefs && (objTierDefs instanceof Array)) {
+      const tierDefs:MTierDef[] = objTierDefs.map( (tdObj) => (
+        MTierDef.fromJsonObject(tdObj)
+      ))
+      formCalc.tierDefs = tierDefs
+    }
+    return formCalc
+  }
+
   id():string {
     return this.name;
   }

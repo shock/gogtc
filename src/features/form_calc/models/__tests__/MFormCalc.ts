@@ -1,4 +1,4 @@
-import { TierNum, toInt } from '../../types';
+import { TierNum, toInt, toBig } from '../../types';
 import { MFormCalc, MTierDef} from '..';
 import { buildFormCalcWithTiers } from '../../lib/test_helper';
 
@@ -52,6 +52,92 @@ describe( 'MTierDef', () => {
       expect(formCalc.getCapFromTierDefs().toString()).toBe('11000');
     });
 
+  });
+
+  describe('serialization', () => {
+    describe('toJsonObject', () => {
+      it('should return an object', () => {
+        const formCalc = new MFormCalc('test', toInt(999))
+        let obj = formCalc.toJsonObject()
+        expect(obj instanceof Object).toBe(true)
+      });
+      it('should return an object with the same attributes', () => {
+        const formCalc = new MFormCalc('test', toInt(999))
+        let obj = formCalc.toJsonObject()
+        expect(obj.name).toStrictEqual('test')
+        expect(obj.marchCap).toStrictEqual(toInt(999))
+      });
+      it('serialize the tierDefs', () => {
+        const formCalc = buildFormCalcWithTiers()
+        let obj = formCalc.toJsonObject()
+        const tierDefs = obj.tierDefs
+        expect(tierDefs instanceof Array).toBe(true)
+        expect(tierDefs.length).toBe(2)
+      });
+    });
+
+    describe('static fromJsonObject', () => {
+      const makeFormCalcObj = () => {
+        return {
+          name: 'test',
+          marchCap: toInt(999),
+          tierDefs: [makeTierDefObj()]
+        }
+      }
+      const makeTierDefObj = () => {
+        return {
+          tierNum: 'T12',
+          capacity: toInt(999),
+          percent: toBig(45.5),
+          capacityLocked: true,
+          troopDefs: [makeTroopDefObj()]
+        }
+      }
+      const makeTroopDefObj = () => {
+        return {
+          type: "Infantry",
+          count: toInt(999),
+          percent: toBig(45.5),
+          countLocked: true
+        }
+      }
+
+      it('should return an MFormCalc instance', () => {
+        const obj = makeFormCalcObj()
+        const formCalc = MFormCalc.fromJsonObject(obj)
+        expect(formCalc instanceof MFormCalc).toBe(true)
+      });
+      it('should return an object with the same attributes', () => {
+        const obj = makeFormCalcObj()
+        const formCalc = MFormCalc.fromJsonObject(obj)
+        expect(formCalc.name).toStrictEqual('test')
+        expect(formCalc.marchCap).toStrictEqual(toInt(999))
+      });
+      it('should deserialize the tierDefs', () => {
+        const obj = makeFormCalcObj()
+        const formCalc = MFormCalc.fromJsonObject(obj)
+        expect(formCalc.name).toStrictEqual('test')
+        expect(formCalc.marchCap).toStrictEqual(toInt(999))
+      });
+      describe('with missing props', () => {
+        it('should throw an error', () => {
+          const obj = makeFormCalcObj()
+          delete obj.marchCap
+          expect( () => MFormCalc.fromJsonObject(obj) ).toThrow(Error)
+        });
+      });
+    });
+
+    describe('round trip', () => {
+      it('should work', () => {
+        const origFormCalc = new MFormCalc('test', toInt(999))
+        const reconstructedFormCalc = MFormCalc.fromJsonObject(origFormCalc.toJsonObject())
+        origFormCalc.key = '1'
+        reconstructedFormCalc.key = '1'
+        expect( origFormCalc ).toEqual(reconstructedFormCalc)
+      });
+
+    });
   });
 
 });

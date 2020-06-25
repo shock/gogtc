@@ -162,21 +162,30 @@ describe( 'MTierDef', () => {
     });
 
     describe('static fromJsonObject', () => {
-      const makeObj = () => {
+      const makeTierDefObj = () => {
         return {
           tierNum: 'T12',
           capacity: toInt(999),
           percent: toBig(45.5),
-          capacityLocked: true
+          capacityLocked: true,
+          troopDefs: [makeTroopDefObj()]
+        }
+      }
+      const makeTroopDefObj = () => {
+        return {
+          type: "Infantry",
+          count: toInt(999),
+          percent: toBig(45.5),
+          countLocked: true
         }
       }
       it('should return an MTierDef instance', () => {
-        const obj = makeObj()
+        const obj = makeTierDefObj()
         const tierDef = MTierDef.fromJsonObject(obj)
         expect(tierDef instanceof MTierDef).toBe(true)
       });
       it('should return an object with the same attributes', () => {
-        const obj = makeObj()
+        const obj = makeTierDefObj()
         const tierDef = MTierDef.fromJsonObject(obj)
         expect(tierDef.tierNum).toStrictEqual(TierNum.T12)
         expect(tierDef.capacity).toStrictEqual(toInt(999))
@@ -184,16 +193,14 @@ describe( 'MTierDef', () => {
         expect(tierDef.capacityLocked).toStrictEqual(true)
       });
       it('should deserialize the troopDefs', () => {
-        const obj = makeObj()
+        const obj = makeTierDefObj()
         const tierDef = MTierDef.fromJsonObject(obj)
-        expect(tierDef.tierNum).toStrictEqual(TierNum.T12)
-        expect(tierDef.capacity).toStrictEqual(toInt(999))
-        expect(tierDef.percent).toStrictEqual(toBig(45.5))
-        expect(tierDef.capacityLocked).toStrictEqual(true)
+        const troopDefs = tierDef.troopDefs
+        expect(troopDefs.length).toBe(1)
       });
       describe('with missing props', () => {
         it('should throw an error', () => {
-          const obj = makeObj()
+          const obj = makeTierDefObj()
           delete obj.capacityLocked
           expect( () => MTierDef.fromJsonObject(obj) ).toThrow(Error)
         });
