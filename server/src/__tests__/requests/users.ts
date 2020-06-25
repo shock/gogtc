@@ -13,19 +13,6 @@ afterAll( async (done) => {
   done();
 });
 
-describe('hello world', () => {
-  it('should work', (done) => {
-    request(app)
-    .get('/hello')
-    .expect(200)
-    .expect('Content-Type', 'application/json; charset=utf-8')
-    .expect((res) => {
-      expect(res.body['hello']).toEqual('world')
-    })
-    .end(done)
-  });
-});
-
 describe('Auth routes', () => {
   describe('POST /api/auth/login', () => {
     it('should work', async (done) => {

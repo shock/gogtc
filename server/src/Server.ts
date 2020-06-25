@@ -66,10 +66,6 @@ app.get('/', (req: Request, res: Response) => {
     res.sendFile('login.html', {root: viewsDir});
 });
 
-app.get('/hello', (req: Request, res: Response) => {
-    res.json({hello: 'world'});
-});
-
 app.get('/ping', function (req, res) {
     return res.send('pong');
 });
