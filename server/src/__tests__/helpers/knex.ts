@@ -25,3 +25,5 @@ export const cleanTables = async () => {
   await knex.table('users').del()
   await knex.table('form_calcs').del()
 }
+
+export const getKnex = () => knex
