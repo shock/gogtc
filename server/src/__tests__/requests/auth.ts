@@ -3,7 +3,7 @@ import app from '../../Server'
 import { getKnex, setupKnex, teardownKnex, cleanTables } from '../helpers/knex'
 import User from '../../models/User'
 import { UserRoles } from '../../client_server/interfaces/User'
-import { paramMissingError, loginFailedErr, cookieProps } from '../../shared/constants';
+import { cookieProps } from '../../shared/constants';
 
 beforeAll( async () => {
   await setupKnex()
@@ -12,10 +12,6 @@ beforeAll( async () => {
 afterAll( async (done) => {
   await teardownKnex();
   done();
-})
-
-afterEach( async () => {
-  await getKnex().table('users').del()
 })
 
 const createAdmin = async () => {
@@ -31,6 +27,10 @@ const createAdmin = async () => {
 describe('Auth routes', () => {
   describe('POST /login', () => {
     describe('with valid user credentials', () => {
+      afterEach( async () => {
+        await getKnex().table('users').del()
+      })
+
       it('should return 200', async (done) => {
         const user = await createAdmin()
         request(app)
@@ -67,6 +67,14 @@ describe('Auth routes', () => {
         .expect(401)
         .end(done)
       });
+    });
+  })
+  describe('GET /logout', () => {
+    it('should expire the JWT cookie', async (done) => {
+      request(app)
+      .get('/api/auth/logout')
+      .expect('set-cookie', new RegExp('Expires=Thu, 01 Jan 1970 00:00:00 GMT'))
+      .end(done)
     });
   })
 });

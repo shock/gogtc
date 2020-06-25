@@ -61,7 +61,6 @@ router.get('/logout', async (req: Request, res: Response) => {
     path: options.path,
     domain: options.domain
   });
-  console.log(res);
   return res.status(OK).end();
 });
 
