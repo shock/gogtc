@@ -1,18 +1,20 @@
-import { Model, QueryBuilderType, Constructor, TransactionOrKnex } from 'objection'
+import Objection, { Model, QueryBuilderType, Constructor, TransactionOrKnex } from 'objection'
 
 export class BaseModel extends Model {
   static debug = true
+  created_at!: string
+  updated_at!: string
 
   static findAll () {
-    return this.query()
+    return super.query()
   }
 
   static findOne (id:number) {
-    return this.query().findById(id)
+    return super.query().findById(id)
   }
 
   static create (data:Object) {
-    return this.query().insert(data)
+    return super.query().insert(data)
   }
 
   static update (id:number, data:Object) {
@@ -25,6 +27,16 @@ export class BaseModel extends Model {
 
   static delete (id:number) {
     return this.findOne(id).delete()
+  }
+
+  async $beforeInsert(queryContext: Objection.QueryContext) {
+    await super.$beforeInsert(queryContext)
+    this.created_at = new Date().toISOString()
+  }
+
+  async $beforeUpdate(opt: Objection.ModelOptions, queryContext: Objection.QueryContext) {
+    await super.$beforeUpdate(opt, queryContext)
+    this.updated_at = new Date().toISOString()
   }
 
 }

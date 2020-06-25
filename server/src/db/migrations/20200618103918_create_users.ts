@@ -9,6 +9,9 @@ export async function up(knex: Knex): Promise<any> {
       table.string('email')
       table.string('password')
       table.integer('role')
+      table.dateTime('created_at')
+      table.dateTime('updated_at')
+
       table.unique(['name'])
       table.unique(['email'])
     })

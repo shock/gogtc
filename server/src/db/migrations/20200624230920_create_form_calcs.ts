@@ -17,6 +17,9 @@ export async function up(knex: Knex): Promise<any> {
         .onDelete('SET NULL')
         .index()
 
+      table.dateTime('created_at')
+      table.dateTime('updated_at')
+
       table.index(['user_id', 'name'])
     })
 }
