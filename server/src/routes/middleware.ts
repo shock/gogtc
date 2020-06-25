@@ -38,6 +38,7 @@ export const userMW = async (req: Request, res: Response, next: NextFunction) =>
 	try {
 		// Get json-web-token
 		const jwt = req.signedCookies[cookieProps.key];
+
 		if (!jwt) {
 			throw Error('JWT not present in signed cookie.');
 		}

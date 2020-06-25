@@ -12,7 +12,6 @@ export async function up(knex: Knex): Promise<any> {
       table.dateTime('created_at')
       table.dateTime('updated_at')
 
-      table.unique(['name'])
       table.unique(['email'])
     })
 }

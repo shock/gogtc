@@ -1,53 +1,46 @@
 import request from 'supertest'
 import app from '../../Server'
 import { getKnex, setupKnex, teardownKnex, cleanTables } from '../helpers/knex'
-import User from '../../models/User'
-import { UserRoles } from '../../client_server/interfaces/User'
 import { cookieProps } from '../../shared/constants';
+import { createAdminUser } from '../helpers/users'
 
 beforeAll( async () => {
-  await setupKnex()
+  await setupKnex('auth')
+  console.log('knex setup auth')
 })
 
 afterAll( async (done) => {
-  await teardownKnex();
+  await teardownKnex('auth');
+  console.log('knex torn down auth')
   done();
 })
 
-const createAdmin = async () => {
-  return await User.query().insert({
-    name: 'Admin',
-    email: 'admin@example.com',
-    password: 'password',
-    role: UserRoles.Admin
-  })
-}
-
 
 describe('Auth routes', () => {
+  afterEach( async (done) => {
+    await cleanTables('auth')
+    console.log('tables cleaned auth')
+    done()
+  })
   describe('POST /login', () => {
     describe('with valid user credentials', () => {
-      afterEach( async () => {
-        await getKnex().table('users').del()
-      })
-
       it('should return 200', async (done) => {
-        const user = await createAdmin()
+        const user = await createAdminUser()
         request(app)
         .post('/api/auth/login')
         .send({
-          email: 'admin@example.com',
+          email: user.email,
           password: 'password'
         })
         .expect(200)
         .end(done)
       });
       it('should set the JWT in a cookie', async (done) => {
-        const user = await createAdmin()
+        const user = await createAdminUser()
         request(app)
         .post('/api/auth/login')
         .send({
-          email: 'admin@example.com',
+          email: user.email,
           password: 'password'
         })
         .expect(200)

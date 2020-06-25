@@ -4,15 +4,15 @@ import { UserRoles } from '../../client_server/interfaces/User'
 import { setupKnex, teardownKnex } from '../helpers/knex'
 
 beforeAll( async () => {
-  await setupKnex()
+  await setupKnex('Users.ts')
 })
 
 afterAll( async (done) => {
-  await teardownKnex();
+  await teardownKnex('Users.ts');
   done();
 });
 
-test('can update password when a user is already saved', async () => {
+test.only('can update password when a user is already saved', async () => {
   const user = await User.query().insert({
     name: 'John',
     email: 'email@email.com',
