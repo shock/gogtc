@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { UNAUTHORIZED } from 'http-status-codes';
 
-import { UserRoles } from '../entities/User';
+import { UserRoles } from '../client_server/interfaces/User';
 import { cookieProps } from '../shared/constants';
 import { JwtService } from '../shared/JwtService';
 
