@@ -31,15 +31,16 @@ const createFormCalc = async (name:string, json:any) => {
 
 
 describe('FormCalc routes', () => {
+  const formCalc = {
+    name: 'fc1',
+    json: '{"a":"b"}'
+  }
   describe('POST /add', () => {
     describe('with no JWT cookie', () => {
       it('should return 401 ', async (done) => {
         request(app)
         .post('/api/form_calcs/add')
-        .send({
-          name: 'fc1',
-          json: '{}'
-        })
+        .send(formCalc)
         .expect(401)
         .end(done)
       });
@@ -52,10 +53,7 @@ describe('FormCalc routes', () => {
 
           request(app)
           .post('/api/form_calcs/add')
-            .send({
-              name: 'fc1',
-              json: '{}'
-            })
+            .send(formCalc)
             .set('Cookie', [`${cookieProps.key}=${jwt}`])
             .expect(201)
             .end(done)
@@ -63,22 +61,23 @@ describe('FormCalc routes', () => {
         it('should create a record in the DB ', async (done) => {
           const user = await createRegularUser('password')
           const jwt = await user.getJwtToken()
-
           request(app)
             .post('/api/form_calcs/add')
-            .send({
-              name: 'fc1',
-              json: '{"a":"b"}'
-            })
+            .send(formCalc)
             .set('Cookie', [`${cookieProps.key}=${jwt}`])
             .expect(201)
-            // .end()
             .end(async (err,res) => {
               if(err) return(done(err))
-              const fcRecord = await FormCalc.findByUserIdAndName(user.id, 'fc1')
+
+              const resObj = res.body
+              expect(resObj.name).toEqual(formCalc.name)
+              expect(resObj.json).toEqual(formCalc.json)
+              expect(resObj.user_id).toEqual(user.id.toString())
+
+              const fcRecord = await FormCalc.findByUserIdAndName(user.id, formCalc.name)
               expect(fcRecord).toBeTruthy()
-              expect(fcRecord.name).toEqual('fc1')
-              expect(fcRecord.json).toEqual({a:'b'})
+              expect(fcRecord.name).toEqual(formCalc.name)
+              expect(fcRecord.json).toEqual(JSON.parse(formCalc.json))
               done()
             })
         });
@@ -90,9 +89,7 @@ describe('FormCalc routes', () => {
 
           request(app)
           .post('/api/form_calcs/add')
-            .send({
-              json: '{}'
-            })
+            .send({ json: '{}' })
             .set('Cookie', [`${cookieProps.key}=${jwt}`])
             .expect(400)
             .end(done)

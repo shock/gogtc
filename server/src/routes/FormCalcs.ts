@@ -51,8 +51,8 @@ router.post('/add', async (req: Request, res: Response) => {
       error: paramMissingError,
     })
   }
-  await FormCalc.create(formCalc);
-  return res.status(CREATED).end();
+  const newFormCalc = await FormCalc.create(formCalc);
+  return res.status(CREATED).json(newFormCalc);
 });
 
 
