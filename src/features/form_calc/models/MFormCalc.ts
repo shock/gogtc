@@ -1,20 +1,18 @@
+import cuid from 'cuid'
+import { getTierNum, getTroopType } from '../lib/IdParser';
 import { Big } from 'big.js';
-import cuid from 'cuid';
-
+import MBase from './MBase'
 import { MTierDef, MTroopDef } from '.';
-import { IdParser } from '../lib/IdParser';
 import { toInt, toBig, IdString, IdBoolean, IdOnly } from '../types';
 import config from '../../../config';
 
 const PercentDeltaEpsilon = toBig(0.1).pow(config.viewPrecision);
 
-class MFormCalc extends IdParser {
+class MFormCalc extends MBase {
   name: string
   tierDefs: MTierDef[] = [];
   marchCap:Big = toInt(0);
-  key:string = cuid();
-  changed:boolean = false;
-  id:string = cuid();
+  id:string = cuid()
 
   constructor(name:string, marchCap:Big = toInt(0)) {
     super();
@@ -29,16 +27,12 @@ class MFormCalc extends IdParser {
     });
     clone.changed = this.changed
     clone.id = this.id
+    clone.key = this.key
     return clone;
   }
 
-  markForUpdate() {
-    this.key = cuid();
-    this.changed = true;
-  }
-
   isChanged() {
-    let isChanged = this.changed
+    let isChanged = super.isChanged()
     this.tierDefs.forEach( td => { isChanged = isChanged || td.isChanged() })
     return isChanged
   }
@@ -50,6 +44,7 @@ class MFormCalc extends IdParser {
   toJsonObject() {
     let obj:any = {};
     obj.name = this.name;
+    obj.id = this.id
     obj.marchCap = this.marchCap;
     obj.tierDefs = this.tierDefs.map( tierDef => {
       return tierDef.toJsonObject();
@@ -65,6 +60,7 @@ class MFormCalc extends IdParser {
     })
 
     const formCalc = new MFormCalc( obj.name, obj.marchCap )
+    formCalc.id = obj.id
 
     const objTierDefs = obj.tierDefs
     if( objTierDefs && (objTierDefs instanceof Array)) {
@@ -77,7 +73,7 @@ class MFormCalc extends IdParser {
   }
 
   findTierDef(id: string) {
-    const tierNum = this.getTierNum(id);
+    const tierNum = getTierNum(id);
     const selected = this.tierDefs.find( tierDef => tierDef.tierNum === tierNum );
     if( selected === undefined )
       throw new Error(`could not find MTierDef with tierNum ==${tierNum}`)
@@ -86,7 +82,7 @@ class MFormCalc extends IdParser {
 
   findTroopDef(id: string) {
     const tierDef = this.findTierDef(id);
-    const troopType = this.getTroopType(id);
+    const troopType = getTroopType(id);
     return tierDef.findTroopDef(troopType);
   }
 

@@ -1,7 +1,6 @@
-import cuid from 'cuid';
-
 import { Big } from 'big.js';
 import { toInt, toBig, TroopType } from '../types';
+import MBase from './MBase'
 
 type ITroopType = {
   type: TroopType
@@ -10,15 +9,14 @@ type ITroopType = {
   countLocked: boolean
 }
 
-export class MTroopDef {
+export class MTroopDef extends MBase{
   type: TroopType;
   count: Big;
   percent: Big;
   countLocked: boolean;
-  key:string = cuid();
-  changed:boolean = false
 
   constructor(type:TroopType, count:Big, percent:Big = toBig(0), countLocked:boolean = false) {
+    super()
     this.type = type;
     this.count = count;
     this.percent = percent;
@@ -28,16 +26,8 @@ export class MTroopDef {
   clone():MTroopDef {
     const clone = new MTroopDef(this.type, this.count, this.percent, this.countLocked)
     clone.changed = this.changed
+    clone.key = this.key
     return clone;
-  }
-
-  markForUpdate() {
-    this.key = cuid()
-    this.changed = true
-  }
-
-  isChanged() {
-    return this.changed
   }
 
   objectForState() {

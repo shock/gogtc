@@ -197,6 +197,7 @@ describe( 'MTierDef', () => {
         const tierDef = MTierDef.fromJsonObject(obj)
         const troopDefs = tierDef.troopDefs
         expect(troopDefs.length).toBe(1)
+        expect(troopDefs[0] instanceof MTroopDef).toBe(true)
       });
       describe('with missing props', () => {
         it('should throw an error', () => {
@@ -211,8 +212,7 @@ describe( 'MTierDef', () => {
       it('should work', () => {
         const origTierDef = new MTierDef(TierNum.T12, toInt(999), toBig(45.5), true)
         const reconstructedTierDef = MTierDef.fromJsonObject(origTierDef.toJsonObject())
-        origTierDef.key = '1'
-        reconstructedTierDef.key = '1'
+        reconstructedTierDef.key = origTierDef.key
         expect( origTierDef ).toEqual(reconstructedTierDef)
       });
 

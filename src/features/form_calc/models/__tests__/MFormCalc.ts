@@ -66,6 +66,7 @@ describe( 'MTierDef', () => {
         let obj = formCalc.toJsonObject()
         expect(obj.name).toStrictEqual('test')
         expect(obj.marchCap).toStrictEqual(toInt(999))
+        expect(obj.id).toStrictEqual(formCalc.id)
       });
       it('serialize the tierDefs', () => {
         const formCalc = buildFormCalcWithTiers()
@@ -81,7 +82,8 @@ describe( 'MTierDef', () => {
         return {
           name: 'test',
           marchCap: toInt(999),
-          tierDefs: [makeTierDefObj()]
+          tierDefs: [makeTierDefObj()],
+          id: 'id'
         }
       }
       const makeTierDefObj = () => {
@@ -110,14 +112,14 @@ describe( 'MTierDef', () => {
       it('should return an object with the same attributes', () => {
         const obj = makeFormCalcObj()
         const formCalc = MFormCalc.fromJsonObject(obj)
-        expect(formCalc.name).toStrictEqual('test')
-        expect(formCalc.marchCap).toStrictEqual(toInt(999))
+        expect(formCalc.name).toStrictEqual(obj.name)
+        expect(formCalc.marchCap).toStrictEqual(obj.marchCap)
       });
       it('should deserialize the tierDefs', () => {
         const obj = makeFormCalcObj()
         const formCalc = MFormCalc.fromJsonObject(obj)
-        expect(formCalc.name).toStrictEqual('test')
-        expect(formCalc.marchCap).toStrictEqual(toInt(999))
+        expect(formCalc.tierDefs.length).toEqual(1)
+        expect(formCalc.tierDefs[0] instanceof MTierDef).toBe(true)
       });
       describe('with missing props', () => {
         it('should throw an error', () => {
@@ -132,10 +134,7 @@ describe( 'MTierDef', () => {
       it('should work', () => {
         const origFormCalc = new MFormCalc('test', toInt(999))
         const reconstructedFormCalc = MFormCalc.fromJsonObject(origFormCalc.toJsonObject())
-        origFormCalc.key = '1'
-        reconstructedFormCalc.key = '1'
-        origFormCalc.id = '1'
-        reconstructedFormCalc.id = '1'
+        reconstructedFormCalc.key = origFormCalc.key
         expect( origFormCalc ).toEqual(reconstructedFormCalc)
       });
 

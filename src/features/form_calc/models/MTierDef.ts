@@ -3,20 +3,19 @@ import { Big } from 'big.js';
 import { TierNum, TroopType, toInt, toBig } from '../types';
 import { MTroopDef } from '.';
 import config from '../../../config';
-import cuid from 'cuid';
+import MBase from './MBase'
 
 const PercentDeltaEpsilon = toBig(0.1).pow(config.viewPrecision);
 
-class MTierDef {
+class MTierDef extends MBase {
   tierNum: TierNum;
   troopDefs: MTroopDef[] = [];
   capacity:Big = toBig(0);
   percent:Big = toBig(0);
   capacityLocked:boolean = false;
-  key:string = cuid();
-  changed:boolean = false
 
   constructor(tierNum:TierNum, capacity:Big = toBig(0), percent:Big = toBig(0), capacityLocked:boolean = false) {
+    super()
     this.tierNum = tierNum
     this.capacity = capacity
     this.percent = percent
@@ -29,16 +28,12 @@ class MTierDef {
       return troopDef.clone()
     })
     clone.changed = this.changed
+    clone.key = this.key
     return clone
   }
 
-  markForUpdate() {
-    this.key = cuid()
-    this.changed = true
-  }
-
   isChanged() {
-    let isChanged = this.changed
+    let isChanged = super.isChanged()
     this.troopDefs.forEach( td => { isChanged = isChanged || td.isChanged() })
     return isChanged
   }

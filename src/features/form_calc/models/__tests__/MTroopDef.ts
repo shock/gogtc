@@ -138,8 +138,7 @@ describe( 'MTroopDef', () => {
       it('should work', () => {
         const origTroopDef = new MTroopDef(TroopType.Infantry, toInt(999), toBig(45.5), true)
         const reconstructedTroopDef = MTroopDef.fromJsonObject(origTroopDef.toJsonObject())
-        origTroopDef.key = '1'
-        reconstructedTroopDef.key = '1'
+        reconstructedTroopDef.key = origTroopDef.key
         expect( origTroopDef ).toEqual(reconstructedTroopDef)
       });
 
