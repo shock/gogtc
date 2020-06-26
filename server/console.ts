@@ -51,6 +51,7 @@ global['logp'] = (it:Promise<any>) => {
   it.then((resp) => console.log(resp))
 }
 
+global['knex'] = knex
 global['a'] = { v: null }
 global['av'] = (it:Promise<any>) => {
   it.then((resp) => {
