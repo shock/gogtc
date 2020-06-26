@@ -102,6 +102,12 @@ class MFormCalc extends MBase {
   // ACTION HANDLERS
   ////////////////////
 
+  // Handles simple change to name
+  updateNameHandler(payload:IdString) {
+    this.updateName(payload.value)
+    return this.objectForState();
+  }
+
   // Handles change to main march cap.
   // should update entire formation based on new march cap
   updateMarchCapHandler(payload:IdString) {

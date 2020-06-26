@@ -7,6 +7,11 @@ export type IdFormCalc = {
   formCalc: MFormCalc
 }
 
+export const updateName = createAction('UPDATE_NAME', (id: string, value: string) => ({
+  id: id,
+  value: value
+}))<IdString>();
+
 export const updateTroopCount = createAction('UPDATE_TROOP_COUNT', (id: string, value: string) => ({
   id: id,
   value: value

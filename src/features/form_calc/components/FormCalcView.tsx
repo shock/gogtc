@@ -18,6 +18,7 @@ const mapStateToProps = (state: RootState) => ({
 
 const dispatchProps = {
   resetState: actions.resetState,
+  updateName: actions.updateName,
   updateMarchCap: actions.updateMarchCap,
 };
 
@@ -38,7 +39,7 @@ class FormCalcViewBase extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      name: '',
+      name: this.data()?.name,
       editingName: false
     }
     this.handleMarchCapChange = this.handleMarchCapChange.bind(this);
@@ -117,6 +118,7 @@ class FormCalcViewBase extends React.Component<Props, State> {
 
   handleNameSubmit(e:any) {
     this.setState({editingName: false})
+    this.props.updateName(this.props.id, this.state.name)
   }
 
   handleNameClick(e:any) {
@@ -161,7 +163,7 @@ class FormCalcViewBase extends React.Component<Props, State> {
     return (
       <React.Fragment>
         <Row>
-          <Col sm={3} className="fcNameForm">
+          <Col sm={5} className="fcNameForm">
             {this.renderName()}
           </Col>
           {this.renderDebug()}
