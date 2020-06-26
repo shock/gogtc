@@ -14,7 +14,7 @@ const jwtService = new JwtService();
 export const adminMW = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		// Get json-web-token
-		const jwt = req.signedCookies[cookieProps.key];
+		const jwt = req.cookies[cookieProps.key];
 		if (!jwt) {
 			throw Error('JWT not present in signed cookie.');
 		}
@@ -37,7 +37,7 @@ export const adminMW = async (req: Request, res: Response, next: NextFunction) =
 export const userMW = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		// Get json-web-token
-		const jwt = req.signedCookies[cookieProps.key];
+		const jwt = req.cookies[cookieProps.key];
 
 		if (!jwt) {
 			throw Error('JWT not present in signed cookie.');

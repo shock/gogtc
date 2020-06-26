@@ -24,7 +24,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-app.use(cookieParser(cookieProps.secret));
+app.use(cookieParser());
 
 // Show routes called in console during development
 if (process.env.NODE_ENV === 'development') {
