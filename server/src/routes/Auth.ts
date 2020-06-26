@@ -39,10 +39,8 @@ router.post('/login', async (req: Request, res: Response) => {
     });
   }
   // Setup Admin Cookie
-  const jwt = await jwtService.getJwt({
-    id: user.id,
-    role: user.role,
-  });
+  const jwt = await user.getJwtToken()
+
   const { key, options } = cookieProps;
   res.cookie(key, jwt, options);
   // Return

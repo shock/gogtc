@@ -17,8 +17,8 @@ const router = Router().use(userMW);
  ******************************************************************************/
 
 router.get('/all', async (req: Request, res: Response) => {
-    const formCalcs = await FormCalc.findAll();
-    return res.status(OK).json({formCalcs});
+  const formCalcs = await FormCalc.findAll();
+  return res.status(OK).json({ formCalcs });
 });
 
 
@@ -27,9 +27,9 @@ router.get('/all', async (req: Request, res: Response) => {
  ******************************************************************************/
 
 router.get('/user', async (req: Request, res: Response) => {
-    const user_id = res.locals.user_id
-    const formCalcs = await FormCalc.findByUserId(parseInt(user_id));
-    return res.status(OK).json({formCalcs});
+  const user_id = res.locals.user_id
+  const formCalcs = await FormCalc.findByUserId(parseInt(user_id));
+  return res.status(OK).json({ formCalcs });
 });
 
 
@@ -38,19 +38,21 @@ router.get('/user', async (req: Request, res: Response) => {
  ******************************************************************************/
 
 router.post('/add', async (req: Request, res: Response) => {
-    // Check parameters
-    console.log(req.body)
-    const { formCalc } = req.body;
-    const user_id = res.locals.user_id
-    formCalc.user_id = user_id
-    if (!formCalc) {
-        return res.status(BAD_REQUEST).json({
-            error: paramMissingError,
-        });
-    }
-    // Add new formCalc
-    await FormCalc.create(formCalc);
-    return res.status(CREATED).end();
+  // Check parameters
+  const formCalc = new FormCalc
+  formCalc.name = req.body.name
+  formCalc.json = req.body.json
+  const user_id = res.locals.user_id
+  formCalc.user_id = user_id
+  try {
+    formCalc.$validate()
+  } catch (err) {
+    return res.status(BAD_REQUEST).json({
+      error: paramMissingError,
+    })
+  }
+  await FormCalc.create(formCalc);
+  return res.status(CREATED).end();
 });
 
 
@@ -59,16 +61,16 @@ router.post('/add', async (req: Request, res: Response) => {
  ******************************************************************************/
 
 router.put('/update/:id', async (req: Request, res: Response) => {
-    // Check Parameters
-    const { id } = req.params as ParamsDictionary;
-    const { formCalc } = req.body;
-    if (!formCalc) {
-        return res.status(BAD_REQUEST).json({
-            error: paramMissingError,
-        });
-    }
-    await FormCalc.patch(Number(id), formCalc);
-    return res.status(OK).end();
+  // Check Parameters
+  const { id } = req.params as ParamsDictionary;
+  const { formCalc } = req.body;
+  if (!formCalc) {
+    return res.status(BAD_REQUEST).json({
+      error: paramMissingError,
+    });
+  }
+  await FormCalc.patch(Number(id), formCalc);
+  return res.status(OK).end();
 });
 
 
@@ -77,9 +79,9 @@ router.put('/update/:id', async (req: Request, res: Response) => {
  ******************************************************************************/
 
 router.delete('/delete/:id', async (req: Request, res: Response) => {
-    const { id } = req.params as ParamsDictionary;
-    await FormCalc.delete(Number(id));
-    return res.status(OK).end();
+  const { id } = req.params as ParamsDictionary;
+  await FormCalc.delete(Number(id));
+  return res.status(OK).end();
 });
 
 

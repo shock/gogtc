@@ -7,12 +7,11 @@ import { setupKnex, teardownKnex } from '../helpers/knex'
 import dbManager from '../../db/dbManager'
 
 beforeAll( async () => {
-  await setupKnex('auth')
+  await setupKnex()
 })
 
 afterAll( async (done) => {
   await teardownKnex();
-  // console.log('knex torn down auth')
   await dbManager.close()
   await dbManager.closeKnex()
   done();

@@ -30,7 +30,6 @@ router.get('/all', async (req: Request, res: Response) => {
 
 router.post('/add', async (req: Request, res: Response) => {
     // Check parameters
-    console.log(req.body)
     const { user } = req.body;
     if (!user) {
         return res.status(BAD_REQUEST).json({
@@ -39,9 +38,6 @@ router.post('/add', async (req: Request, res: Response) => {
     }
     // Add new user
     user.role = UserRoles.Standard;
-    user.pwdHash = await bcrypt.hash(user.password, 10)
-    console.log('pwdHash: ', user.pwdHash)
-    delete user.password
     await User.create(user);
     return res.status(CREATED).end();
 });

@@ -13,7 +13,6 @@ beforeAll( async () => {
 
 afterAll( async (done) => {
   await teardownKnex();
-  // console.log('knex torn down auth')
   await dbManager.close()
   await dbManager.closeKnex()
   done();
@@ -33,7 +32,7 @@ const createFormCalc = async (name:string, json:any) => {
 
 describe('FormCalc routes', () => {
   describe('POST /add', () => {
-    describe('when user is not logged in', () => {
+    describe('with no JWT cookie', () => {
       it('should return 401 ', async (done) => {
         request(app)
         .post('/api/form_calcs/add')
@@ -45,31 +44,37 @@ describe('FormCalc routes', () => {
         .end(done)
       });
     })
-    describe('when user is logged in', () => {
-      it('should return 200 ', async (done) => {
-        const user = await createAdminUser('password')
-        const agent = request.agent(app)
-        request(app)
-          .post('/api/auth/login')
-          .send({
-            email: user.email,
-            password: 'password'
-          })
-          .expect(200)
-          .expect('set-cookie', new RegExp(cookieProps.key))
-          .end(done)
-          // .end((err, res) => { if(err) return done(err) })
+    describe('with valid JWT cookie', () => {
+      describe('with valid params', () => {
+        it('it should return 201 ', async (done) => {
+          const user = await createRegularUser('password')
+          const jwt = await user.getJwtToken()
 
-        // done()
-        // agent
-        //   .post('/api/form_calcs/add')
-        //   .send({
-        //     name: 'fc1',
-        //     json: '{}'
-        //   })
-        //   .expect(200)
-        //   .end(done)
+          request(app)
+          .post('/api/form_calcs/add')
+            .send({
+              name: 'fc1',
+              json: '{}'
+            })
+            .set('Cookie', [`${cookieProps.key}=${jwt}`])
+            .expect(201)
+            .end(done)
+        });
+      });
+      describe('with invalid params', () => {
+        it('it should return 400 ', async (done) => {
+          const user = await createRegularUser('password')
+          const jwt = await user.getJwtToken()
 
+          request(app)
+          .post('/api/form_calcs/add')
+            .send({
+              json: '{}'
+            })
+            .set('Cookie', [`${cookieProps.key}=${jwt}`])
+            .expect(400)
+            .end(done)
+        });
       });
     })
   })

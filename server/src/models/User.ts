@@ -1,8 +1,12 @@
-import { Model, Modifiers } from 'objection'
-import { BaseModel } from './BaseModel'
-import IUser from '../client_server/interfaces/User'
 import Objection from 'objection'
 import bcrypt from 'bcrypt'
+import { Model, Modifiers } from 'objection'
+
+import { BaseModel } from './BaseModel'
+import IUser from '../client_server/interfaces/User'
+import { JwtService } from '../shared/JwtService';
+
+const jwtService = new JwtService();
 
 export default class User extends BaseModel implements IUser {
   id!: number
@@ -81,5 +85,16 @@ export default class User extends BaseModel implements IUser {
   static async findByEmail (email: string) {
     const response = await this.query().where({email:email})
     return response[0]
+  }
+
+  ////////////////////
+  // Instance Methods
+  ////////////////////
+
+  async getJwtToken () {
+    return await jwtService.getJwt({
+      id: this.id,
+      role: this.role,
+    });
   }
 }
