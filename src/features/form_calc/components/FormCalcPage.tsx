@@ -41,7 +41,7 @@ class FormCalcPageBase extends React.Component<Props, State> {
       showJson: false,
       jsonState: true
     }
-    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handeSelectChange = this.handeSelectChange.bind(this);
     this.handleNameSubmit = this.handleNameSubmit.bind(this);
     this.handleDebugClick = this.handleDebugClick.bind(this);
     this.handleJsonClick = this.handleJsonClick.bind(this);
@@ -84,7 +84,7 @@ class FormCalcPageBase extends React.Component<Props, State> {
     this.setState({jsonState: !this.state.jsonState});
   }
 
-  handleNameChange(event: React.ChangeEvent<HTMLInputElement>) {
+  handeSelectChange(event: React.ChangeEvent<HTMLInputElement>) {
     this.setState({
       fcId: event.target.value
     })
@@ -180,20 +180,20 @@ class FormCalcPageBase extends React.Component<Props, State> {
           <Col>
             <Form onSubmit={this.handleNameSubmit}>
               <Form.Group as={Row} controlId="formBasicEmail">
-                <Form.Label column sm={2}>Form Name</Form.Label>
+                <Form.Label column sm={2}>Load Preset</Form.Label>
                 <Col sm={4}>
-                  {/* <Form.Control type="text" placeholder="form name" value={this.state.fcId} onChange={this.handleNameChange}/> */}
+                  {/* <Form.Control type="text" placeholder="form name" value={this.state.fcId} onChange={this.handeSelectChange}/> */}
                   <Form.Control
                     as="select"
                     custom
-                    onChange={this.handleNameChange}
+                    onChange={this.handeSelectChange}
                     defaultValue={this.state.fcId}
                   >
                     {this.selectOptions()}
                   </Form.Control>
                 </Col>
                 <Col sm={2}>
-                  <Button variant="primary" onClick={this.handleNameSubmit}>Submit</Button>
+                  <Button variant="primary" onClick={this.handleNameSubmit}>OK</Button>
                 </Col>
               </Form.Group>
             </Form>

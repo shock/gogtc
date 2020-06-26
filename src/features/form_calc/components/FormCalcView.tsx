@@ -1,10 +1,11 @@
 import { RootState } from 'typesafe-actions';
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Form, Button } from 'react-bootstrap';
 import NumericInput from 'react-numeric-input';
-import * as NumEntry from '../../../lib/num-entry';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import * as NumEntry from '../../../lib/num-entry';
 import * as actions from '../actions';
 import * as selectors from '../selectors';
 import { TierDefView } from './TierDefView';
@@ -26,15 +27,37 @@ interface FormCalcViewProps {
 }
 
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & FormCalcViewProps;
+type State = {
+  name: string
+  editingName: boolean
+}
 
-class FormCalcViewBase extends React.Component<Props> {
+class FormCalcViewBase extends React.Component<Props, State> {
+  private nameInputRef = React.createRef<HTMLInputElement>()
+
   constructor(props: Props) {
     super(props);
+    this.state = {
+      name: '',
+      editingName: false
+    }
     this.handleMarchCapChange = this.handleMarchCapChange.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this)
+    this.handleNameSubmit = this.handleNameSubmit.bind(this)
+    this.handleNameClick = this.handleNameClick.bind(this)
   }
 
   static defaultProps = {
     debug: false
+  }
+
+  componentDidUpdate(prevProps:Props) {
+    if((this.props.formCalcs != prevProps.formCalcs) || ( this.props.id !== prevProps.id )) {
+      this.setState({
+        name: this.data()?.name,
+        editingName: false
+      })
+    }
   }
 
   id():string {
@@ -88,14 +111,58 @@ class FormCalcViewBase extends React.Component<Props> {
     } else return null;
   }
 
+  handleNameChange(event:React.ChangeEvent<HTMLInputElement>) {
+    this.setState({name: event.target.value})
+  }
+
+  handleNameSubmit(e:any) {
+    this.setState({editingName: false})
+  }
+
+  handleNameClick(e:any) {
+    this.setState({editingName: true})
+
+    // nameInputRef.current won't be set until the input element is rendered, so wait until the next event cycle
+    setTimeout(() => {
+      const node = this.nameInputRef.current
+      if( node ) {
+        console.log('WE BE HERE')
+        node.focus()
+      }
+    }, 0)
+  }
+
+  renderName() {
+    if( this.state.editingName ) {
+      return (
+        <Form onSubmit={this.handleNameSubmit}>
+          <Form.Control
+            as="input"
+            value={this.state.name}
+            onChange={this.handleNameChange}
+            ref={this.nameInputRef}
+          />
+          <Button variant="primary" onClick={this.handleNameSubmit}>OK</Button>
+        </Form>
+      )
+    } else {
+      return (
+        <div onClick={this.handleNameClick}>
+          <span className="fcName">{this.state.name}</span>
+          <span className="fcNicon"><FontAwesomeIcon icon={'pencil-alt'} fixedWidth/></span>
+        </div>
+      )
+    }
+  }
+
   render() {
     if( !this.data() ) return (null);
     const formCalc = this.data();
     return (
       <React.Fragment>
         <Row>
-          <Col sm={3}>
-            <h3>{formCalc.name}</h3>
+          <Col sm={3} className="fcNameForm">
+            {this.renderName()}
           </Col>
           {this.renderDebug()}
           <Col >
