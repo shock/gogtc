@@ -1,22 +1,21 @@
 import User from '../../models/User'
 import { UserRoles } from '../../client_server/interfaces/User'
+import faker from 'faker'
 
-export const createAdminUser = async () => {
-  console.log('creating admin user')
+export const createAdminUser = async (password = 'password') => {
   return await User.query().insert({
-    name: 'Admin',
-    email: 'admin@example.com',
-    password: 'password',
+    name: faker.name.firstName(),
+    email: faker.internet.email(),
+    password: password,
     role: UserRoles.Admin
   })
 }
 
-export const createRegularUser = async () => {
-  console.log('creating regular user')
+export const createRegularUser = async (password = 'password') => {
   return await User.query().insert({
-    name: 'Regular',
-    email: 'reg@example.com',
-    password: 'password',
+    name: faker.name.firstName(),
+    email: faker.internet.email(),
+    password: password,
     role: UserRoles.Standard
   })
 }

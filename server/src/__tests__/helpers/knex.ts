@@ -4,8 +4,7 @@ import knexConfig from '../../db/knexfile'
 
 let knex:Knex<any, unknown[]>;
 
-export const setupKnex = async (msg:any=undefined) => {
-  console.log(`setting up knex ${msg}`)
+export const setupKnex = async () => {
   // Initialize knex.
   knex = Knex(knexConfig.test)
 
@@ -16,14 +15,11 @@ export const setupKnex = async (msg:any=undefined) => {
   // await cleanTables()
 }
 
-export const teardownKnex = async (msg:any=undefined) => {
-  console.log(`tearing down knex ${msg}`)
-  // await cleanTables()
+export const teardownKnex = async () => {
   await knex.destroy()
 }
 
-export const cleanTables = async (msg:any=undefined) => {
-  console.log(`cleaning tables ${msg}`)
+export const cleanTables = async () => {
   await knex.table('users').del()
   await knex.table('form_calcs').del()
 }

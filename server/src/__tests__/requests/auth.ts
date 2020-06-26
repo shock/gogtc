@@ -1,31 +1,32 @@
 import request from 'supertest'
 import app from '../../Server'
-import { getKnex, setupKnex, teardownKnex, cleanTables } from '../helpers/knex'
 import { cookieProps } from '../../shared/constants';
 import { createAdminUser } from '../helpers/users'
 
+import { setupKnex, teardownKnex } from '../helpers/knex'
+import dbManager from '../../db/dbManager'
+
 beforeAll( async () => {
   await setupKnex('auth')
-  console.log('knex setup auth')
 })
 
 afterAll( async (done) => {
-  await teardownKnex('auth');
-  console.log('knex torn down auth')
+  await teardownKnex();
+  // console.log('knex torn down auth')
+  await dbManager.close()
+  await dbManager.closeKnex()
   done();
 })
 
+beforeEach( async () => {
+  await dbManager.truncateDb(['knex_migrations', 'knex_migrations_lock'])
+})
 
 describe('Auth routes', () => {
-  afterEach( async (done) => {
-    await cleanTables('auth')
-    console.log('tables cleaned auth')
-    done()
-  })
   describe('POST /login', () => {
     describe('with valid user credentials', () => {
       it('should return 200', async (done) => {
-        const user = await createAdminUser()
+        const user = await createAdminUser('password')
         request(app)
         .post('/api/auth/login')
         .send({
