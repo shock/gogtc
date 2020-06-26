@@ -16,6 +16,7 @@ export class MTroopDef {
   percent: Big;
   countLocked: boolean;
   key:string = cuid();
+  changed:boolean = false
 
   constructor(type:TroopType, count:Big, percent:Big = toBig(0), countLocked:boolean = false) {
     this.type = type;
@@ -25,14 +26,18 @@ export class MTroopDef {
   }
 
   clone():MTroopDef {
-    const clone = new MTroopDef(this.type, this.count);
-    clone.percent = this.percent;
-    clone.countLocked = this.countLocked;
+    const clone = new MTroopDef(this.type, this.count, this.percent, this.countLocked)
+    clone.changed = this.changed
     return clone;
   }
 
   markForUpdate() {
-    this.key = cuid();
+    this.key = cuid()
+    this.changed = true
+  }
+
+  isChanged() {
+    return this.changed
   }
 
   objectForState() {

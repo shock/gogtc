@@ -14,6 +14,7 @@ class MTierDef {
   percent:Big = toBig(0);
   capacityLocked:boolean = false;
   key:string = cuid();
+  changed:boolean = false
 
   constructor(tierNum:TierNum, capacity:Big = toBig(0), percent:Big = toBig(0), capacityLocked:boolean = false) {
     this.tierNum = tierNum
@@ -23,18 +24,23 @@ class MTierDef {
   }
 
   clone():MTierDef {
-    const clone = new MTierDef(this.tierNum);
+    const clone = new MTierDef(this.tierNum, this.capacity, this.percent, this.capacityLocked)
     clone.troopDefs = this.troopDefs.map( troopDef => {
-      return troopDef.clone();
-    });
-    clone.capacity = this.capacity;
-    clone.percent = this.percent;
-    clone.capacityLocked = this.capacityLocked;
-    return clone;
+      return troopDef.clone()
+    })
+    clone.changed = this.changed
+    return clone
   }
 
   markForUpdate() {
-    this.key = cuid();
+    this.key = cuid()
+    this.changed = true
+  }
+
+  isChanged() {
+    let isChanged = this.changed
+    this.troopDefs.forEach( td => { isChanged = isChanged || td.isChanged() })
+    return isChanged
   }
 
   objectForState() {

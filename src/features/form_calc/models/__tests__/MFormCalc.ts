@@ -134,6 +134,8 @@ describe( 'MTierDef', () => {
         const reconstructedFormCalc = MFormCalc.fromJsonObject(origFormCalc.toJsonObject())
         origFormCalc.key = '1'
         reconstructedFormCalc.key = '1'
+        origFormCalc.srvr_id = '1'
+        reconstructedFormCalc.srvr_id = '1'
         expect( origFormCalc ).toEqual(reconstructedFormCalc)
       });
 

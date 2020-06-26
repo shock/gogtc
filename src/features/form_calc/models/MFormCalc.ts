@@ -13,6 +13,8 @@ class MFormCalc extends IdParser {
   tierDefs: MTierDef[] = [];
   marchCap:Big = toInt(0);
   key:string = cuid();
+  changed:boolean = false;
+  srvr_id:string = cuid();
 
   constructor(name:string, marchCap:Big = toInt(0)) {
     super();
@@ -21,16 +23,23 @@ class MFormCalc extends IdParser {
   }
 
   clone():MFormCalc {
-    const clone = new MFormCalc(this.name);
+    const clone = new MFormCalc(this.name, this.marchCap);
     clone.tierDefs = this.tierDefs.map( tierDef => {
       return tierDef.clone();
     });
-    clone.marchCap = this.marchCap;
+    clone.changed = this.changed;
     return clone;
   }
 
   markForUpdate() {
     this.key = cuid();
+    this.changed = true;
+  }
+
+  isChanged() {
+    let isChanged = this.changed
+    this.tierDefs.forEach( td => { isChanged = isChanged || td.isChanged() })
+    return isChanged
   }
 
   objectForState() {
