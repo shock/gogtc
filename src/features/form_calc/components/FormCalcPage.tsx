@@ -20,12 +20,12 @@ const dispatchProps = {
 };
 
 interface FormCalcPageProps {
-  name: string
+  fcId: string
 }
 
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & FormCalcPageProps;
 type State = {
-  formName: string,
+  fcId: string,
   debug: boolean,
   showJson: boolean,
   jsonState: boolean
@@ -36,7 +36,7 @@ class FormCalcPageBase extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      formName: this.props.name,
+      fcId: this.props.fcId,
       debug: false,
       showJson: false,
       jsonState: true
@@ -49,7 +49,7 @@ class FormCalcPageBase extends React.Component<Props, State> {
   }
 
   formCalc() {
-    return this.props.formCalcs[this.state.formName];
+    return this.props.formCalcs[this.state.fcId];
   }
 
   componentDidUpdate(prevProps:Props) {
@@ -62,14 +62,14 @@ class FormCalcPageBase extends React.Component<Props, State> {
   }
 
   resetReduxState() {
-    const formCalc = TestLibrary.formCalcs[this.state.formName];
+    const formCalc = TestLibrary.formCalcs[this.state.fcId];
     if( formCalc ) {
-      console.log(`MFormCalc found with name '${this.state.formName}'`);
-      this.props.resetState(this.state.formName, formCalc.clone());
+      console.log(`MFormCalc found with name '${this.state.fcId}'`);
+      this.props.resetState(this.state.fcId, formCalc.clone());
       this.props.clearUndoHistory();
       return;
     }
-    console.log(`No MFormCalc found with name '${this.state.formName}'`);
+    console.log(`No MFormCalc found with name '${this.state.fcId}'`);
   }
 
   handleDebugClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -86,24 +86,24 @@ class FormCalcPageBase extends React.Component<Props, State> {
 
   handleNameChange(event: React.ChangeEvent<HTMLInputElement>) {
     this.setState({
-      formName: event.target.value
+      fcId: event.target.value
     })
     setTimeout( () => this.handleNameSubmit(event), 0);
   }
 
   handleNameSubmit(event: any) {
     event.preventDefault();
-    const formCalc = TestLibrary.formCalcs[this.state.formName];
+    const formCalc = TestLibrary.formCalcs[this.state.fcId];
     if( !formCalc ) {
-      alert(`Couldn't find model with name: '${this.state.formName}'`);
+      alert(`Couldn't find model with name: '${this.state.fcId}'`);
       return;
     }
     setTimeout( ()  => this.resetReduxState(), 0);
   }
 
   selectOptions() {
-    const options = Object.keys(TestLibrary.formCalcs).map( (name, index) => {
-      return (<option key={index}>{name}</option>);
+    const options = Object.values(TestLibrary.formCalcs).map( (formCalc, index) => {
+      return (<option key={index} value={formCalc.srvr_id}>{formCalc.name}</option>);
     });
     return options;
   }
@@ -130,7 +130,7 @@ class FormCalcPageBase extends React.Component<Props, State> {
   renderJsonView() {
     const obj = this.state.jsonState
       ? this.formCalc().toJsonObject()
-      : TestLibrary.formCalcs[this.state.formName].toJsonObject();
+      : TestLibrary.formCalcs[this.state.fcId].toJsonObject();
     const json = JSON.stringify(obj, null, 2);
     return (
       <Row>
@@ -145,7 +145,7 @@ class FormCalcPageBase extends React.Component<Props, State> {
     return (
       <Row>
         <Col>
-          <FormCalcView id={this.state.formName} debug={this.state.debug}/>
+          <FormCalcView id={this.state.fcId} debug={this.state.debug}/>
         </Col>
       </Row>
     )
@@ -182,12 +182,12 @@ class FormCalcPageBase extends React.Component<Props, State> {
               <Form.Group as={Row} controlId="formBasicEmail">
                 <Form.Label column sm={2}>Form Name</Form.Label>
                 <Col sm={4}>
-                  {/* <Form.Control type="text" placeholder="form name" value={this.state.formName} onChange={this.handleNameChange}/> */}
+                  {/* <Form.Control type="text" placeholder="form name" value={this.state.fcId} onChange={this.handleNameChange}/> */}
                   <Form.Control
                     as="select"
                     custom
                     onChange={this.handleNameChange}
-                    defaultValue={this.state.formName}
+                    defaultValue={this.state.fcId}
                   >
                     {this.selectOptions()}
                   </Form.Control>

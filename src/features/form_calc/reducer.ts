@@ -1,14 +1,17 @@
 import undoable, { excludeAction } from 'redux-undo';
 import { createReducer, getType } from 'typesafe-actions';
 import * as actions from './actions';
-import { MFormCalc, FCState, BlankFCState, FormCalcDictionary } from './models';
-import { getFormCalcName } from './lib/IdParser';
+import { MFormCalc, FCState, BlankFCState, FormCalcDictionary, TestLibrary } from './models';
+import { getFormCalcId } from './lib/IdParser';
 
 const getFormationById = (state:FCState, id: string) => {
-  const formationName = getFormCalcName(id);
+  const formationName = getFormCalcId(id);
 
   // NOTE: we have to clone the formCalc here, otherwise the UNDO history won't be preserved
   const formCalcModel = state.formCalcs[formationName].clone();
+
+  // experimental save ONLY
+  TestLibrary.formCalcs[formCalcModel.srvr_id] = formCalcModel
 
   if( !(formCalcModel instanceof MFormCalc) )
     throw new Error(`Can't find formation with name: ${formationName}`);
@@ -19,7 +22,7 @@ const fcReturnState = (state:FCState, formCalc:MFormCalc) => {
   const formCalcDictionary:FormCalcDictionary = {
     formCalcs: {...state.formCalcs}
   };
-  formCalcDictionary.formCalcs[formCalc.name] = formCalc;
+  formCalcDictionary.formCalcs[formCalc.srvr_id] = formCalc;
   const returnState = {
     ...state,
     ...formCalcDictionary,

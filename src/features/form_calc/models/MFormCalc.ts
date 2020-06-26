@@ -9,7 +9,7 @@ import config from '../../../config';
 const PercentDeltaEpsilon = toBig(0.1).pow(config.viewPrecision);
 
 class MFormCalc extends IdParser {
-  name: string;
+  name: string
   tierDefs: MTierDef[] = [];
   marchCap:Big = toInt(0);
   key:string = cuid();
@@ -27,7 +27,8 @@ class MFormCalc extends IdParser {
     clone.tierDefs = this.tierDefs.map( tierDef => {
       return tierDef.clone();
     });
-    clone.changed = this.changed;
+    clone.changed = this.changed
+    clone.srvr_id = this.srvr_id
     return clone;
   }
 
@@ -76,7 +77,7 @@ class MFormCalc extends IdParser {
   }
 
   id():string {
-    return this.name;
+    return this.srvr_id;
   }
 
   findTierDef(id: string) {
@@ -302,6 +303,14 @@ class MFormCalc extends IdParser {
       tierDef.calculateAndUpdateTroopCounts();
     });
     this.markForUpdate();
+  }
+
+  /////////////////////////////////
+  // logicless setters
+
+  updateName(name:string) {
+    this.name = name
+    this.markForUpdate()
   }
 
 };
