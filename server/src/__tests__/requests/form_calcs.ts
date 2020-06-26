@@ -46,7 +46,7 @@ describe('FormCalc routes', () => {
     })
     describe('with valid JWT cookie', () => {
       describe('with valid params', () => {
-        it('it should return 201 ', async (done) => {
+        it('should return 201 ', async (done) => {
           const user = await createRegularUser('password')
           const jwt = await user.getJwtToken()
 
@@ -59,6 +59,28 @@ describe('FormCalc routes', () => {
             .set('Cookie', [`${cookieProps.key}=${jwt}`])
             .expect(201)
             .end(done)
+        });
+        it('should create a record in the DB ', async (done) => {
+          const user = await createRegularUser('password')
+          const jwt = await user.getJwtToken()
+
+          request(app)
+            .post('/api/form_calcs/add')
+            .send({
+              name: 'fc1',
+              json: '{"a":"b"}'
+            })
+            .set('Cookie', [`${cookieProps.key}=${jwt}`])
+            .expect(201)
+            // .end()
+            .end(async (err,res) => {
+              if(err) return(done(err))
+              const fcRecord = await FormCalc.findByUserIdAndName(user.id, 'fc1')
+              expect(fcRecord).toBeTruthy()
+              expect(fcRecord.name).toEqual('fc1')
+              expect(fcRecord.json).toEqual({a:'b'})
+              done()
+            })
         });
       });
       describe('with invalid params', () => {

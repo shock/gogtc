@@ -42,7 +42,7 @@ router.post('/add', async (req: Request, res: Response) => {
   const formCalc = new FormCalc
   formCalc.name = req.body.name
   formCalc.json = req.body.json
-  const user_id = res.locals.user_id
+  const user_id = res.locals.userId
   formCalc.user_id = user_id
   try {
     formCalc.$validate()

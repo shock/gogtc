@@ -31,6 +31,10 @@ export default class FormCalc extends BaseModel implements IFormCalc {
   ////////////////////
 
   static findByUserId(userId:number) {
-    this.query().where('user_id', userId)
+    return this.query().where('user_id', userId)
+  }
+  static async findByUserIdAndName(userId:number, name:string) {
+    const results = await this.query().where('user_id', userId).where('name', name)
+    return results[0]
   }
 }
