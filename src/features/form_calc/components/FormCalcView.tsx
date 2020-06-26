@@ -66,7 +66,7 @@ class FormCalcViewBase extends React.Component<Props> {
   }
 
   handleMarchCapChange(numVal:number|null, strVal:string, target:HTMLInputElement) {
-    this.props.updateMarchCap(this.data().id(), ''+numVal);
+    this.props.updateMarchCap(this.props.id, ''+numVal);
   }
 
   renderDebug() {

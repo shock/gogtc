@@ -14,7 +14,7 @@ class MFormCalc extends IdParser {
   marchCap:Big = toInt(0);
   key:string = cuid();
   changed:boolean = false;
-  srvr_id:string = cuid();
+  id:string = cuid();
 
   constructor(name:string, marchCap:Big = toInt(0)) {
     super();
@@ -28,7 +28,7 @@ class MFormCalc extends IdParser {
       return tierDef.clone();
     });
     clone.changed = this.changed
-    clone.srvr_id = this.srvr_id
+    clone.id = this.id
     return clone;
   }
 
@@ -74,10 +74,6 @@ class MFormCalc extends IdParser {
       formCalc.tierDefs = tierDefs
     }
     return formCalc
-  }
-
-  id():string {
-    return this.srvr_id;
   }
 
   findTierDef(id: string) {

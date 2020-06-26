@@ -64,8 +64,8 @@ export const BlankFCState:FCState = {
 const test = buildFormCalc('test')
 const fc1 = buildFormCalc('fc1')
 const formCalcs:{[key:string]: MFormCalc} = {}
-formCalcs[fc1.srvr_id] = fc1
-formCalcs[test.srvr_id] = test
+formCalcs[fc1.id] = fc1
+formCalcs[test.id] = test
 
 export const TestLibrary:FormCalcDictionary = {
   formCalcs: formCalcs

@@ -11,7 +11,7 @@ const getFormationById = (state:FCState, id: string) => {
   const formCalcModel = state.formCalcs[formationName].clone();
 
   // experimental save ONLY
-  TestLibrary.formCalcs[formCalcModel.srvr_id] = formCalcModel
+  TestLibrary.formCalcs[formCalcModel.id] = formCalcModel
 
   if( !(formCalcModel instanceof MFormCalc) )
     throw new Error(`Can't find formation with name: ${formationName}`);
@@ -22,7 +22,7 @@ const fcReturnState = (state:FCState, formCalc:MFormCalc) => {
   const formCalcDictionary:FormCalcDictionary = {
     formCalcs: {...state.formCalcs}
   };
-  formCalcDictionary.formCalcs[formCalc.srvr_id] = formCalc;
+  formCalcDictionary.formCalcs[formCalc.id] = formCalc;
   const returnState = {
     ...state,
     ...formCalcDictionary,

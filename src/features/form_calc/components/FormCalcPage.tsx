@@ -103,7 +103,7 @@ class FormCalcPageBase extends React.Component<Props, State> {
 
   selectOptions() {
     const options = Object.values(TestLibrary.formCalcs).map( (formCalc, index) => {
-      return (<option key={index} value={formCalc.srvr_id}>{formCalc.name}</option>);
+      return (<option key={index} value={formCalc.id}>{formCalc.name}</option>);
     });
     return options;
   }

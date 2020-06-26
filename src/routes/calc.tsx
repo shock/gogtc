@@ -8,5 +8,5 @@ const testFormCalc = Object.values(TestLibrary.formCalcs)[0]
 
 export default () =>
 <Layout title="GOG Troop Calculator">
-  <FormCalcPage fcId={testFormCalc.srvr_id} />
+  <FormCalcPage fcId={testFormCalc.id} />
 </Layout>
