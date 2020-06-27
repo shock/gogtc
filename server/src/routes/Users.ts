@@ -38,8 +38,8 @@ router.post('/add', async (req: Request, res: Response) => {
     }
     // Add new user
     user.role = UserRoles.Standard;
-    await User.create(user);
-    return res.status(CREATED).end();
+    const newUser = await User.create(user)
+    return res.status(CREATED).json(newUser)
 });
 
 
