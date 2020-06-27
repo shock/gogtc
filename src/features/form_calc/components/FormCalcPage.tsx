@@ -7,16 +7,17 @@ import { ActionCreators as UndoActionCreators } from 'redux-undo'
 import * as actions from '../actions';
 import * as selectors from '../selectors';
 import { FormCalcView } from './FormCalcView';
-import { TestLibrary } from '../models';
 import TT from '../../../components/tooltips';
 
 const mapStateToProps = (state: RootState) => ({
-  formCalcs: selectors.getFormCalcs(state.formCalc)
+  formCalcs: selectors.getFormCalcs(state.formCalc),
+  currentId: state.formCalc.present.currentId
 });
 
 const dispatchProps = {
   resetState: actions.resetState,
-  clearUndoHistory: UndoActionCreators.clearHistory
+  clearUndoHistory: UndoActionCreators.clearHistory,
+  setFcId: actions.setFcId
 };
 
 interface FormCalcPageProps {
@@ -53,6 +54,12 @@ class FormCalcPageBase extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps:Props) {
+    if(prevProps.fcId !== this.props.fcId) {
+      this.setState({fcId: this.props.fcId})
+    }
+    if(prevProps.currentId !== this.props.currentId) {
+      this.setState({fcId: this.props.currentId})
+    }
   }
 
   componentDidMount() {
@@ -62,14 +69,14 @@ class FormCalcPageBase extends React.Component<Props, State> {
   }
 
   resetReduxState() {
-    const formCalc = TestLibrary.formCalcs[this.state.fcId];
+    const formCalc = this.props.formCalcs[this.state.fcId];
     if( formCalc ) {
-      console.log(`MFormCalc found with name '${this.state.fcId}'`);
+      console.log(`MFormCalc found with id '${this.state.fcId}'`);
       this.props.resetState(this.state.fcId, formCalc.clone());
       this.props.clearUndoHistory();
       return;
     }
-    console.log(`No MFormCalc found with name '${this.state.fcId}'`);
+    console.log(`No MFormCalc found with id '${this.state.fcId}'`);
   }
 
   handleDebugClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -92,17 +99,17 @@ class FormCalcPageBase extends React.Component<Props, State> {
   }
 
   handleNameSubmit(event: any) {
-    event.preventDefault();
-    const formCalc = TestLibrary.formCalcs[this.state.fcId];
+    const formCalc = this.props.formCalcs[this.state.fcId];
     if( !formCalc ) {
-      alert(`Couldn't find model with name: '${this.state.fcId}'`);
+      alert(`Couldn't find model with id: '${this.state.fcId}'`);
       return;
     }
     setTimeout( ()  => this.resetReduxState(), 0);
+    this.props.setFcId(this.state.fcId)
   }
 
   selectOptions() {
-    const options = Object.values(TestLibrary.formCalcs).map( (formCalc, index) => {
+    const options = Object.values(this.props.formCalcs).map( (formCalc, index) => {
       return (<option key={index} value={formCalc.id}>{formCalc.name}</option>);
     });
     return options;
@@ -130,7 +137,10 @@ class FormCalcPageBase extends React.Component<Props, State> {
   renderJsonView() {
     const obj = this.state.jsonState
       ? this.formCalc().toJsonObject()
-      : TestLibrary.formCalcs[this.state.fcId].toJsonObject();
+      : this.props.formCalcs[this.state.fcId].toJsonObject();
+    if( !obj ) {
+      return <h4>Can't find formCalc with id '{this.state.fcId}'</h4>
+    }
     const json = JSON.stringify(obj, null, 2);
     return (
       <Row>
@@ -166,13 +176,6 @@ class FormCalcPageBase extends React.Component<Props, State> {
       >Json</Button>
     );
     const jMsg = this.state.showJson ? 'Hide Json' : 'Show Json';
-    const stateButton = (
-      <Button
-        variant={this.state.jsonState ? "secondary" : "info"}
-        onClick={this.handleStateClick}
-      >State</Button>
-    );
-    const sMsg = this.state.jsonState ? 'show TestLibrary' : 'show FCS state';
 
     return (
       <React.Fragment>

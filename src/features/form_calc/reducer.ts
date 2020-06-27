@@ -5,16 +5,13 @@ import { MFormCalc, FCState, BlankFCState, FormCalcDictionary, TestLibrary } fro
 import { getFormCalcId } from './lib/IdParser';
 
 const getFormationById = (state:FCState, id: string) => {
-  const formationName = getFormCalcId(id);
+  const formId = getFormCalcId(id);
 
   // NOTE: we have to clone the formCalc here, otherwise the UNDO history won't be preserved
-  const formCalcModel = state.formCalcs[formationName].clone();
-
-  // experimental save ONLY
-  TestLibrary.formCalcs[formCalcModel.id] = formCalcModel
+  const formCalcModel = state.formCalcs[formId].clone();
 
   if( !(formCalcModel instanceof MFormCalc) )
-    throw new Error(`Can't find formation with name: ${formationName}`);
+    throw new Error(`Can't find formCalc with id: ${formId}`);
   return formCalcModel;
 }
 
@@ -30,18 +27,32 @@ const fcReturnState = (state:FCState, formCalc:MFormCalc) => {
   return returnState;
 };
 
-const formCalc = createReducer(BlankFCState)
+const initialState:FCState = {
+  formCalcs: TestLibrary.formCalcs,
+  currentId: Object.values(TestLibrary.formCalcs)[0].id
+}
+
+const formCalc = createReducer(initialState)
   .handleAction(actions.createCalcAsync.success, (state, action) => {
     const formCalc = action.payload
     formCalc.clearChanged()
     formCalc.persisted = true
-    return fcReturnState(state, formCalc)
+    return {
+      ...fcReturnState(state, formCalc),
+      currentId: formCalc.id
+    }
   })
   .handleAction(actions.updateCalcAsync.success, (state, action) => {
     const formCalc = action.payload
     formCalc.clearChanged()
     formCalc.persisted = true
     return fcReturnState(state, formCalc)
+  })
+  .handleAction(actions.setFcId, (state, action) => {
+    return {
+      ...state,
+      currentId: action.payload.id
+    }
   })
   .handleAction(actions.updateName, (state, action) => {
     return fcReturnState(state, getFormationById(state, action.payload.id).updateNameHandler(action.payload));

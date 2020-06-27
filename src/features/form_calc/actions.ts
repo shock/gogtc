@@ -29,6 +29,10 @@ export const updateCalcAsync = createAsyncAction(
   'UPDATE_CALC_FAILURE'
 )<MFormCalc, MFormCalc, string>();
 
+export const setFcId = createAction('SET_FC_ID', (id:string) => ({
+  id: id
+}))<IdOnly>()
+
 export const updateName = createAction('UPDATE_NAME', (id: string, value: string) => ({
   id: id,
   value: value
