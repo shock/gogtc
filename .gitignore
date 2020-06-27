@@ -10,6 +10,9 @@
 # Ignore bundler config.
 /.bundle
 
+# Ignore build directory
+/build
+
 # Runtime data
 pids
 *.pid
