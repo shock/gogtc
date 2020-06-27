@@ -20,7 +20,7 @@ const dispatchProps = {
   resetState: actions.resetState,
   updateName: actions.updateName,
   updateMarchCap: actions.updateMarchCap,
-  saveFormCalc: actions.createCalcAsync.request
+  saveFormCalc: actions.saveFormCalc
 };
 
 interface FormCalcViewProps {

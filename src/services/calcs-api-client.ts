@@ -31,3 +31,30 @@ export function create(formCalc:MFormCalc): Promise<MFormCalc> {
     ).catch(error => reject(error))
   })
 }
+
+const updateCalcEndpoint = '/api/form_calcs/update'
+
+export function update(formCalc:MFormCalc): Promise<MFormCalc> {
+  const preparedBody = {
+    name: formCalc.name,
+    json: formCalc.toJsonObject()
+  }
+  return new Promise((resolve, reject) => {
+    async function request(url = '', data = {}) {
+      // Default options are marked with *
+      const response = await fetch(url, {
+        method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      if( response.status === 201 )
+        return response.json(); // parses JSON response into native JavaScript objects
+      else
+        throw `received status code ${response.status}`
+    }
+    const endPoint = `${updateCalcEndpoint}/${formCalc.id}`
+    request(endPoint, preparedBody).then(
+      resp => resolve(formCalc)
+    ).catch(error => reject(error))
+  })
+}

@@ -13,6 +13,7 @@ class MFormCalc extends MBase {
   tierDefs: MTierDef[] = [];
   marchCap:Big = toInt(0);
   id:string = cuid()
+  persisted:boolean = false
 
   constructor(name:string, marchCap:Big = toInt(0)) {
     super();

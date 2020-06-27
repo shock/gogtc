@@ -9,6 +9,14 @@ export type IdFormCalc = {
   formCalc: MFormCalc
 }
 
+export const saveFormCalc = (formCalc:MFormCalc) => {
+  if(!formCalc.persisted) {
+    return createCalcAsync.request(formCalc)
+  } else {
+    return updateCalcAsync.request(formCalc)
+  }
+}
+
 export const createCalcAsync = createAsyncAction(
   'CREATE_CALC_REQUEST',
   'CREATE_CALC_SUCCESS',
