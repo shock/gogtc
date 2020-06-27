@@ -20,6 +20,7 @@ const dispatchProps = {
   resetState: actions.resetState,
   updateName: actions.updateName,
   updateMarchCap: actions.updateMarchCap,
+  saveFormCalc: actions.createCalcAsync.request
 };
 
 interface FormCalcViewProps {
@@ -46,6 +47,7 @@ class FormCalcViewBase extends React.Component<Props, State> {
     this.handleNameChange = this.handleNameChange.bind(this)
     this.handleNameSubmit = this.handleNameSubmit.bind(this)
     this.handleNameClick = this.handleNameClick.bind(this)
+    this.handleSaveClick = this.handleSaveClick.bind(this)
   }
 
   static defaultProps = {
@@ -98,18 +100,20 @@ class FormCalcViewBase extends React.Component<Props, State> {
     const formCalc = this.data();
     if( this.props.debug ) {
       return (
-        <Col>
-          <div className="NumCell inline nobr">
-            <label>Troops Sum</label>
-            <span className="sum">{formCalc.getCapFromTierDefs().toString()}</span>
-          </div>
-          <div className="NumCell inline nobr">
-            <label>Tier % Sum</label>
-            <span className="sum">{formCalc.getTierDefPercentsSum().toFixed(config.calcPrecision)}</span>
-          </div>
-        </Col>
-      );
-    } else return null;
+        <Row>
+          <Col>
+            <div className="NumCell inline nobr">
+              <label>Troops Sum</label>
+              <span className="sum">{formCalc.getCapFromTierDefs().toString()}</span>
+            </div>
+            <div className="NumCell inline nobr">
+              <label>Tier % Sum</label>
+              <span className="sum">{formCalc.getTierDefPercentsSum().toFixed(config.calcPrecision)}</span>
+            </div>
+          </Col>
+        </Row>
+      )
+    } else return null
   }
 
   handleNameChange(event:React.ChangeEvent<HTMLInputElement>) {
@@ -157,6 +161,20 @@ class FormCalcViewBase extends React.Component<Props, State> {
     }
   }
 
+  handleSaveClick(e:any) {
+    this.props.saveFormCalc(this.data())
+  }
+
+  renderSave() {
+    const disabled = !this.data()?.isChanged()
+    console.log('disabled ' + disabled)
+    return (
+      <Col sm={1}>
+        <Button disabled={disabled} onClick={this.handleSaveClick}>SAVE</Button>
+      </Col>
+    )
+  }
+
   render() {
     if( !this.data() ) return (null);
     const formCalc = this.data();
@@ -166,7 +184,7 @@ class FormCalcViewBase extends React.Component<Props, State> {
           <Col sm={5} className="fcNameForm">
             {this.renderName()}
           </Col>
-          {this.renderDebug()}
+          {this.renderSave()}
           <Col >
             <label>March Cap</label>&nbsp;
             <NumericInput
@@ -184,6 +202,7 @@ class FormCalcViewBase extends React.Component<Props, State> {
             <UndoRedo/>
           </Col>
         </Row>
+        {this.renderDebug()}
         <Row>
           <Col>
             {this.buildTierDefViews()}

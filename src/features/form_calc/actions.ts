@@ -1,3 +1,5 @@
+import { createAsyncAction } from 'typesafe-actions';
+
 import { IdString, IdBoolean, IdOnly } from './types';
 import { createAction } from 'typesafe-actions';
 import { MFormCalc } from './models';
@@ -6,6 +8,18 @@ export type IdFormCalc = {
   id: string,
   formCalc: MFormCalc
 }
+
+export const createCalcAsync = createAsyncAction(
+  'CREATE_CALC_REQUEST',
+  'CREATE_CALC_SUCCESS',
+  'CREATE_CALC_FAILURE'
+)<MFormCalc, MFormCalc, string>();
+
+export const updateCalcAsync = createAsyncAction(
+  'UPDATE_CALC_REQUEST',
+  'UPDATE_CALC_SUCCESS',
+  'UPDATE_CALC_FAILURE'
+)<MFormCalc, MFormCalc, string>();
 
 export const updateName = createAction('UPDATE_NAME', (id: string, value: string) => ({
   id: id,

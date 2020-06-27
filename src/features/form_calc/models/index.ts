@@ -16,9 +16,6 @@ function buildTroopDefs(tierDef:MTierDef):MTroopDef[] {
       toBig(6000),
     ),
   ];
-  // troopDefs.forEach( (troopDef) => {
-  //   troopDef.tierDef = tierDef;
-  // });
   return troopDefs;
 }
 
