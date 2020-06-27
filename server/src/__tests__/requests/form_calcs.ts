@@ -6,6 +6,7 @@ import { createAdminUser, createRegularUser } from '../helpers/users'
 
 import { setupKnex, teardownKnex } from '../helpers/knex'
 import dbManager from '../../db/dbManager'
+import faker from 'faker'
 
 beforeAll( async () => {
   await setupKnex()
@@ -32,7 +33,7 @@ const createFormCalc = async (name:string, json:any) => {
 
 describe('FormCalc routes', () => {
   const formCalc = {
-    name: 'fc1',
+    name: faker.random.word(),
     json: '{"a":"b"}'
   }
   describe('POST /create', () => {

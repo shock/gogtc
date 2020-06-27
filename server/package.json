@@ -18,6 +18,7 @@
     ],
     "testPathIgnorePatterns": [
       "/__tests__/helpers/",
+      "/dist/",
       "/__tests__/factories/"
     ]
   },

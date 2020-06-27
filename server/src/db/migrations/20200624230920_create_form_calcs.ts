@@ -12,15 +12,15 @@ export async function up(knex: Knex): Promise<any> {
       table
         .bigInteger('user_id')
         .unsigned()
-        .references('id')
-        .inTable('users')
-        .onDelete('SET NULL')
-        .index()
+        // .references('id')
+        // .inTable('users')
+        // .onDelete('SET NULL')
 
       table.dateTime('created_at')
       table.dateTime('updated_at')
 
       table.index(['user_id', 'name'])
+      table.index(['user_id'])
     })
 }
 
