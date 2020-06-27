@@ -58,10 +58,6 @@ app.set('views', viewsDir);
 const staticDir = path.join(__dirname, 'public');
 app.use(express.static(staticDir));
 
-app.get('/', (req: Request, res: Response) => {
-    res.sendFile('login.html', {root: viewsDir});
-});
-
 app.get('/ping', function (req, res) {
     return res.send('pong');
 });
