@@ -34,10 +34,10 @@ router.get('/user', async (req: Request, res: Response) => {
 
 
 /******************************************************************************
- *                       Add One - "POST /api/form_calcs/add"
+ *                Create Calc - "POST /api/form_calcs/create"
  ******************************************************************************/
 
-router.post('/add', async (req: Request, res: Response) => {
+router.post('/create', async (req: Request, res: Response) => {
   // Check parameters
   const formCalc = new FormCalc
   formCalc.name = req.body.name

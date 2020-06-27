@@ -35,11 +35,11 @@ describe('FormCalc routes', () => {
     name: 'fc1',
     json: '{"a":"b"}'
   }
-  describe('POST /add', () => {
+  describe('POST /create', () => {
     describe('with no JWT cookie', () => {
       it('should return 401 ', async (done) => {
         request(app)
-        .post('/api/form_calcs/add')
+        .post('/api/form_calcs/create')
         .send(formCalc)
         .expect(401)
         .end(done)
@@ -52,7 +52,7 @@ describe('FormCalc routes', () => {
           const jwt = await user.getJwtToken()
 
           request(app)
-          .post('/api/form_calcs/add')
+          .post('/api/form_calcs/create')
             .send(formCalc)
             .set('Cookie', [`${cookieProps.key}=${jwt}`])
             .expect(201)
@@ -62,7 +62,7 @@ describe('FormCalc routes', () => {
           const user = await createRegularUser('password')
           const jwt = await user.getJwtToken()
           request(app)
-            .post('/api/form_calcs/add')
+            .post('/api/form_calcs/create')
             .send(formCalc)
             .set('Cookie', [`${cookieProps.key}=${jwt}`])
             .expect(201)
@@ -88,7 +88,7 @@ describe('FormCalc routes', () => {
           const jwt = await user.getJwtToken()
 
           request(app)
-          .post('/api/form_calcs/add')
+          .post('/api/form_calcs/create')
             .send({ json: '{}' })
             .set('Cookie', [`${cookieProps.key}=${jwt}`])
             .expect(400)
