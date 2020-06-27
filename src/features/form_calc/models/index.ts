@@ -42,20 +42,13 @@ export type FormCalcDictionary = {
   formCalcs: {[key: string]: MFormCalc}
 }
 
-export type TierDefDictionary = {
-  tierDefs: {[key: string]: MTierDef}
+export type FCState = FormCalcDictionary & {
+  currentId: string
 }
-
-export type TroopDefDictionary = {
-  troopDefs: {[key: string]: MTroopDef}
-}
-
-export type FCState = FormCalcDictionary & TierDefDictionary & TroopDefDictionary;
 
 export const BlankFCState:FCState = {
   formCalcs: {},
-  tierDefs: {},
-  troopDefs: {}
+  currentId: ''
 }
 
 const test = buildFormCalc('test')
