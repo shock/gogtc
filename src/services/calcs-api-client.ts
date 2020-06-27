@@ -47,7 +47,7 @@ export function update(formCalc:MFormCalc): Promise<MFormCalc> {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       })
-      if( response.status === 201 )
+      if( response.status === 200 )
         return response.json(); // parses JSON response into native JavaScript objects
       else
         throw `received status code ${response.status}`
