@@ -37,4 +37,8 @@ export default class FormCalc extends BaseModel implements IFormCalc {
     const results = await this.query().where('user_id', userId).where('name', name)
     return results[0]
   }
+
+  async $reload () {
+    return this.$query().where('id', this.id)
+  }
 }

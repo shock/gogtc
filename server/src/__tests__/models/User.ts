@@ -20,7 +20,7 @@ beforeEach( async () => {
   await dbManager.truncateDb(['knex_migrations', 'knex_migrations_lock'])
 })
 
-test.only('can update password when a user is already saved', async () => {
+it('can update password when a user is already saved', async () => {
   const user = await createRegularUser('foo')
   const passwordMatches = await bcrypt.compare('foo', user.password)
   expect(passwordMatches).toBeTruthy()

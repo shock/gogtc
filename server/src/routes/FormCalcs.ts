@@ -62,15 +62,23 @@ router.post('/create', async (req: Request, res: Response) => {
 
 router.put('/update/:id', async (req: Request, res: Response) => {
   // Check Parameters
-  const { id } = req.params as ParamsDictionary;
-  const { formCalc } = req.body;
+  const { id } = req.params as ParamsDictionary
+  const formCalc = req.body
   if (!formCalc) {
     return res.status(BAD_REQUEST).json({
       error: paramMissingError,
     });
   }
-  await FormCalc.patch(Number(id), formCalc);
-  return res.status(OK).end();
+  if(formCalc.id) { formCalc.id = Number(formCalc.id) }
+  if(formCalc.user_id) { formCalc.user_id = Number(formCalc.user_id) }
+  try {
+    const rowsUpdated = await FormCalc.patch(Number(id), formCalc);
+    return res.status(OK).json(rowsUpdated);
+  } catch(err) {
+    return res.status(BAD_REQUEST).json({
+      error: err.toString(),
+    })
+  }
 });
 
 
