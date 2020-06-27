@@ -1,57 +1,86 @@
+import cuid from 'cuid'
+import { getTierNum, getTroopType } from '../lib/IdParser';
 import { Big } from 'big.js';
-import cuid from 'cuid';
-
+import MBase from './MBase'
 import { MTierDef, MTroopDef } from '.';
-import { IdParser } from '../lib/IdParser';
 import { toInt, toBig, IdString, IdBoolean, IdOnly } from '../types';
 import config from '../../../config';
 
 const PercentDeltaEpsilon = toBig(0.1).pow(config.viewPrecision);
 
-class MFormCalc extends IdParser {
-  name: string;
+class MFormCalc extends MBase {
+  name: string
   tierDefs: MTierDef[] = [];
   marchCap:Big = toInt(0);
-  key:string = cuid();
+  id:string = cuid()
+  persisted:boolean = false
 
-  constructor(name:string) {
+  constructor(name:string, marchCap:Big = toInt(0)) {
     super();
     this.name = name;
+    this.marchCap = toInt(marchCap)
   }
 
   clone():MFormCalc {
-    const clone = new MFormCalc(this.name);
+    const clone = new MFormCalc(this.name, this.marchCap);
     clone.tierDefs = this.tierDefs.map( tierDef => {
       return tierDef.clone();
     });
-    clone.marchCap = this.marchCap;
+    clone.changed = this.changed
+    clone.persisted = this.persisted
+    clone.id = this.id
+    clone.key = this.key
     return clone;
   }
 
-  markForUpdate() {
-    this.key = cuid();
+  isChanged() {
+    let isChanged = super.isChanged()
+    this.tierDefs.forEach( td => { isChanged = isChanged || td.isChanged() })
+    return isChanged
+  }
+
+  clearChanged() {
+    super.clearChanged()
+    this.tierDefs.forEach(td => td.clearChanged())
   }
 
   objectForState() {
     return this;
   }
 
-  asJsonObject() {
+  toJsonObject() {
     let obj:any = {};
     obj.name = this.name;
+    obj.id = this.id
     obj.marchCap = this.marchCap;
     obj.tierDefs = this.tierDefs.map( tierDef => {
-      return tierDef.asJsonObject();
+      return tierDef.toJsonObject();
     });
     return obj;
   }
 
-  id():string {
-    return this.name;
+  static fromJsonObject(obj:any) {
+    ['name', 'marchCap'].forEach( prop => {
+      if( !obj.hasOwnProperty(prop) ) {
+        throw new Error(`must have property: ${prop}`)
+      }
+    })
+
+    const formCalc = new MFormCalc( obj.name, obj.marchCap )
+    formCalc.id = obj.id
+
+    const objTierDefs = obj.tierDefs
+    if( objTierDefs && (objTierDefs instanceof Array)) {
+      const tierDefs:MTierDef[] = objTierDefs.map( (tdObj) => (
+        MTierDef.fromJsonObject(tdObj)
+      ))
+      formCalc.tierDefs = tierDefs
+    }
+    return formCalc
   }
 
   findTierDef(id: string) {
-    const tierNum = this.getTierNum(id);
+    const tierNum = getTierNum(id);
     const selected = this.tierDefs.find( tierDef => tierDef.tierNum === tierNum );
     if( selected === undefined )
       throw new Error(`could not find MTierDef with tierNum ==${tierNum}`)
@@ -60,7 +89,7 @@ class MFormCalc extends IdParser {
 
   findTroopDef(id: string) {
     const tierDef = this.findTierDef(id);
-    const troopType = this.getTroopType(id);
+    const troopType = getTroopType(id);
     return tierDef.findTroopDef(troopType);
   }
 
@@ -79,6 +108,12 @@ class MFormCalc extends IdParser {
   ////////////////////
   // ACTION HANDLERS
   ////////////////////
+
+  // Handles simple change to name
+  updateNameHandler(payload:IdString) {
+    this.updateName(payload.value)
+    return this.objectForState();
+  }
 
   // Handles change to main march cap.
   // should update entire formation based on new march cap
@@ -273,6 +308,14 @@ class MFormCalc extends IdParser {
       tierDef.calculateAndUpdateTroopCounts();
     });
     this.markForUpdate();
+  }
+
+  /////////////////////////////////
+  // logicless setters
+
+  updateName(name:string) {
+    this.name = name
+    this.markForUpdate()
   }
 
 };

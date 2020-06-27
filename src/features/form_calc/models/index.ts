@@ -16,9 +16,6 @@ function buildTroopDefs(tierDef:MTierDef):MTroopDef[] {
       toBig(6000),
     ),
   ];
-  // troopDefs.forEach( (troopDef) => {
-  //   troopDef.tierDef = tierDef;
-  // });
   return troopDefs;
 }
 
@@ -45,27 +42,23 @@ export type FormCalcDictionary = {
   formCalcs: {[key: string]: MFormCalc}
 }
 
-export type TierDefDictionary = {
-  tierDefs: {[key: string]: MTierDef}
+export type FCState = FormCalcDictionary & {
+  currentId: string
 }
-
-export type TroopDefDictionary = {
-  troopDefs: {[key: string]: MTroopDef}
-}
-
-export type FCState = FormCalcDictionary & TierDefDictionary & TroopDefDictionary;
 
 export const BlankFCState:FCState = {
   formCalcs: {},
-  tierDefs: {},
-  troopDefs: {}
+  currentId: ''
 }
 
+const test = buildFormCalc('test')
+const fc1 = buildFormCalc('fc1')
+const formCalcs:{[key:string]: MFormCalc} = {}
+formCalcs[fc1.id] = fc1
+formCalcs[test.id] = test
+
 export const TestLibrary:FormCalcDictionary = {
-  formCalcs: {
-    test: buildFormCalc('test'),
-    fc1: buildFormCalc('fc1')
-  }
+  formCalcs: formCalcs
 };
 
 export * from './MTierDef';

@@ -7,25 +7,26 @@ import { ActionCreators as UndoActionCreators } from 'redux-undo'
 import * as actions from '../actions';
 import * as selectors from '../selectors';
 import { FormCalcView } from './FormCalcView';
-import { TestLibrary } from '../models';
 import TT from '../../../components/tooltips';
 
 const mapStateToProps = (state: RootState) => ({
-  formCalcs: selectors.getFormCalcs(state.formCalc)
+  formCalcs: selectors.getFormCalcs(state.formCalc),
+  currentId: state.formCalc.present.currentId
 });
 
 const dispatchProps = {
   resetState: actions.resetState,
-  clearUndoHistory: UndoActionCreators.clearHistory
+  clearUndoHistory: UndoActionCreators.clearHistory,
+  setFcId: actions.setFcId
 };
 
 interface FormCalcPageProps {
-  name: string
+  fcId: string
 }
 
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & FormCalcPageProps;
 type State = {
-  formName: string,
+  fcId: string,
   debug: boolean,
   showJson: boolean,
   jsonState: boolean
@@ -36,12 +37,12 @@ class FormCalcPageBase extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      formName: this.props.name,
+      fcId: this.props.fcId,
       debug: false,
       showJson: false,
       jsonState: true
     }
-    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handeSelectChange = this.handeSelectChange.bind(this);
     this.handleNameSubmit = this.handleNameSubmit.bind(this);
     this.handleDebugClick = this.handleDebugClick.bind(this);
     this.handleJsonClick = this.handleJsonClick.bind(this);
@@ -49,10 +50,16 @@ class FormCalcPageBase extends React.Component<Props, State> {
   }
 
   formCalc() {
-    return this.props.formCalcs[this.state.formName];
+    return this.props.formCalcs[this.state.fcId];
   }
 
   componentDidUpdate(prevProps:Props) {
+    if(prevProps.fcId !== this.props.fcId) {
+      this.setState({fcId: this.props.fcId})
+    }
+    if(prevProps.currentId !== this.props.currentId) {
+      this.setState({fcId: this.props.currentId})
+    }
   }
 
   componentDidMount() {
@@ -62,14 +69,14 @@ class FormCalcPageBase extends React.Component<Props, State> {
   }
 
   resetReduxState() {
-    const formCalc = TestLibrary.formCalcs[this.state.formName];
+    const formCalc = this.props.formCalcs[this.state.fcId];
     if( formCalc ) {
-      console.log(`MFormCalc found with name '${this.state.formName}'`);
-      this.props.resetState(this.state.formName, formCalc.clone());
+      console.log(`MFormCalc found with id '${this.state.fcId}'`);
+      this.props.resetState(this.state.fcId, formCalc.clone());
       this.props.clearUndoHistory();
       return;
     }
-    console.log(`No MFormCalc found with name '${this.state.formName}'`);
+    console.log(`No MFormCalc found with id '${this.state.fcId}'`);
   }
 
   handleDebugClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -84,26 +91,26 @@ class FormCalcPageBase extends React.Component<Props, State> {
     this.setState({jsonState: !this.state.jsonState});
   }
 
-  handleNameChange(event: React.ChangeEvent<HTMLInputElement>) {
+  handeSelectChange(event: React.ChangeEvent<HTMLInputElement>) {
     this.setState({
-      formName: event.target.value
+      fcId: event.target.value
     })
     setTimeout( () => this.handleNameSubmit(event), 0);
   }
 
   handleNameSubmit(event: any) {
-    event.preventDefault();
-    const formCalc = TestLibrary.formCalcs[this.state.formName];
+    const formCalc = this.props.formCalcs[this.state.fcId];
     if( !formCalc ) {
-      alert(`Couldn't find model with name: '${this.state.formName}'`);
+      alert(`Couldn't find model with id: '${this.state.fcId}'`);
       return;
     }
     setTimeout( ()  => this.resetReduxState(), 0);
+    this.props.setFcId(this.state.fcId)
   }
 
   selectOptions() {
-    const options = Object.keys(TestLibrary.formCalcs).map( (name, index) => {
-      return (<option key={index}>{name}</option>);
+    const options = Object.values(this.props.formCalcs).map( (formCalc, index) => {
+      return (<option key={index} value={formCalc.id}>{formCalc.name}</option>);
     });
     return options;
   }
@@ -129,8 +136,11 @@ class FormCalcPageBase extends React.Component<Props, State> {
 
   renderJsonView() {
     const obj = this.state.jsonState
-      ? this.formCalc().asJsonObject()
-      : TestLibrary.formCalcs[this.state.formName].asJsonObject();
+      ? this.formCalc().toJsonObject()
+      : this.props.formCalcs[this.state.fcId].toJsonObject();
+    if( !obj ) {
+      return <h4>Can't find formCalc with id '{this.state.fcId}'</h4>
+    }
     const json = JSON.stringify(obj, null, 2);
     return (
       <Row>
@@ -145,7 +155,7 @@ class FormCalcPageBase extends React.Component<Props, State> {
     return (
       <Row>
         <Col>
-          <FormCalcView id={this.state.formName} debug={this.state.debug}/>
+          <FormCalcView id={this.state.fcId} debug={this.state.debug}/>
         </Col>
       </Row>
     )
@@ -166,13 +176,6 @@ class FormCalcPageBase extends React.Component<Props, State> {
       >Json</Button>
     );
     const jMsg = this.state.showJson ? 'Hide Json' : 'Show Json';
-    const stateButton = (
-      <Button
-        variant={this.state.jsonState ? "secondary" : "info"}
-        onClick={this.handleStateClick}
-      >State</Button>
-    );
-    const sMsg = this.state.jsonState ? 'show TestLibrary' : 'show FCS state';
 
     return (
       <React.Fragment>
@@ -180,20 +183,20 @@ class FormCalcPageBase extends React.Component<Props, State> {
           <Col>
             <Form onSubmit={this.handleNameSubmit}>
               <Form.Group as={Row} controlId="formBasicEmail">
-                <Form.Label column sm={2}>Form Name</Form.Label>
+                <Form.Label column sm={2}>Load Preset</Form.Label>
                 <Col sm={4}>
-                  {/* <Form.Control type="text" placeholder="form name" value={this.state.formName} onChange={this.handleNameChange}/> */}
+                  {/* <Form.Control type="text" placeholder="form name" value={this.state.fcId} onChange={this.handeSelectChange}/> */}
                   <Form.Control
                     as="select"
                     custom
-                    onChange={this.handleNameChange}
-                    defaultValue={this.state.formName}
+                    onChange={this.handeSelectChange}
+                    defaultValue={this.state.fcId}
                   >
                     {this.selectOptions()}
                   </Form.Control>
                 </Col>
                 <Col sm={2}>
-                  <Button variant="primary" onClick={this.handleNameSubmit}>Submit</Button>
+                  <Button variant="primary" onClick={this.handleNameSubmit}>OK</Button>
                 </Col>
               </Form.Group>
             </Form>

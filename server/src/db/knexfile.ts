@@ -4,6 +4,22 @@ import 'ts-node/register'
 
 const config = {
 
+  test: {
+    client: "postgresql",
+    connection: {
+      database: "gog_test",
+      user: "gog",
+      password: "gog"
+    },
+    pool: {
+      min: 3,
+      max: 10
+    },
+    migrations: {
+      tableName: "knex_migrations"
+    }
+  },
+
   development: {
     client: "postgresql",
     connection: {

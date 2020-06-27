@@ -20,31 +20,31 @@ const Seeds:any = {
       {
         "name":"Sean Maxwell",
         "email":"sean.maxwell@gmail.com",
-        "pwdHash":"$2b$12$1mE2OI9hMS/rgH9Mi0s85OM2V5gzm7aF3gJIWH1y0S1MqVBueyjsy",
+        "password":"password", // password is "password"
         "role":1
       },
       {
         "name":"Admin",
         "email":"admin@example.com",
-        "pwdHash":"$2b$10$.NY6ZPprXeqfHGHYPo3TDOmgIVpEn/hpR4nS01hiVFjd8Aj.7GrPC",
+        "password":"password",
         "role":1
       },
       {
         "name":"Super Admin",
         "email":"admin@test.com",
-        "pwdHash":"$2b$12$1mE2OI9hMS/rgH9Mi0s85OM2V5gzm7aF3gJIWH1y0S1MqVBueyjsy",
+        "password":"password",
         "role":1
       },
       {
         "name":"Gordan Freeman",
         "email":"gordan.freeman@halflife.com",
-        "pwdHash":"$2b$12$1mE2OI9hMS/rgH9Mi0s85OM2V5gzm7aF3gJIWH1y0S1MqVBueyjsy",
+        "password":"password",
         "role":0
       },
       {
         "name":"John Smith",
         "email":"jsmith@yahoo.com",
-        "pwdHash":"$2b$12$1mE2OI9hMS/rgH9Mi0s85OM2V5gzm7aF3gJIWH1y0S1MqVBueyjsy",
+        "password":"password",
         "role":0
       }
     ]

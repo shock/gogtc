@@ -7,9 +7,11 @@ export async function up(knex: Knex): Promise<any> {
       table.bigIncrements('id').primary()
       table.string('name')
       table.string('email')
-      table.string('pwdHash')
+      table.string('password')
       table.integer('role')
-      table.unique(['name'])
+      table.dateTime('created_at')
+      table.dateTime('updated_at')
+
       table.unique(['email'])
     })
 }

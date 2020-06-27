@@ -1,44 +1,60 @@
-import cuid from 'cuid';
-
 import { Big } from 'big.js';
 import { toInt, toBig, TroopType } from '../types';
+import MBase from './MBase'
 
-export class MTroopDef {
+type ITroopType = {
+  type: TroopType
+  count: Big
+  percent: Big
+  countLocked: boolean
+}
+
+export class MTroopDef extends MBase{
   type: TroopType;
   count: Big;
   percent: Big;
   countLocked: boolean;
-  key:string = cuid();
 
-  constructor(type:TroopType, count:Big) {
+  constructor(type:TroopType, count:Big, percent:Big = toBig(0), countLocked:boolean = false) {
+    super()
     this.type = type;
-    this.count = count;
-    this.percent = toBig(0);
-    this.countLocked = false;
+    this.count = toInt(count)
+    this.percent = toBig(percent)
+    this.countLocked = countLocked;
   }
 
   clone():MTroopDef {
-    const clone = new MTroopDef(this.type, this.count);
-    clone.percent = this.percent;
-    clone.countLocked = this.countLocked;
+    const clone = new MTroopDef(this.type, this.count, this.percent, this.countLocked)
+    clone.changed = this.changed
+    clone.key = this.key
     return clone;
-  }
-
-  markForUpdate() {
-    this.key = cuid();
   }
 
   objectForState() {
     return this;
   }
 
-  asJsonObject() {
+  toJsonObject() {
     let obj:any = {};
     obj.type = this.type;
     obj.count = this.count;
     obj.percent = this.percent;
     obj.countLocked = this.countLocked;
     return obj;
+  }
+
+  static fromJsonObject(obj:any) {
+    ['type', 'count', 'percent', 'countLocked'].forEach( prop => {
+      if( !obj.hasOwnProperty(prop) ) {
+        throw new Error(`must have property: ${prop}`)
+      }
+    })
+    return new MTroopDef(
+      obj.type,
+      obj.count,
+      obj.percent,
+      obj.countLocked
+    )
   }
 
   // updates the count unless the percentage is locked

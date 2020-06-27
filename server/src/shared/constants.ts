@@ -11,7 +11,7 @@ export const cookieProps = Object.freeze({
     secret: process.env.COOKIE_SECRET,
     options: {
         httpOnly: true,
-        signed: true,
+        signed: false,
         path: (process.env.COOKIE_PATH),
         maxAge: Number(process.env.COOKIE_EXP),
         domain: (process.env.COOKIE_DOMAIN),

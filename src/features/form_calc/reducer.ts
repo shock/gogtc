@@ -1,17 +1,17 @@
 import undoable, { excludeAction } from 'redux-undo';
 import { createReducer, getType } from 'typesafe-actions';
 import * as actions from './actions';
-import { MFormCalc, FCState, BlankFCState, FormCalcDictionary } from './models';
-import { getFormCalcName } from './lib/IdParser';
+import { MFormCalc, FCState, BlankFCState, FormCalcDictionary, TestLibrary } from './models';
+import { getFormCalcId } from './lib/IdParser';
 
 const getFormationById = (state:FCState, id: string) => {
-  const formationName = getFormCalcName(id);
+  const formId = getFormCalcId(id);
 
   // NOTE: we have to clone the formCalc here, otherwise the UNDO history won't be preserved
-  const formCalcModel = state.formCalcs[formationName].clone();
+  const formCalcModel = state.formCalcs[formId].clone();
 
   if( !(formCalcModel instanceof MFormCalc) )
-    throw new Error(`Can't find formation with name: ${formationName}`);
+    throw new Error(`Can't find formCalc with id: ${formId}`);
   return formCalcModel;
 }
 
@@ -19,7 +19,7 @@ const fcReturnState = (state:FCState, formCalc:MFormCalc) => {
   const formCalcDictionary:FormCalcDictionary = {
     formCalcs: {...state.formCalcs}
   };
-  formCalcDictionary.formCalcs[formCalc.name] = formCalc;
+  formCalcDictionary.formCalcs[formCalc.id] = formCalc;
   const returnState = {
     ...state,
     ...formCalcDictionary,
@@ -27,7 +27,36 @@ const fcReturnState = (state:FCState, formCalc:MFormCalc) => {
   return returnState;
 };
 
-const formCalc = createReducer(BlankFCState)
+const initialState:FCState = {
+  formCalcs: TestLibrary.formCalcs,
+  currentId: Object.values(TestLibrary.formCalcs)[0].id
+}
+
+const formCalc = createReducer(initialState)
+  .handleAction(actions.createCalcAsync.success, (state, action) => {
+    const formCalc = action.payload
+    formCalc.clearChanged()
+    formCalc.persisted = true
+    return {
+      ...fcReturnState(state, formCalc),
+      currentId: formCalc.id
+    }
+  })
+  .handleAction(actions.updateCalcAsync.success, (state, action) => {
+    const formCalc = action.payload
+    formCalc.clearChanged()
+    formCalc.persisted = true
+    return fcReturnState(state, formCalc)
+  })
+  .handleAction(actions.setFcId, (state, action) => {
+    return {
+      ...state,
+      currentId: action.payload.id
+    }
+  })
+  .handleAction(actions.updateName, (state, action) => {
+    return fcReturnState(state, getFormationById(state, action.payload.id).updateNameHandler(action.payload));
+  })
   .handleAction(actions.updateTroopCount, (state, action) => {
     return fcReturnState(state, getFormationById(state, action.payload.id).updateTroopCountHandler(action.payload));
   })
@@ -54,7 +83,8 @@ const formCalc = createReducer(BlankFCState)
   })
   .handleAction(actions.resetState, (state, action) => {
     return fcReturnState(state, action.payload.formCalc);
-  });
+  })
+
 
 
 const parseActions = (rawActions:string[] | string, defaultValue=[]):string[] => {

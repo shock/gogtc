@@ -1,3 +1,5 @@
+import { createAsyncAction } from 'typesafe-actions';
+
 import { IdString, IdBoolean, IdOnly } from './types';
 import { createAction } from 'typesafe-actions';
 import { MFormCalc } from './models';
@@ -6,6 +8,35 @@ export type IdFormCalc = {
   id: string,
   formCalc: MFormCalc
 }
+
+export const saveFormCalc = (formCalc:MFormCalc) => {
+  if(!formCalc.persisted) {
+    return createCalcAsync.request(formCalc)
+  } else {
+    return updateCalcAsync.request(formCalc)
+  }
+}
+
+export const createCalcAsync = createAsyncAction(
+  'CREATE_CALC_REQUEST',
+  'CREATE_CALC_SUCCESS',
+  'CREATE_CALC_FAILURE'
+)<MFormCalc, MFormCalc, string>();
+
+export const updateCalcAsync = createAsyncAction(
+  'UPDATE_CALC_REQUEST',
+  'UPDATE_CALC_SUCCESS',
+  'UPDATE_CALC_FAILURE'
+)<MFormCalc, MFormCalc, string>();
+
+export const setFcId = createAction('SET_FC_ID', (id:string) => ({
+  id: id
+}))<IdOnly>()
+
+export const updateName = createAction('UPDATE_NAME', (id: string, value: string) => ({
+  id: id,
+  value: value
+}))<IdString>();
 
 export const updateTroopCount = createAction('UPDATE_TROOP_COUNT', (id: string, value: string) => ({
   id: id,

@@ -1,13 +1,19 @@
+import Objection from 'objection'
+import bcrypt from 'bcrypt'
 import { Model, Modifiers } from 'objection'
+
 import { BaseModel } from './BaseModel'
 import IUser from '../client_server/interfaces/User'
+import { JwtService } from '../shared/JwtService';
+
+const jwtService = new JwtService();
 
 export default class User extends BaseModel implements IUser {
   id!: number
   name!: string
   email!: string
   role!: number
-  pwdHash!: string
+  password!: string
 
 
   // Table name is the only required property.
@@ -18,14 +24,38 @@ export default class User extends BaseModel implements IUser {
   // is created it is checked against this schema. http://json-schema.org/.
   static jsonSchema = {
     type: 'object',
-    required: ['name', 'email', 'role'],
+    required: ['name', 'email', 'role', 'password'],
 
     properties: {
       id: { type: 'integer' },
       name: { type: 'string', minLength: 1, maxLength: 255 },
       email: { type: 'string', minLength: 1, maxLength: 255 },
-      pwdHash: { type: 'string', minLength: 1, maxLength: 255 },
+      password: { type: 'string', minLength: 1, maxLength: 255 },
       role: { type: 'integer' },
+    }
+  }
+
+  async $beforeInsert(queryContext: Objection.QueryContext) {
+    await super.$beforeInsert(queryContext)
+    await this.updatePassword()
+  }
+
+  async $beforeUpdate(opt: Objection.ModelOptions, queryContext: Objection.QueryContext) {
+    await super.$beforeUpdate(opt, queryContext)
+    await this.updatePasswordIfChanged(opt.old)
+  }
+
+  async updatePassword() {
+    const hash = await bcrypt.hash(this.password, 10);
+    this.password = hash;
+  }
+
+  async updatePasswordIfChanged(old:any) {
+    if (old?.password) {
+      const passwordMatches = await bcrypt.compare(this.password, old.password);
+      if (!passwordMatches) {
+        await this.updatePassword();
+      }
     }
   }
 
@@ -55,5 +85,16 @@ export default class User extends BaseModel implements IUser {
   static async findByEmail (email: string) {
     const response = await this.query().where({email:email})
     return response[0]
+  }
+
+  ////////////////////
+  // Instance Methods
+  ////////////////////
+
+  async getJwtToken () {
+    return await jwtService.getJwt({
+      id: this.id,
+      role: this.role,
+    });
   }
 }

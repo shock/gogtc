@@ -1,3 +1,4 @@
+import './loadEnv'; // Must be the first import
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import path from 'path';
@@ -23,7 +24,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-app.use(cookieParser(cookieProps.secret));
+app.use(cookieParser());
 
 // Show routes called in console during development
 if (process.env.NODE_ENV === 'development') {
@@ -57,8 +58,8 @@ app.set('views', viewsDir);
 const staticDir = path.join(__dirname, 'public');
 app.use(express.static(staticDir));
 
-app.get('/', (req: Request, res: Response) => {
-    res.sendFile('login.html', {root: viewsDir});
+app.get('/ping', function (req, res) {
+    return res.send('pong');
 });
 
 app.get('/users', (req: Request, res: Response) => {

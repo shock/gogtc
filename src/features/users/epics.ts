@@ -5,7 +5,6 @@ import { RootAction, RootState, Services, isActionOf } from 'typesafe-actions';
 
 import { loginUserAsync, logoutUserAsync, createUserAsync } from './actions';
 import User from '../../client_server/interfaces/User'
-import history from '../../lib/history'
 import { push } from 'connected-react-router'
 
 export const loginUserEpic: Epic<
@@ -55,7 +54,10 @@ export const createUserEpic: Epic<
     switchMap((action) =>
       from(api.users.createUser(action.payload)).pipe(
         map(createUserAsync.success),
-        catchError((message: string) => of(createUserAsync.failure(message)))
+        catchError((message: string) => {
+          console.log('message: ' + message)
+          return of(createUserAsync.failure(message))
+        })
       )
     )
   );

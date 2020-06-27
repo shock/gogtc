@@ -3,51 +3,84 @@ import { Big } from 'big.js';
 import { TierNum, TroopType, toInt, toBig } from '../types';
 import { MTroopDef } from '.';
 import config from '../../../config';
-import cuid from 'cuid';
+import MBase from './MBase'
 
 const PercentDeltaEpsilon = toBig(0.1).pow(config.viewPrecision);
 
-class MTierDef {
+class MTierDef extends MBase {
   tierNum: TierNum;
   troopDefs: MTroopDef[] = [];
   capacity:Big = toBig(0);
   percent:Big = toBig(0);
   capacityLocked:boolean = false;
-  key:string = cuid();
 
-  constructor(tierNum:TierNum) {
-    this.tierNum = tierNum;
+  constructor(tierNum:TierNum, capacity:Big = toBig(0), percent:Big = toBig(0), capacityLocked:boolean = false) {
+    super()
+    this.tierNum = tierNum
+    this.capacity = toInt(capacity)
+    this.percent = toBig(percent)
+    this.capacityLocked = capacityLocked
   }
 
   clone():MTierDef {
-    const clone = new MTierDef(this.tierNum);
+    const clone = new MTierDef(this.tierNum, this.capacity, this.percent, this.capacityLocked)
     clone.troopDefs = this.troopDefs.map( troopDef => {
-      return troopDef.clone();
-    });
-    clone.capacity = this.capacity;
-    clone.percent = this.percent;
-    clone.capacityLocked = this.capacityLocked;
-    return clone;
+      return troopDef.clone()
+    })
+    clone.changed = this.changed
+    clone.key = this.key
+    return clone
   }
 
-  markForUpdate() {
-    this.key = cuid();
+  isChanged() {
+    let isChanged = super.isChanged()
+    this.troopDefs.forEach( td => { isChanged = isChanged || td.isChanged() })
+    return isChanged
+  }
+
+  clearChanged() {
+    super.clearChanged()
+    this.troopDefs.forEach(td => td.clearChanged())
   }
 
   objectForState() {
     return this;
   }
 
-  asJsonObject() {
+  toJsonObject() {
     let obj:any = {};
     obj.tierNum = this.tierNum;
     obj.capacity = this.capacity;
     obj.percent = this.percent;
     obj.capacityLocked = this.capacityLocked;
     obj.troopDefs = this.troopDefs.map( troopDef => {
-      return troopDef.asJsonObject();
+      return troopDef.toJsonObject();
     });
     return obj;
+  }
+
+  static fromJsonObject(obj:any) {
+    ['tierNum', 'capacity', 'percent', 'capacityLocked'].forEach( prop => {
+      if( !obj.hasOwnProperty(prop) ) {
+        throw new Error(`must have property: ${prop}`)
+      }
+    })
+
+    const tierDef = new MTierDef(
+      obj.tierNum,
+      obj.capacity,
+      obj.percent,
+      obj.capacityLocked
+    )
+
+    const objTroopDefs = obj.troopDefs
+    if( objTroopDefs && (objTroopDefs instanceof Array)) {
+      const troopDefs:MTroopDef[] = objTroopDefs.map( (tdObj) => (
+        MTroopDef.fromJsonObject(tdObj)
+      ))
+      tierDef.troopDefs = troopDefs
+    }
+    return tierDef
   }
 
   findTroopDef( troopType: TroopType ) {

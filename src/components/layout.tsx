@@ -90,20 +90,6 @@ class Layout extends React.Component<Props> {
           <Row>
             <div style={{marginBottom: '10rem'}}></div>
           </Row>
-          <Row>
-            <Col md={2}>
-              <h3>Col1</h3>
-              <p>Col md=2</p>
-            </Col>
-            <Col md={4}>
-              <h3>Col2</h3>
-              <p>Col md=4</p>
-            </Col>
-            <Col md={6}>
-              <h3>Col3</h3>
-              <p>Col md=6</p>
-            </Col>
-          </Row>
         </Container>
       </main>
     )

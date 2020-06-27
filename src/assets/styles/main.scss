@@ -141,6 +141,25 @@ $icon-action: rgb(250, 234, 90);
   }
 }
 
+.fcNameForm {
+  & > div {
+    cursor: pointer;
+  }
+  .fcName {
+    font-size: 1.40625rem;
+  }
+  .fcNicon {
+    font-size: 0.8rem;
+    padding: 0 0 0 0.2rem;
+    margin-bottom: 0.1rem;
+  }
+  input {
+    max-width: 15rem;
+    display: inline-block;
+  }
+
+}
+
 @include media-breakpoint-down(xs) {
   span.react-numeric-input input, span.sum {
     max-width: 8rem;
