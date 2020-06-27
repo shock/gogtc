@@ -31,6 +31,10 @@ const fcReturnState = (state:FCState, formCalc:MFormCalc) => {
 };
 
 const formCalc = createReducer(BlankFCState)
+  .handleAction(actions.createCalcAsync.success, (state, action) => {
+    action.payload.clearChanged()
+    return fcReturnState(state, action.payload)
+  })
   .handleAction(actions.updateName, (state, action) => {
     return fcReturnState(state, getFormationById(state, action.payload.id).updateNameHandler(action.payload));
   })
@@ -60,7 +64,8 @@ const formCalc = createReducer(BlankFCState)
   })
   .handleAction(actions.resetState, (state, action) => {
     return fcReturnState(state, action.payload.formCalc);
-  });
+  })
+
 
 
 const parseActions = (rawActions:string[] | string, defaultValue=[]):string[] => {
