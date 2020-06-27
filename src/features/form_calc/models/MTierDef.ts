@@ -38,6 +38,11 @@ class MTierDef extends MBase {
     return isChanged
   }
 
+  clearChanged() {
+    super.clearChanged()
+    this.troopDefs.forEach(td => td.clearChanged())
+  }
+
   objectForState() {
     return this;
   }

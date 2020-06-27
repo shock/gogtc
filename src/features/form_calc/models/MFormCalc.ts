@@ -37,6 +37,11 @@ class MFormCalc extends MBase {
     return isChanged
   }
 
+  clearChanged() {
+    super.clearChanged()
+    this.tierDefs.forEach(td => td.clearChanged())
+  }
+
   objectForState() {
     return this;
   }

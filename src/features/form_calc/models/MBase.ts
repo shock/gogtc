@@ -13,6 +13,8 @@ class MBase {
     return this.changed
   }
 
+  clearChanged() { this.changed = false }
+
 }
 
 export default MBase
