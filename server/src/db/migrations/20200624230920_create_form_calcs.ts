@@ -19,7 +19,7 @@ export async function up(knex: Knex): Promise<any> {
       table.dateTime('created_at')
       table.dateTime('updated_at')
 
-      table.index(['user_id', 'name'])
+      table.unique(['user_id', 'name'])
       table.index(['user_id'])
     })
 }
