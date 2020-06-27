@@ -1,3 +1,4 @@
+import Big from 'big.js'
 import { toInt, toBig, TroopType } from '../../types';
 import { MTroopDef } from '../';
 import config from '../../../../config';
@@ -123,6 +124,8 @@ describe( 'MTroopDef', () => {
         expect(troopDef.type).toStrictEqual(TroopType.Infantry)
         expect(troopDef.count).toStrictEqual(toInt(999))
         expect(troopDef.percent).toStrictEqual(toBig(45.5))
+        expect(troopDef.count instanceof Big).toBeTruthy()
+        expect(troopDef.percent instanceof Big).toBeTruthy()
         expect(troopDef.countLocked).toStrictEqual(true)
       });
       describe('with missing props', () => {

@@ -1,3 +1,4 @@
+import Big from 'big.js'
 import { toInt, toBig, TierNum, TroopType } from '../../types';
 import { MTroopDef, MTierDef } from '..';
 import { buildTierWithTroopDefs } from '../../lib/test_helper';
@@ -190,6 +191,8 @@ describe( 'MTierDef', () => {
         expect(tierDef.tierNum).toStrictEqual(TierNum.T12)
         expect(tierDef.capacity).toStrictEqual(toInt(999))
         expect(tierDef.percent).toStrictEqual(toBig(45.5))
+        expect(tierDef.capacity instanceof Big).toBeTruthy()
+        expect(tierDef.percent instanceof Big).toBeTruthy()
         expect(tierDef.capacityLocked).toStrictEqual(true)
       });
       it('should deserialize the troopDefs', () => {

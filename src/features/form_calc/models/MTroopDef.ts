@@ -18,8 +18,8 @@ export class MTroopDef extends MBase{
   constructor(type:TroopType, count:Big, percent:Big = toBig(0), countLocked:boolean = false) {
     super()
     this.type = type;
-    this.count = count;
-    this.percent = percent;
+    this.count = toInt(count)
+    this.percent = toBig(percent)
     this.countLocked = countLocked;
   }
 

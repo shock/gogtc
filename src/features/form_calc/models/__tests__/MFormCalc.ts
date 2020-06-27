@@ -1,3 +1,4 @@
+import Big from 'big.js'
 import { TierNum, toInt, toBig } from '../../types';
 import { MFormCalc, MTierDef} from '..';
 import { buildFormCalcWithTiers } from '../../lib/test_helper';
@@ -114,6 +115,7 @@ describe( 'MTierDef', () => {
         const formCalc = MFormCalc.fromJsonObject(obj)
         expect(formCalc.name).toStrictEqual(obj.name)
         expect(formCalc.marchCap).toStrictEqual(obj.marchCap)
+        expect(formCalc.marchCap instanceof Big).toBeTruthy()
       });
       it('should deserialize the tierDefs', () => {
         const obj = makeFormCalcObj()

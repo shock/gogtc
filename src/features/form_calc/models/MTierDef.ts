@@ -17,8 +17,8 @@ class MTierDef extends MBase {
   constructor(tierNum:TierNum, capacity:Big = toBig(0), percent:Big = toBig(0), capacityLocked:boolean = false) {
     super()
     this.tierNum = tierNum
-    this.capacity = capacity
-    this.percent = percent
+    this.capacity = toInt(capacity)
+    this.percent = toBig(percent)
     this.capacityLocked = capacityLocked
   }
 

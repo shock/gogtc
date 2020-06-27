@@ -18,7 +18,7 @@ class MFormCalc extends MBase {
   constructor(name:string, marchCap:Big = toInt(0)) {
     super();
     this.name = name;
-    this.marchCap = marchCap
+    this.marchCap = toInt(marchCap)
   }
 
   clone():MFormCalc {
