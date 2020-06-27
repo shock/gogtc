@@ -27,6 +27,7 @@ class MFormCalc extends MBase {
       return tierDef.clone();
     });
     clone.changed = this.changed
+    clone.persisted = this.persisted
     clone.id = this.id
     clone.key = this.key
     return clone;
