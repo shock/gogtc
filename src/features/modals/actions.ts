@@ -12,17 +12,23 @@ export const hideGeneralModal = createAction('HIDE_G_MODAL', () => {})<void>()
 
 let alertId = 0;
 
-export const createAlert = (message: string, variant:BootstrapVariant='success', timeout=config.alertTimeout) => ({
+export type AlertOptions = {
+  variant?:BootstrapVariant,
+  timeout?:number,
+  details?:string
+}
+
+const createAlert = (message: string, options:AlertOptions={}) => ({
   id: alertId++,
   message: message,
-  variant: variant,
-  timeout: timeout
+  variant: options.variant || 'success',
+  timeout: options.timeout || config.alertTimeout,
+  details: options.details
 })
 
-export const addAlert = createAction('ADD_ALERT', createAlert)<Alert>();
-export const showAlert = addAlert
+export const showAlert = createAction('ADD_ALERT', createAlert)<Alert>();
 
-export const removeAlert = createAction('REMOVE_ALERT', (id:number) => {
+export const hideAlert = createAction('REMOVE_ALERT', (id:number) => {
   return {
     id: id
   }

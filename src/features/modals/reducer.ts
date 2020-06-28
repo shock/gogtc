@@ -38,13 +38,13 @@ const alertsInitialState = {
 }
 
 const alerts = createReducer(alertsInitialState)
-  .handleAction(actions.addAlert, (state, action) => {
+  .handleAction(actions.showAlert, (state, action) => {
     return {
       ...state,
       alerts: state.alerts.concat([action.payload])
     }
   })
-  .handleAction(actions.removeAlert, (state, action) => {
+  .handleAction(actions.hideAlert, (state, action) => {
     return {
       ...state,
       alerts: state.alerts.filter((alert) => (alert.id !== action.payload.id))

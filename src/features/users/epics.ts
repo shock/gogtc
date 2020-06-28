@@ -26,7 +26,7 @@ export const loginUserEpic: Epic<
         )),
         catchError((message: string) => of(
           loginUserAsync.failure(message.toString()),
-          showAlert(message, 'danger')
+          showAlert(message, {variant: 'danger'})
         ))
       )
     )
@@ -45,7 +45,7 @@ export const logoutUserEpic: Epic<
         map(logoutUserAsync.success),
         catchError((message: string) => of(
           logoutUserAsync.failure(message.toString()),
-          showAlert(message.toString(), 'danger')
+          showAlert(message.toString(), {variant: 'danger'})
         ))
       )
     )
@@ -66,7 +66,7 @@ export const createUserEpic: Epic<
           console.log('message: ' + message)
           return of(
             createUserAsync.failure(message.toString()),
-            showAlert(message.toString(), 'danger')
+            showAlert(message.toString(), {variant: 'danger'})
           )
         })
       )

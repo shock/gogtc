@@ -20,11 +20,11 @@ export const createCalcEpic: Epic<
     switchMap((action) =>
       from(api.formCalcs.create(action.payload)).pipe(
         mergeMap((formCalc:MFormCalc) => of(
-          showAlert('Save successful', 'success'),
+          showAlert('Formation Saved'),
           createCalcAsync.success(formCalc)
         )),
         catchError((error: any) => of(
-          showAlert('Failed to save', 'danger'),
+          showAlert('Failed to save formation', {variant: 'danger', details: error.toString()}),
           createCalcAsync.failure(error.toString()))
         )
       )
@@ -41,8 +41,14 @@ export const updateCalcEpic: Epic<
     filter(isActionOf(updateCalcAsync.request)),
     switchMap((action) =>
       from(api.formCalcs.update(action.payload)).pipe(
-        map(updateCalcAsync.success),
-        catchError((error: any) => of(updateCalcAsync.failure(error.toString())))
+        mergeMap((formCalc:MFormCalc) => of(
+          showAlert('Formation Saved'),
+          updateCalcAsync.success(formCalc)
+        )),
+        catchError((error: any) => of(
+          showAlert('Failed to save formation', {variant: 'danger', details: error.toString()}),
+          createCalcAsync.failure(error.toString()))
+        )
       )
     )
   );

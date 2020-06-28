@@ -9,5 +9,6 @@ export type Alert = {
   id:number,
   message:string,
   variant:BootstrapVariant,
-  timeout:number
+  timeout:number,
+  details:string|undefined
 }
