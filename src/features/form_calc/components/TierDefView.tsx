@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as NumEntry from '../../../lib/num-entry';
 import * as actions from '../actions';
 import { TroopDefView } from './TroopDefView';
-import { LockState } from '../../../components/LockState';
+import { LockState } from './LockState';
 import { MTierDef } from '../models';
 import config from '../../../config';
 

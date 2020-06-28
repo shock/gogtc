@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as NumEntry from '../../../lib/num-entry';
 import * as actions from '../actions';
 import { MTroopDef, MTierDef } from '../models';
-import { LockState } from '../../../components/LockState';
+import { LockState } from './LockState';
 import config from '../../../config';
 
 const mapStateToProps = (state: RootState) => ({
