@@ -5,8 +5,10 @@ import { Row, Col, Form, Button } from 'react-bootstrap';
 import { ActionCreators as UndoActionCreators } from 'redux-undo'
 
 import * as actions from '../actions';
+import { showAlert } from '../../modals/actions';
 import * as selectors from '../selectors';
 import { FormCalcView } from './FormCalcView';
+import { InlineButton } from '../../../components/InlineButton'
 import TT from '../../../components/tooltips';
 
 const mapStateToProps = (state: RootState) => ({
@@ -17,7 +19,8 @@ const mapStateToProps = (state: RootState) => ({
 const dispatchProps = {
   resetState: actions.resetState,
   clearUndoHistory: UndoActionCreators.clearHistory,
-  setFcId: actions.setFcId
+  setFcId: actions.setFcId,
+  showAlert: showAlert
 };
 
 interface FormCalcPageProps {
@@ -204,6 +207,7 @@ class FormCalcPageBase extends React.Component<Props, State> {
           <Col sm={4}>
             {/* <TT tip={sMsg}>{stateButton}</TT> */}
             {/* &nbsp;&nbsp;&nbsp; */}
+            <InlineButton text="SA" onClick={() => {this.props.showAlert('test')}} />
             <TT tip={jMsg}>{jsonButton}</TT>
             &nbsp;&nbsp;&nbsp;
             <TT tip={dMsg}>{debugButton}</TT>
