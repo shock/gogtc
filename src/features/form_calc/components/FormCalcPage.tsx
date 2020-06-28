@@ -6,6 +6,7 @@ import { ActionCreators as UndoActionCreators } from 'redux-undo'
 
 import * as actions from '../actions';
 import { showAlert } from '../../modals/actions';
+import { showGeneralModal } from '../../modals/actions';
 import * as selectors from '../selectors';
 import { FormCalcView } from './FormCalcView';
 import { InlineButton } from '../../../components/InlineButton'
@@ -20,7 +21,8 @@ const dispatchProps = {
   resetState: actions.resetState,
   clearUndoHistory: UndoActionCreators.clearHistory,
   setFcId: actions.setFcId,
-  showAlert: showAlert
+  showAlert: showAlert,
+  showModal: showGeneralModal
 };
 
 interface FormCalcPageProps {
@@ -74,12 +76,11 @@ class FormCalcPageBase extends React.Component<Props, State> {
   resetReduxState() {
     const formCalc = this.props.formCalcs[this.state.fcId];
     if( formCalc ) {
-      console.log(`MFormCalc found with id '${this.state.fcId}'`);
       this.props.resetState(this.state.fcId, formCalc.clone());
       this.props.clearUndoHistory();
       return;
     }
-    console.log(`No MFormCalc found with id '${this.state.fcId}'`);
+    this.props.showModal('Error', `No MFormCalc found with id '${this.state.fcId}'`, );
   }
 
   handleDebugClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -207,7 +208,7 @@ class FormCalcPageBase extends React.Component<Props, State> {
           <Col sm={4}>
             {/* <TT tip={sMsg}>{stateButton}</TT> */}
             {/* &nbsp;&nbsp;&nbsp; */}
-            <InlineButton text="SA" onClick={() => {this.props.showAlert('test')}} />
+            {/* <InlineButton text="SA" onClick={() => {this.props.showAlert('test')}} /> */}
             <TT tip={jMsg}>{jsonButton}</TT>
             &nbsp;&nbsp;&nbsp;
             <TT tip={dMsg}>{debugButton}</TT>

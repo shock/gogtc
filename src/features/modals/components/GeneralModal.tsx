@@ -33,7 +33,7 @@ class GeneralModalBase extends React.Component<Props, State> {
 
   render() {
     return (
-      <Modal show={this.props.generalModal.show} onHide={this.handleClose}>
+      <Modal show={this.props.generalModal.show} onHide={this.handleClose} centered>
         <Modal.Header closeButton>
           <Modal.Title style={{textAlign:'center', width:'100%'}}>{this.props.generalModal.title}</Modal.Title>
         </Modal.Header>
