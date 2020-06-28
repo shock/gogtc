@@ -20,11 +20,11 @@ export const createCalcEpic: Epic<
     switchMap((action) =>
       from(api.formCalcs.create(action.payload)).pipe(
         mergeMap((formCalc:MFormCalc) => of(
-          showAlert('Save successful'),
+          showAlert('Save successful', 'success', 1000),
           createCalcAsync.success(formCalc)
         )),
         catchError((error: any) => of(
-          showAlert('Failed to save', 'danger'),
+          showAlert('Failed to save', 'danger', 1000),
           createCalcAsync.failure(error.toString()))
         )
       )

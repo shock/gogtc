@@ -17,7 +17,7 @@ export const showAlertEpic: Epic<
     tap(it => console.log('tap1: '+it)),
     mergeMap((action) =>
       of(action.payload.id).pipe(
-        delay(config.alertTimeout),
+        delay(action.payload.timeout || config.alertTimeout),
         tap(it => console.log('tap2: '+it)),
         map(removeAlert)
       )
