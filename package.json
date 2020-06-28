@@ -36,7 +36,6 @@
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
     "redux-observable": "^1.2.0",
-    "redux-thunk": "^2.3.0",
     "redux-undo": "^1.0.1",
     "ts-node": "^8.10.2",
     "ts-node-dev": "^1.0.0-pre.49",
