@@ -167,7 +167,6 @@ class FormCalcViewBase extends React.Component<Props, State> {
 
   renderSave() {
     const disabled = !this.data()?.isChanged()
-    console.log('disabled ' + disabled)
     return (
       <Col sm={1}>
         <Button disabled={disabled} onClick={this.handleSaveClick}>SAVE</Button>
@@ -215,7 +214,7 @@ class FormCalcViewBase extends React.Component<Props, State> {
   }
 }
 
-const FormCalcView =  connect(
+const FormCalcView = connect(
   mapStateToProps,
   dispatchProps
 )(FormCalcViewBase);

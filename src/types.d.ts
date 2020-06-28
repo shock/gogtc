@@ -14,3 +14,13 @@ export type Sub<
  * @example Omit<{a: number, b: string}, keyof {a: number}> // === {b: string}
  */
 export type Omit<O, D extends string> = Pick<O, Sub<keyof O, D>>
+
+export type BootstrapVariant =
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'danger'
+  | 'warning'
+  | 'info'
+  | 'dark'
+  | 'light';
