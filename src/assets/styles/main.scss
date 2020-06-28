@@ -160,6 +160,10 @@ $icon-action: rgb(250, 234, 90);
 
 }
 
+div.alert {
+  cursor: pointer;
+}
+
 @include media-breakpoint-down(xs) {
   span.react-numeric-input input, span.sum {
     max-width: 8rem;
