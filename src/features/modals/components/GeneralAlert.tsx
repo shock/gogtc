@@ -28,11 +28,19 @@ class GeneralAlertBase extends React.Component<Props, State> {
 
   render() {
     const renderedAlerts = this.props.alerts.map((alert) => (
-      <Alert key={alert.id} variant={alert.variant}>
+      <Alert key={alert.id} variant={alert.variant} onClick={() => {this.props.hide(alert.id)}}>
         {alert.message}
       </Alert>
     ));
-    return renderedAlerts;
+    return (
+      <div style={{position: 'relative'}}>
+        <div  style={{position:'absolute', zIndex:1, width:'100%'}}>
+          <div  style={{width:'35%', margin:'1rem 0 0 auto'}}>
+            {renderedAlerts}
+          </div>
+        </div>
+      </div>
+    );
   }
 }
 

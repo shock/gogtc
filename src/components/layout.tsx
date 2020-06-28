@@ -53,7 +53,8 @@ class Layout extends React.Component<Props> {
   render () {
     return (
       <main>
-        <Container fluid style={{position:'relative'}}>
+        <Container fluid>
+          <GeneralAlert/>
           <Row>
             <Col md={12}>
               <Navbar bg="primary" expand="lg" className="navbar-dark">
@@ -84,11 +85,6 @@ class Layout extends React.Component<Props> {
             </Col>
           </Row>
           <GeneralModal/>
-          <div  style={{position:'relative', zIndex:1, width:'100%'}}>
-            <div  style={{width:'50%', margin:'0 auto'}}>
-              <GeneralAlert/>
-            </div>
-          </div>
           <Row>
             <Col md={12}>
               {this.props.children}

@@ -39,11 +39,9 @@ const alertsInitialState = {
 
 const alerts = createReducer(alertsInitialState)
   .handleAction(actions.addAlert, (state, action) => {
-    const alerts = state.alerts
-    alerts.push(action.payload)
     return {
       ...state,
-      alerts: alerts
+      alerts: state.alerts.concat([action.payload])
     }
   })
   .handleAction(actions.removeAlert, (state, action) => {
