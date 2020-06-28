@@ -4,6 +4,7 @@ import { filter, switchMap, map, catchError, mergeMap } from 'rxjs/operators';
 import { RootAction, RootState, Services, isActionOf } from 'typesafe-actions';
 
 import { createCalcAsync, updateCalcAsync } from './actions';
+import { showAlert } from '../modals/actions'
 import { MFormCalc } from './models'
 import history from '../../lib/history'
 import { push } from 'connected-react-router'
@@ -18,8 +19,14 @@ export const createCalcEpic: Epic<
     filter(isActionOf(createCalcAsync.request)),
     switchMap((action) =>
       from(api.formCalcs.create(action.payload)).pipe(
-        map(createCalcAsync.success),
-        catchError((error: any) => of(createCalcAsync.failure(error.toString())))
+        mergeMap((formCalc:MFormCalc) => of(
+          showAlert('Save successful'),
+          createCalcAsync.success(formCalc)
+        )),
+        catchError((error: any) => of(
+          showAlert('Failed to save', 'danger'),
+          createCalcAsync.failure(error.toString()))
+        )
       )
     )
   );

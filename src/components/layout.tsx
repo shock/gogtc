@@ -6,7 +6,7 @@ import { Container, Row, Col, Navbar, Nav, NavDropdown, Form, FormControl,
 import { RootState } from 'typesafe-actions'
 import * as actions from '../features/users/actions'
 import * as usersSelector from '../features/users/selectors'
-import { GeneralModal } from '../features/modals/components/GeneralModal'
+import { GeneralModal, GeneralAlert } from '../features/modals/components'
 
 export interface LayoutProps {
   title: string,
@@ -53,8 +53,7 @@ class Layout extends React.Component<Props> {
   render () {
     return (
       <main>
-        <Container fluid>
-          <GeneralModal/>
+        <Container fluid style={{position:'relative'}}>
           <Row>
             <Col md={12}>
               <Navbar bg="primary" expand="lg" className="navbar-dark">
@@ -84,6 +83,12 @@ class Layout extends React.Component<Props> {
               <p>{this.props.paragraph}</p>
             </Col>
           </Row>
+          <GeneralModal/>
+          <div  style={{position:'relative', zIndex:1, width:'100%'}}>
+            <div  style={{width:'50%', margin:'0 auto'}}>
+              <GeneralAlert/>
+            </div>
+          </div>
           <Row>
             <Col md={12}>
               {this.props.children}

@@ -1,16 +1,17 @@
 import { combineReducers } from 'redux'
 import { createReducer, getType } from 'typesafe-actions';
 import * as actions from './actions';
+import { Alert, Variant } from './types'
 
-const initialState = {
+const gmInitialState = {
   generalModal: {
-    show: true,
+    show: false,
     title: 'Info',
     body: 'Some body text'
   }
 }
 
-const modals = createReducer(initialState)
+const modals = createReducer(gmInitialState)
   .handleAction(actions.showGeneralModal, (state, action) => {
     return {
       ...state,
@@ -32,8 +33,30 @@ const modals = createReducer(initialState)
     }
   })
 
+const alertsInitialState = {
+  // alerts: ['success', 'info', 'danger', 'warning'].map( variant => actions.createAlert(variant, variant as Variant))
+  alerts: [] as Alert[]
+}
+
+const alerts = createReducer(alertsInitialState)
+  .handleAction(actions.addAlert, (state, action) => {
+    const alerts = state.alerts
+    alerts.push(action.payload)
+    return {
+      ...state,
+      alerts: alerts
+    }
+  })
+  .handleAction(actions.removeAlert, (state, action) => {
+    return {
+      ...state,
+      alerts: state.alerts.filter((alert) => (alert.id !== action.payload.id))
+    }
+  })
+
 const modalsReducer = combineReducers({
-  modals
+  modals,
+  alerts
 })
 
 export default modalsReducer

@@ -4,6 +4,7 @@ import { filter, switchMap, map, catchError, mergeMap } from 'rxjs/operators';
 import { RootAction, RootState, Services, isActionOf } from 'typesafe-actions';
 
 import { loginUserAsync, logoutUserAsync, createUserAsync } from './actions';
+import { showAlert } from '../modals/actions'
 import User from '../../client_server/interfaces/User'
 import { push } from 'connected-react-router'
 
@@ -19,10 +20,14 @@ export const loginUserEpic: Epic<
     switchMap((action) =>
       from(api.users.loginUser(action.payload)).pipe(
         mergeMap((user:User) => of(
+          showAlert('Login successful'),
           loginUserAsync.success(user),
           push('/'),
         )),
-        catchError((message: string) => of(loginUserAsync.failure(message)))
+        catchError((message: string) => of(
+          loginUserAsync.failure(message.toString()),
+          showAlert(message, 'danger')
+        ))
       )
     )
   );
@@ -38,7 +43,10 @@ export const logoutUserEpic: Epic<
     switchMap((action) =>
       from(api.users.logoutUser()).pipe(
         map(logoutUserAsync.success),
-        catchError((message: string) => of(logoutUserAsync.failure(message)))
+        catchError((message: string) => of(
+          logoutUserAsync.failure(message.toString()),
+          showAlert(message.toString(), 'danger')
+        ))
       )
     )
   );
@@ -56,7 +64,10 @@ export const createUserEpic: Epic<
         map(createUserAsync.success),
         catchError((message: string) => {
           console.log('message: ' + message)
-          return of(createUserAsync.failure(message))
+          return of(
+            createUserAsync.failure(message.toString()),
+            showAlert(message.toString(), 'danger')
+          )
         })
       )
     )
