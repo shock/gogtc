@@ -215,7 +215,7 @@ class FormCalcViewBase extends React.Component<Props, State> {
   }
 }
 
-const FormCalcView =  connect(
+const FormCalcView = connect(
   mapStateToProps,
   dispatchProps
 )(FormCalcViewBase);

@@ -1,7 +1,9 @@
-import * as formCalcActions from '../features/form_calc/actions';
-import * as userActions from '../features/users/actions';
+import * as formCalc from '../features/form_calc/actions'
+import * as users from '../features/users/actions'
+import * as modals from '../features/modals/actions'
 
 export default {
-  formCalc: formCalcActions,
-  users: userActions,
+  formCalc,
+  users,
+  modals
 };

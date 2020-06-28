@@ -6,6 +6,7 @@ import { Container, Row, Col, Navbar, Nav, NavDropdown, Form, FormControl,
 import { RootState } from 'typesafe-actions'
 import * as actions from '../features/users/actions'
 import * as usersSelector from '../features/users/selectors'
+import { GeneralModal } from '../features/modals/components/GeneralModal'
 
 export interface LayoutProps {
   title: string,
@@ -53,6 +54,7 @@ class Layout extends React.Component<Props> {
     return (
       <main>
         <Container fluid>
+          <GeneralModal/>
           <Row>
             <Col md={12}>
               <Navbar bg="primary" expand="lg" className="navbar-dark">
