@@ -1,15 +1,14 @@
-import { Request, Response, Router } from 'express';
-import { BAD_REQUEST, CREATED, OK } from 'http-status-codes';
-import { ParamsDictionary } from 'express-serve-static-core';
-import bcrypt from 'bcrypt';
+import { Request, Response, Router } from 'express'
+import { BAD_REQUEST, CREATED, OK } from 'http-status-codes'
+import { ParamsDictionary } from 'express-serve-static-core'
 
-import FormCalc from '../models/FormCalc';
-import { paramMissingError } from '../shared/constants';
-import { userMW } from './middleware';
+import FormCalc from '../models/FormCalc'
+import { paramMissingError } from '../shared/constants'
+import { userMW } from './middleware'
 
 
 // Init shared
-const router = Router().use(userMW);
+const router = Router().use(userMW)
 
 
 /******************************************************************************
@@ -17,9 +16,9 @@ const router = Router().use(userMW);
  ******************************************************************************/
 
 router.get('/all', async (req: Request, res: Response) => {
-  const formCalcs = await FormCalc.findAll();
-  return res.status(OK).json({ formCalcs });
-});
+  const formCalcs = await FormCalc.findAll().where('preset', true)
+  return res.status(OK).json({ formCalcs })
+})
 
 
 /******************************************************************************
@@ -27,10 +26,10 @@ router.get('/all', async (req: Request, res: Response) => {
  ******************************************************************************/
 
 router.get('/user', async (req: Request, res: Response) => {
-  const user_id = res.locals.user_id
-  const formCalcs = await FormCalc.findByUserId(parseInt(user_id));
-  return res.status(OK).json({ formCalcs });
-});
+  const user_id = parseInt(res.locals.user_id)
+  const formCalcs = await FormCalc.query().where('preset', true).orWhere('user_id', user_id)
+  return res.status(OK).json({ formCalcs })
+})
 
 
 /******************************************************************************
@@ -51,9 +50,9 @@ router.post('/create', async (req: Request, res: Response) => {
       error: paramMissingError,
     })
   }
-  const newFormCalc = await FormCalc.create(formCalc);
-  return res.status(CREATED).json(newFormCalc);
-});
+  const newFormCalc = await FormCalc.create(formCalc)
+  return res.status(CREATED).json(newFormCalc)
+})
 
 
 /******************************************************************************
@@ -67,19 +66,19 @@ router.put('/update/:id', async (req: Request, res: Response) => {
   if (!formCalc) {
     return res.status(BAD_REQUEST).json({
       error: paramMissingError,
-    });
+    })
   }
   if(formCalc.id) { formCalc.id = Number(formCalc.id) }
   if(formCalc.user_id) { formCalc.user_id = Number(formCalc.user_id) }
   try {
-    const rowsUpdated = await FormCalc.patch(Number(id), formCalc);
-    return res.status(OK).json(rowsUpdated);
+    const rowsUpdated = await FormCalc.patch(Number(id), formCalc)
+    return res.status(OK).json(rowsUpdated)
   } catch(err) {
     return res.status(BAD_REQUEST).json({
       error: err.toString(),
     })
   }
-});
+})
 
 
 /******************************************************************************
@@ -87,14 +86,14 @@ router.put('/update/:id', async (req: Request, res: Response) => {
  ******************************************************************************/
 
 router.delete('/delete/:id', async (req: Request, res: Response) => {
-  const { id } = req.params as ParamsDictionary;
-  await FormCalc.delete(Number(id));
-  return res.status(OK).end();
-});
+  const { id } = req.params as ParamsDictionary
+  await FormCalc.delete(Number(id))
+  return res.status(OK).end()
+})
 
 
 /******************************************************************************
  *                                     Export
  ******************************************************************************/
 
-export default router;
+export default router
