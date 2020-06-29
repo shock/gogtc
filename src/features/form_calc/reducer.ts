@@ -32,7 +32,7 @@ const initialState:FCState = {
   currentId: Object.values(TestLibrary.formCalcs)[0].id
 }
 
-const _formCalcReducer = createReducer(initialState)
+const _formCalcReducer = createReducer(BlankFCState)
 .handleAction(actions.loadUserCalcsAsync.success, (state, action) => {
     const formCalcs = action.payload
     console.log(formCalcs)

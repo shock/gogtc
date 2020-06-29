@@ -1,4 +1,3 @@
-import IFormCalc from '../client_server/interfaces/FormCalc'
 import { MFormCalc } from '../features/form_calc/models'
 
 const createCalcEndpoint = '/api/form_calcs/create'
@@ -75,9 +74,14 @@ export function getUserCalcs(): Promise<[MFormCalc]> {
         throw `received status code ${response.status}`
     }
     request(getUserCalcsEndpoint).then(
-      resp => resolve(resp.formCalcs.map((jsonObj:IFormCalc) => (
-        MFormCalc.fromJsonObject(jsonObj.json)
-      )))
+      resp => resolve(resp.formCalcs.map((dbObj:any) => {
+        const formCalc = MFormCalc.fromJsonObject(dbObj.json)
+        formCalc.id = dbObj.id
+        formCalc.name = dbObj.name
+        formCalc.persisted = true
+        formCalc.preset = dbObj.preset
+        return formCalc
+      }))
     ).catch(error => reject(error))
   })
 }

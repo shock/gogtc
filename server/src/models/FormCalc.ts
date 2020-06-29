@@ -59,6 +59,7 @@ export default class FormCalc extends BaseModel implements IFormCalc {
       formCalc.name = fcObj.name
       formCalc.description = fcObj.description
       formCalc.json = fcObj.json
+      formCalc.preset = fcObj.preset
       return formCalc
     }
   }

@@ -175,9 +175,13 @@ class FormCalcViewBase extends React.Component<Props, State> {
   }
 
   render() {
-    if( !this.data() ) return (
-      <h4>Can't find form calc with id '{this.props.id}'</h4>
-    );
+    if( !this.data() ) {
+      if( this.props.debug ) {
+        return (<h4>Can't find form calc with id '{this.props.id}'</h4>)
+      } else {
+        return (<h4>Please select a calculator</h4>)
+      }
+    }
     const formCalc = this.data();
     return (
       <React.Fragment>

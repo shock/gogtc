@@ -200,6 +200,8 @@ describe('FormCalc routes', () => {
             const { formCalc, user, jwt } = await createUserFormCalc('fc3', {a:'b'})
             const res = await FormCalc.query().count() as any
             expect(res[0].count).toEqual('3')
+            const testPreset = await FormCalc.query().where('preset', true)
+            expect(testPreset[0].preset).toBe(true)
             request(app)
               .get('/api/form_calcs/user')
               .set('Cookie', [`${cookieProps.key}=${jwt}`])

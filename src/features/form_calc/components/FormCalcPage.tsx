@@ -1,4 +1,4 @@
-import { RootState } from 'typesafe-actions';
+import { RootState, isOfType } from 'typesafe-actions';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Row, Col, Form, Button } from 'react-bootstrap';
@@ -9,7 +9,7 @@ import { showAlert } from '../../modals/actions';
 import { showGeneralModal } from '../../modals/actions';
 import * as selectors from '../selectors';
 import { FormCalcView } from './FormCalcView';
-import { InlineButton } from '../../../components/InlineButton'
+import { MFormCalc } from '../models'
 import TT from '../../../components/tooltips';
 
 const mapStateToProps = (state: RootState) => ({
@@ -22,7 +22,8 @@ const dispatchProps = {
   clearUndoHistory: UndoActionCreators.clearHistory,
   setFcId: actions.setFcId,
   showAlert: showAlert,
-  showModal: showGeneralModal
+  showModal: showGeneralModal,
+  loadUserCalcs: actions.loadUserCalcsAsync.request
 };
 
 interface FormCalcPageProps {
@@ -71,6 +72,7 @@ class FormCalcPageBase extends React.Component<Props, State> {
     if( !this.formCalc() ) {
       this.resetReduxState();
     }
+    this.props.loadUserCalcs()
   }
 
   resetReduxState() {
@@ -80,7 +82,8 @@ class FormCalcPageBase extends React.Component<Props, State> {
       this.props.clearUndoHistory();
       return;
     }
-    this.props.showModal('Error', `No MFormCalc found with id '${this.state.fcId}'`, );
+    if( this.state.debug )
+      this.props.showModal('Error', `No MFormCalc found with id '${this.state.fcId}'`, );
   }
 
   handleDebugClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -113,10 +116,26 @@ class FormCalcPageBase extends React.Component<Props, State> {
   }
 
   selectOptions() {
-    const options = Object.values(this.props.formCalcs).map( (formCalc, index) => {
-      return (<option key={index} value={formCalc.id}>{formCalc.name}</option>);
-    });
-    return options;
+    const formCalcs = Object.values(this.props.formCalcs)
+    const presetCalcs = formCalcs.filter(fc => fc.preset)
+    const userCalcs = formCalcs.filter(fc => !fc.preset)
+    let index = 0
+    const mapOptions = (formCalcs:MFormCalc[]) => formCalcs.map(formCalc => (
+      <option key={index++} value={formCalc.id}>{formCalc.name}</option>
+    ))
+
+    const userOptions = mapOptions(userCalcs)
+    const presetOptions = mapOptions(presetCalcs)
+    return (
+      <>
+        <optgroup label="Preset Calculators">
+          {presetOptions}
+        </optgroup>
+        <optgroup label="MyCalculators">
+          {userOptions}
+        </optgroup>
+      </>
+    )
   }
 
   syntaxHighlight(json:string) {
@@ -140,10 +159,14 @@ class FormCalcPageBase extends React.Component<Props, State> {
 
   renderJsonView() {
     const obj = this.state.jsonState
-      ? this.formCalc().toJsonObject()
-      : this.props.formCalcs[this.state.fcId].toJsonObject();
+      ? this.formCalc()?.toJsonObject()
+      : this.props.formCalcs[this.state.fcId]?.toJsonObject();
     if( !obj ) {
-      return <h4>Can't find formCalc with id '{this.state.fcId}'</h4>
+      if( this.state.debug ) {
+        return <h4>Can't find formCalc with id '{this.state.fcId}'</h4>
+      } else {
+        return <h4>Please load a calculator.</h4>
+      }
     }
     const json = JSON.stringify(obj, null, 2);
     return (
