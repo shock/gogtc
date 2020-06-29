@@ -2,6 +2,7 @@ import { Epic } from 'redux-observable';
 import { from, of } from 'rxjs';
 import { filter, switchMap, map, catchError, mergeMap } from 'rxjs/operators';
 import { RootAction, RootState, Services, isActionOf } from 'typesafe-actions';
+import { ActionCreators as Undoable } from 'redux-undo'
 
 import { createCalcAsync, updateCalcAsync } from './actions';
 import { showAlert } from '../modals/actions'
@@ -21,7 +22,8 @@ export const createCalcEpic: Epic<
       from(api.formCalcs.create(action.payload)).pipe(
         mergeMap((formCalc:MFormCalc) => of(
           showAlert('Formation Saved'),
-          createCalcAsync.success(formCalc)
+          createCalcAsync.success(formCalc),
+          Undoable.clearHistory()
         )),
         catchError((error: any) => of(
           showAlert('Failed to save formation', {variant: 'danger', details: error.toString()}),
@@ -43,7 +45,8 @@ export const updateCalcEpic: Epic<
       from(api.formCalcs.update(action.payload)).pipe(
         mergeMap((formCalc:MFormCalc) => of(
           showAlert('Formation Saved'),
-          updateCalcAsync.success(formCalc)
+          updateCalcAsync.success(formCalc),
+          Undoable.clearHistory()
         )),
         catchError((error: any) => of(
           showAlert('Failed to save formation', {variant: 'danger', details: error.toString()}),

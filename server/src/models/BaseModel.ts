@@ -1,9 +1,20 @@
 import Objection, { Model, QueryBuilderType, Constructor, TransactionOrKnex } from 'objection'
+import yaml from 'js-yaml'
+
+const { QueryBuilder } = require('objection');
 
 export class BaseModel extends Model {
   static debug = true
   created_at!: string
   updated_at!: string
+
+  ///////////////////
+  // Static methods
+
+  static async first () {
+    const records = await super.query().limit(1)
+    return records[0]
+  }
 
   static findAll () {
     return super.query()
@@ -37,6 +48,16 @@ export class BaseModel extends Model {
   async $beforeUpdate(opt: Objection.ModelOptions, queryContext: Objection.QueryContext) {
     await super.$beforeUpdate(opt, queryContext)
     this.updated_at = new Date().toISOString()
+  }
+
+  //////////////////////
+  // Instance methods
+
+  ///////////////
+  // YAML Methods
+
+  toYaml() {
+    return yaml.safeDump(this)
   }
 
 }

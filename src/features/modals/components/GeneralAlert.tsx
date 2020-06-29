@@ -44,7 +44,7 @@ class GeneralAlertBase extends React.Component<Props, State> {
     return (
       <div style={{position: 'relative'}}>
         <div  style={{position:'absolute', zIndex:1, width:'35%', right:'0'}}>
-          <div  style={{margin:'1rem 0 0 auto'}}>
+          <div  style={{margin:'1rem 1rem 0 auto'}}>
             {renderedAlerts}
           </div>
         </div>
