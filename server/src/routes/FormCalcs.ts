@@ -26,7 +26,7 @@ router.get('/all', async (req: Request, res: Response) => {
  ******************************************************************************/
 
 router.get('/user', async (req: Request, res: Response) => {
-  const user_id = parseInt(res.locals.user_id)
+  const user_id = parseInt(res.locals.userId)
   const formCalcs = await FormCalc.query().where('preset', true).orWhere('user_id', user_id)
   return res.status(OK).json({ formCalcs })
 })

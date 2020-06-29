@@ -10,6 +10,7 @@ export default class FormCalc extends BaseModel implements IFormCalc {
   description!: string
   json!: string
   user_id!: number
+  preset!: boolean
 
   // Table name is the only required property.
   static tableName = 'form_calcs'

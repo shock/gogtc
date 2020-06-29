@@ -1,7 +1,7 @@
 import request from 'supertest'
 import app from '../../Server'
 import FormCalc from '../../models/FormCalc'
-import { cookieProps } from '../../shared/constants';
+import { cookieProps } from '../../shared/constants'
 import { createAdminUser, createRegularUser } from '../helpers/users'
 
 import { setupKnex, teardownKnex } from '../helpers/knex'
@@ -13,10 +13,10 @@ beforeAll( async () => {
 })
 
 afterAll( async (done) => {
-  await teardownKnex();
+  await teardownKnex()
   await dbManager.close()
   await dbManager.closeKnex()
-  done();
+  done()
 })
 
 beforeEach( async () => {
@@ -47,7 +47,7 @@ describe('FormCalc routes', () => {
           .send(formCalc)
           .expect(401)
           .end(done)
-      });
+      })
     })
     describe('with valid JWT cookie', () => {
       describe('with valid params', () => {
@@ -61,7 +61,7 @@ describe('FormCalc routes', () => {
             .set('Cookie', [`${cookieProps.key}=${jwt}`])
             .expect(201)
             .end(done)
-        });
+        })
         it('should create a record in the DB ', async (done) => {
           const user = await createRegularUser('password')
           const jwt = await user.getJwtToken()
@@ -84,8 +84,8 @@ describe('FormCalc routes', () => {
               expect(fcRecord.json).toEqual(JSON.parse(formCalc.json))
               done()
             })
-        });
-      });
+        })
+      })
       describe('with invalid params', () => {
         it('it should return 400 ', async (done) => {
           const user = await createRegularUser('password')
@@ -97,8 +97,8 @@ describe('FormCalc routes', () => {
             .set('Cookie', [`${cookieProps.key}=${jwt}`])
             .expect(400)
             .end(done)
-        });
-      });
+        })
+      })
     })
   })
   describe('PUT /update/:id', () => {
@@ -109,7 +109,7 @@ describe('FormCalc routes', () => {
         .send(formCalc)
         .expect(401)
         .end(done)
-      });
+      })
     })
     describe('with valid JWT cookie', () => {
       describe('with valid params', () => {
@@ -121,7 +121,7 @@ describe('FormCalc routes', () => {
             .set('Cookie', [`${cookieProps.key}=${jwt}`])
             .expect(200)
             .end(done)
-        });
+        })
         it('should update the record in the DB', async (done) => {
           const { formCalc, user, jwt } = await createUserFormCalc('fc1', {a:'b'})
           formCalc.name = 'newName'
@@ -139,8 +139,8 @@ describe('FormCalc routes', () => {
               expect(fcRecord.json).toEqual(JSON.parse(formCalc.json))
               done()
             })
-        });
-      });
+        })
+      })
       describe('with invalid params', () => {
         it('it should return 400 ', async (done) => {
           const { formCalc, jwt } = await createUserFormCalc('fc1', {a:'b'})
@@ -151,8 +151,66 @@ describe('FormCalc routes', () => {
             .set('Cookie', [`${cookieProps.key}=${jwt}`])
             .expect(400)
             .end(done)
-        });
-      });
+        })
+      })
     })
   })
-});
+  describe('GET /user', () => {
+    describe('with no JWT cookie', () => {
+      it('should return 401 ', async (done) => {
+        request(app)
+        .get('/api/form_calcs/get')
+        .expect(401)
+        .end(done)
+      })
+    })
+    describe('with valid JWT cookie', () => {
+      describe('with valid params', () => {
+        it('should return 200', async (done) => {
+          const { formCalc, jwt } = await createUserFormCalc('fc1', {a:'b'})
+          request(app)
+            .get(`/api/form_calcs/user`)
+            .set('Cookie', [`${cookieProps.key}=${jwt}`])
+            .expect(200)
+            .end(done)
+        })
+        describe('with formCalcs from other users', () => {
+          it('should only return the ones for the logged in user', async (done) => {
+            await createUserFormCalc('fc1', {a:'b'})
+            const { formCalc, user, jwt } = await createUserFormCalc('fc1', {a:'b'})
+            const res = await FormCalc.query().count() as any
+            expect(res[0].count).toEqual('2')
+            request(app)
+              .get('/api/form_calcs/user')
+              .set('Cookie', [`${cookieProps.key}=${jwt}`])
+              .expect(200)
+              .expect((res) => {
+                expect(res.body.formCalcs.length).toEqual(1)
+              })
+              .end(done)
+          })
+        })
+        describe('with formCalcs from other users and presets', () => {
+          it('should only return the ones for the logged in user along with presets', async (done) => {
+            await createUserFormCalc('fc1', {a:'b'})
+            const r1 = await createUserFormCalc('fc2', {a:'b'})
+            const preset = r1.formCalc
+            preset.preset = true
+            await preset.$query().patch()
+            const { formCalc, user, jwt } = await createUserFormCalc('fc3', {a:'b'})
+            const res = await FormCalc.query().count() as any
+            expect(res[0].count).toEqual('3')
+            request(app)
+              .get('/api/form_calcs/user')
+              .set('Cookie', [`${cookieProps.key}=${jwt}`])
+              .expect(200)
+              .expect((res) => {
+                expect(res.body.formCalcs.length).toEqual(2)
+              })
+              .end(done)
+          })
+        })
+      })
+    })
+  })
+})
