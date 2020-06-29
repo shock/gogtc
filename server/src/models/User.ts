@@ -5,6 +5,7 @@ import { Model, Modifiers } from 'objection'
 import { BaseModel } from './BaseModel'
 import IUser from '../client_server/interfaces/User'
 import { JwtService } from '../shared/JwtService';
+import yaml from 'js-yaml'
 
 const jwtService = new JwtService();
 
@@ -96,5 +97,24 @@ export default class User extends BaseModel implements IUser {
       id: this.id,
       role: this.role,
     });
+  }
+
+  ////////////////////////////
+  // YAML pseudo-constructor
+
+  static fromYaml(yamlInput:string) {
+    const obj = yaml.safeLoad(yamlInput);
+    if( (obj === undefined) || ('string' === typeof obj) ) {
+      throw new Error("invalid YAML string")
+    } else {
+      const userObj = obj as IUser
+      const user = new User
+      user.id = userObj.id
+      user.name = userObj.name
+      user.email = userObj.email
+      user.role = userObj.role
+      user.password = userObj.password
+      return user
+    }
   }
 }

@@ -3,6 +3,7 @@ export type User = {
   name: string
   email: string
   role: number
+  password: string
 }
 
 export type LoginUser = Omit<Omit<Omit<Omit<User, 'name'>, 'id'>, 'role'>, 'id'> & { password: string }

@@ -1,0 +1,424 @@
+- name: fc1
+  description: ''
+  json:
+    name: fc1
+    id: ckbzkz73h00473h5xzjy93es4
+    marchCap: '144100'
+    tierDefs:
+      - tierNum: T12
+        capacity: '12100'
+        percent: '8.392'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2100'
+            percent: '17.355'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.058'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '49.587'
+            countLocked: false
+      - tierNum: T11
+        capacity: '12000'
+        percent: '8.328'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2000'
+            percent: '16.667'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.333'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '50'
+            countLocked: false
+      - tierNum: T10
+        capacity: '12000'
+        percent: '8.328'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2000'
+            percent: '16.667'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.333'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '50'
+            countLocked: false
+      - tierNum: T9
+        capacity: '12000'
+        percent: '8.328'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2000'
+            percent: '16.667'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.333'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '50'
+            countLocked: false
+      - tierNum: T8
+        capacity: '12000'
+        percent: '8.328'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2000'
+            percent: '16.667'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.333'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '50'
+            countLocked: false
+      - tierNum: T7
+        capacity: '12000'
+        percent: '8.328'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2000'
+            percent: '16.667'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.333'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '50'
+            countLocked: false
+      - tierNum: T6
+        capacity: '12000'
+        percent: '8.328'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2000'
+            percent: '16.667'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.333'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '50'
+            countLocked: false
+      - tierNum: T5
+        capacity: '12000'
+        percent: '8.328'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2000'
+            percent: '16.667'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.333'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '50'
+            countLocked: false
+      - tierNum: T4
+        capacity: '12000'
+        percent: '8.328'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2000'
+            percent: '16.667'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.333'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '50'
+            countLocked: false
+      - tierNum: T3
+        capacity: '12000'
+        percent: '8.328'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2000'
+            percent: '16.667'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.333'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '50'
+            countLocked: false
+      - tierNum: T2
+        capacity: '12000'
+        percent: '8.328'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2000'
+            percent: '16.667'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.333'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '50'
+            countLocked: false
+      - tierNum: T1
+        capacity: '12000'
+        percent: '8.328'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2000'
+            percent: '16.667'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.333'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '50'
+            countLocked: false
+  preset: true
+- name: test
+  description: ''
+  json:
+    name: fc1
+    id: ckbzkz73h00473h5xzjy93es4
+    marchCap: '144100'
+    tierDefs:
+      - tierNum: T12
+        capacity: '12100'
+        percent: '8.392'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2100'
+            percent: '17.355'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.058'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '49.587'
+            countLocked: false
+      - tierNum: T11
+        capacity: '12000'
+        percent: '8.328'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2000'
+            percent: '16.667'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.333'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '50'
+            countLocked: false
+      - tierNum: T10
+        capacity: '12000'
+        percent: '8.328'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2000'
+            percent: '16.667'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.333'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '50'
+            countLocked: false
+      - tierNum: T9
+        capacity: '12000'
+        percent: '8.328'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2000'
+            percent: '16.667'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.333'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '50'
+            countLocked: false
+      - tierNum: T8
+        capacity: '12000'
+        percent: '8.328'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2000'
+            percent: '16.667'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.333'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '50'
+            countLocked: false
+      - tierNum: T7
+        capacity: '12000'
+        percent: '8.328'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2000'
+            percent: '16.667'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.333'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '50'
+            countLocked: false
+      - tierNum: T6
+        capacity: '12000'
+        percent: '8.328'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2000'
+            percent: '16.667'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.333'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '50'
+            countLocked: false
+      - tierNum: T5
+        capacity: '12000'
+        percent: '8.328'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2000'
+            percent: '16.667'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.333'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '50'
+            countLocked: false
+      - tierNum: T4
+        capacity: '12000'
+        percent: '8.328'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2000'
+            percent: '16.667'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.333'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '50'
+            countLocked: false
+      - tierNum: T3
+        capacity: '12000'
+        percent: '8.328'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2000'
+            percent: '16.667'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.333'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '50'
+            countLocked: false
+      - tierNum: T2
+        capacity: '12000'
+        percent: '8.328'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2000'
+            percent: '16.667'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.333'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '50'
+            countLocked: false
+      - tierNum: T1
+        capacity: '12000'
+        percent: '8.328'
+        capacityLocked: false
+        troopDefs:
+          - type: Infantry
+            count: '2000'
+            percent: '16.667'
+            countLocked: false
+          - type: Cavalry
+            count: '4000'
+            percent: '33.333'
+            countLocked: false
+          - type: Distance
+            count: '6000'
+            percent: '50'
+            countLocked: false
+  preset: true

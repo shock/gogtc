@@ -1,4 +1,6 @@
 import { Modifiers } from 'objection'
+import yaml from 'js-yaml'
+
 import { BaseModel } from './BaseModel'
 import IFormCalc from '../client_server/interfaces/FormCalc'
 
@@ -40,5 +42,23 @@ export default class FormCalc extends BaseModel implements IFormCalc {
 
   async $reload () {
     return this.$query().where('id', this.id)
+  }
+
+  ////////////////////////////
+  // YAML pseudo-constructor
+
+  static fromYaml(yamlInput:string) {
+    const obj = yaml.safeLoad(yamlInput);
+    if( (obj === undefined) || ('string' === typeof obj) ) {
+      throw new Error("invalid YAML string")
+    } else {
+      const fcObj = obj as IFormCalc
+      const formCalc = new FormCalc
+      formCalc.id = fcObj.id
+      formCalc.name = fcObj.name
+      formCalc.description = fcObj.description
+      formCalc.json = fcObj.json
+      return formCalc
+    }
   }
 }
