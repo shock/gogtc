@@ -49,7 +49,7 @@ class FormCalcPageBase extends React.Component<Props, State> {
       debug: false,
       showJson: false,
       jsonState: true,
-      summary: true
+      summary: false
     }
     this.handeSelectChange = this.handeSelectChange.bind(this);
     this.handleNameSubmit = this.handleNameSubmit.bind(this);
