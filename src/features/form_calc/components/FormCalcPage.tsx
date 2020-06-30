@@ -11,6 +11,7 @@ import * as selectors from '../selectors';
 import { CalculatorView } from './CalculatorView';
 import { MFormCalc } from '../models'
 import TT from '../../../components/tooltips';
+import { SummaryView } from './SummaryView'
 
 const mapStateToProps = (state: RootState) => ({
   formCalcs: selectors.getFormCalcs(state.formCalc),
@@ -35,7 +36,8 @@ type State = {
   fcId: string,
   debug: boolean,
   showJson: boolean,
-  jsonState: boolean
+  jsonState: boolean,
+  summary: boolean
 }
 
 class FormCalcPageBase extends React.Component<Props, State> {
@@ -46,11 +48,13 @@ class FormCalcPageBase extends React.Component<Props, State> {
       fcId: this.props.fcId,
       debug: false,
       showJson: false,
-      jsonState: true
+      jsonState: true,
+      summary: true
     }
     this.handeSelectChange = this.handeSelectChange.bind(this);
     this.handleNameSubmit = this.handleNameSubmit.bind(this);
     this.handleDebugClick = this.handleDebugClick.bind(this);
+    this.handleSummaryClick = this.handleSummaryClick.bind(this);
     this.handleJsonClick = this.handleJsonClick.bind(this);
     this.handleStateClick = this.handleStateClick.bind(this);
   }
@@ -88,6 +92,10 @@ class FormCalcPageBase extends React.Component<Props, State> {
 
   handleDebugClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     this.setState({debug: !this.state.debug});
+  }
+
+  handleSummaryClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    this.setState({summary: !this.state.summary});
   }
 
   handleJsonClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -194,8 +202,15 @@ class FormCalcPageBase extends React.Component<Props, State> {
         variant={this.state.debug ? "secondary" : "info"}
         onClick={this.handleDebugClick}
       >Debug</Button>
+    )
+    const dMsg = this.state.debug ? 'Hide Debug Info' : 'Show Debug Info'
+    const summaryButton = (
+      <Button
+        variant={this.state.summary ? "secondary" : "info"}
+        onClick={this.handleSummaryClick}
+      >Summary</Button>
     );
-    const dMsg = this.state.debug ? 'Hide Debug Info' : 'Show Debug Info';
+    const sMsg = this.state.summary ? 'Show Calculator' : 'Show Summary';
     const jsonButton = (
       <Button
         variant={this.state.showJson ? "secondary" : "info"}
@@ -232,7 +247,9 @@ class FormCalcPageBase extends React.Component<Props, State> {
             {/* <TT tip={sMsg}>{stateButton}</TT> */}
             {/* &nbsp;&nbsp;&nbsp; */}
             {/* <InlineButton text="SA" onClick={() => {this.props.showAlert('test')}} /> */}
-            <TT tip={jMsg}>{jsonButton}</TT>
+            {/* <TT tip={jMsg}>{jsonButton}</TT>
+            &nbsp;&nbsp;&nbsp; */}
+            <TT tip={sMsg}>{summaryButton}</TT>
             &nbsp;&nbsp;&nbsp;
             <TT tip={dMsg}>{debugButton}</TT>
           </Col>
@@ -240,7 +257,9 @@ class FormCalcPageBase extends React.Component<Props, State> {
         {
           this.state.showJson
             ? this.renderJsonView()
-            : this.renderCalcView()
+            : this.state.summary
+              ? <SummaryView id={this.state.fcId} debug={this.state.debug}/>
+              : this.renderCalcView()
         }
       </React.Fragment>
     );

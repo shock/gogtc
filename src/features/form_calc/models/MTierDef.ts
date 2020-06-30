@@ -114,6 +114,16 @@ class MTierDef extends MBase {
     return toInt(capacity);
   }
 
+  getCountForType(type:TroopType) {
+    return this.troopDefs.reduce((sum, td) => {
+      if( td.type == type ) {
+        return sum.plus(td.count)
+      } else {
+        return sum
+      }
+    }, toInt(0))
+  }
+
   updateCap(capacity:Big) {
     const max = toInt(99999999);
     const zero = toInt(0);
