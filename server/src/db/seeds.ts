@@ -93,10 +93,6 @@ const doit = async () => {
   console.log('Truncating DB')
   await dbManager.truncateDb(['knex_migrations', 'knex_migrations_lock'])
   console.log('DB Truncated')
-  // const user = await models.User.first() as models.User
-  // if( user ) {
-  //   throw new Error('Unexpected user found with name: ' + user.name)
-  // }
   await fcPromises()
   await Promise.all( userPromises )
 }
