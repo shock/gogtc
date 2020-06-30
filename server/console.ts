@@ -32,6 +32,12 @@ import { Model, ForeignKeyViolationError, ValidationError } from 'objection'
 import knexConfig from './src/db/knexfile'
 import bcrypt from 'bcrypt';
 const replHistory = require('repl.history')
+import csv from 'csv'
+import fs from 'fs'
+import yaml from 'js-yaml'
+
+global['csv'] = csv;
+global['fs'] = fs;
 
 // replHistory(repl, process.env.HOME + '/.node_history')
 
@@ -71,3 +77,34 @@ const replServer = repl.start({
 require('repl.history')(replServer, process.env.HOME + '/.node_history');
 
 replServer.context.db = models;
+
+const parseTroopDataCsv = () => {
+  const csvData = fs.readFileSync('../data/troop_info.csv', 'utf-8')
+  let parsedRecords
+  csv.parse(csvData, (err, res) => {
+    parsedRecords = res
+    const headers = parsedRecords.shift()
+    const mappedRecords = parsedRecords.map(record => {
+      const obj = {}
+      record.forEach((field, index) => {
+        const fieldName = headers[index]
+        if( fieldName.match(/health|attack|defense|speed|power|load|upkeep/) ) {
+          field = Number(field)
+        }
+        obj[fieldName] = field
+      })
+      return obj
+    })
+    const yml = yaml.dump(mappedRecords)
+    console.log(yml)
+  })
+}
+
+const parseTroopDataYaml = () => {
+  const ymlData = fs.readFileSync('../data/troop_info.yml', 'utf-8')
+  const ymlRecords = yaml.safeLoad(ymlData)
+  console.log(ymlRecords)
+}
+
+// parseTroopDataCsv()
+// parseTroopDataYaml()

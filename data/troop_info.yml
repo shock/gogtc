@@ -1,0 +1,576 @@
+- type: Infantry
+  tier: T12
+  name: Royal Rogues
+  class: Pikemen
+  health: 19
+  attack: 8
+  defense: 21
+  speed: 8
+  power: 194
+  load: 14
+  upkeep: -2.4
+  strength: Pikemen have an increased Defense against Riflemen
+- type: Infantry
+  tier: T11
+  name: Royal Duelists
+  class: Musketeers
+  health: 17
+  attack: 7
+  defense: 18
+  speed: 8
+  power: 138
+  load: 13
+  upkeep: -2.2
+  strength: Musketeers have an increased Defense against Light Cavalry
+- type: Infantry
+  tier: T10
+  name: War Masters
+  class: Pikemen
+  health: 14
+  attack: 6
+  defense: 16
+  speed: 8
+  power: 106
+  load: 13
+  upkeep: -2
+  strength: Pikemen have an increased Defense against Riflemen
+- type: Infantry
+  tier: T9
+  name: Royal Gunners
+  class: Musketeers
+  health: 12
+  attack: 5
+  defense: 14
+  speed: 8
+  power: 82
+  load: 12
+  upkeep: -1.8
+  strength: Musketeers have an increased Defense against Light Cavalry
+- type: Infantry
+  tier: T8
+  name: Armored Spearmen
+  class: Pikemen
+  health: 11
+  attack: 4
+  defense: 12
+  speed: 8
+  power: 63
+  load: 11
+  upkeep: -1.6
+  strength: Pikemen have an increased Defense against Riflemen
+- type: Infantry
+  tier: T7
+  name: Frontline Gunners
+  class: Musketeers
+  health: 9
+  attack: 4
+  defense: 10
+  speed: 8
+  power: 48
+  load: 10
+  upkeep: -1.4
+  strength: Musketeers have an increased Defense against Light Cavalry
+- type: Infantry
+  tier: T6
+  name: Spearmen
+  class: Pikemen
+  health: 8
+  attack: 3
+  defense: 9
+  speed: 8
+  power: 37
+  load: 9
+  upkeep: -1.2
+  strength: Pikemen have an increased Defense against Riflemen
+- type: Infantry
+  tier: T5
+  name: Skirmishers
+  class: Musketeers
+  health: 7
+  attack: 3
+  defense: 8
+  speed: 8
+  power: 29
+  load: 9
+  upkeep: -1
+  strength: Musketeers have an increased Defense against Light Cavalry
+- type: Infantry
+  tier: T4
+  name: Armored Pikemen
+  class: Pikemen
+  health: 6
+  attack: 2
+  defense: 7
+  speed: 8
+  power: 22
+  load: 8
+  upkeep: -0.8
+  strength: Pikemen have an increased Defense against Riflemen
+- type: Infantry
+  tier: T3
+  name: Gunmen
+  class: Musketeers
+  health: 5
+  attack: 2
+  defense: 6
+  speed: 8
+  power: 17
+  load: 7
+  upkeep: -0.6
+  strength: Musketeers have an increased Defense against Light Cavalry
+- type: Infantry
+  tier: T2
+  name: Pikemen
+  class: Pikemen
+  health: 4
+  attack: 2
+  defense: 5
+  speed: 8
+  power: 13
+  load: 6
+  upkeep: -0.4
+  strength: Pikemen have an increased Defense against Riflemen
+- type: Infantry
+  tier: T1
+  name: Musketmen
+  class: Musketeers
+  health: 4
+  attack: 1
+  defense: 4
+  speed: 8
+  power: 10
+  load: 5
+  upkeep: -0.2
+  strength: Musketeers have an increased Defense against Light Cavalry
+- type: Cavalry
+  tier: T12
+  name: Charging Cossacks
+  class: Light Cavalry
+  health: 7
+  attack: 11
+  defense: 10
+  speed: 12
+  power: 194
+  load: 11
+  upkeep: -2.4
+  strength: Light Cavalry have an increased Attack against Riflemen
+- type: Cavalry
+  tier: T11
+  name: Winged Hussars
+  class: Heavy Cavalry
+  health: 6
+  attack: 11
+  defense: 9
+  speed: 13
+  power: 138
+  load: 10
+  upkeep: -2.2
+  strength: Heavy Cavalry have an increased Attack against Pikemen
+- type: Cavalry
+  tier: T10
+  name: Storm Riders
+  class: Light Cavalry
+  health: 5
+  attack: 8
+  defense: 8
+  speed: 14
+  power: 106
+  load: 9
+  upkeep: -2
+  strength: Light Cavalry have an increased Attack against Riflemen
+- type: Cavalry
+  tier: T9
+  name: Royal Cavaliers
+  class: Light Cavalry
+  health: 5
+  attack: 7
+  defense: 7
+  speed: 14
+  power: 82
+  load: 8
+  upkeep: -1.8
+  strength: Light Cavalry have an increased Attack against Riflemen
+- type: Cavalry
+  tier: T8
+  name: Carbiniers
+  class: Heavy Cavalry
+  health: 4
+  attack: 7
+  defense: 6
+  speed: 13
+  power: 63
+  load: 8
+  upkeep: -1.6
+  strength: Heavy Cavalry have an increased Attack against Pikemen
+- type: Cavalry
+  tier: T7
+  name: Heavy Dragoons
+  class: Light Cavalry
+  health: 3
+  attack: 5
+  defense: 5
+  speed: 14
+  power: 48
+  load: 7
+  upkeep: -1.4
+  strength: Light Cavalry have an increased Attack against Riflemen
+- type: Cavalry
+  tier: T6
+  name: Chargers
+  class: Heavy Cavalry
+  health: 3
+  attack: 5
+  defense: 4
+  speed: 13
+  power: 37
+  load: 7
+  upkeep: -1.2
+  strength: Heavy Cavalry have an increased Attack against Pikemen
+- type: Cavalry
+  tier: T5
+  name: Cavaliers
+  class: Light Cavalry
+  health: 2
+  attack: 4
+  defense: 4
+  speed: 14
+  power: 29
+  load: 6
+  upkeep: -1
+  strength: Light Cavalry have an increased Attack against Riflemen
+- type: Cavalry
+  tier: T4
+  name: Light Dragoons
+  class: Heavy Cavalry
+  health: 2
+  attack: 4
+  defense: 3
+  speed: 13
+  power: 22
+  load: 6
+  upkeep: -0.8
+  strength: Heavy Cavalry have an increased Attack against Pikemen
+- type: Cavalry
+  tier: T3
+  name: Amored Horsemen
+  class: Heavy Cavalry
+  health: 2
+  attack: 3
+  defense: 3
+  speed: 13
+  power: 17
+  load: 5
+  upkeep: -0.6
+  strength: Heavy Cavalry have an increased Attack against Pikemen
+- type: Cavalry
+  tier: T2
+  name: Mounted Swordsmen
+  class: Light Cavalry
+  health: 1
+  attack: 2
+  defense: 2
+  speed: 14
+  power: 13
+  load: 4
+  upkeep: -0.4
+  strength: Light Cavalry have an increased Attack against Riflemen
+- type: Cavalry
+  tier: T1
+  name: Mounted Musketmen
+  class: Heavy Cavalry
+  health: 1
+  attack: 2
+  defense: 2
+  speed: 13
+  power: 10
+  load: 4
+  upkeep: -0.2
+  strength: Heavy Cavalry have an increased Attack against Pikemen
+- type: Distance
+  tier: T12
+  name: Battlefield Elites
+  class: Riflemen
+  health: 6
+  attack: 12
+  defense: 7
+  speed: 8
+  power: 194
+  load: 13
+  upkeep: -2.4
+  strength: Riflemen have an increased Attack against all Cavalry and Artillery
+- type: Distance
+  tier: T11
+  name: Thunder Throwers
+  class: Grenadiers
+  health: 5
+  attack: 12
+  defense: 6
+  speed: 8
+  power: 138
+  load: 12
+  upkeep: -2.2
+  strength: Grenadiers have an increased Attack against Musketeers
+- type: Distance
+  tier: T10
+  name: Master Marksmen
+  class: Riflemen
+  health: 5
+  attack: 9
+  defense: 5
+  speed: 8
+  power: 106
+  load: 12
+  upkeep: -2
+  strength: Atk Cav
+- type: Distance
+  tier: T9
+  name: Royal Grenadiers
+  class: Grenadiers
+  health: 4
+  attack: 9
+  defense: 4
+  speed: 8
+  power: 82
+  load: 11
+  upkeep: -1.8
+  strength: Grenadiers have an increased Attack against Musketeers
+- type: Distance
+  tier: T8
+  name: Sharpshooters
+  class: Riflemen
+  health: 3
+  attack: 7
+  defense: 4
+  speed: 8
+  power: 63
+  load: 10
+  upkeep: -1.6
+  strength: Atk Cav
+- type: Distance
+  tier: T7
+  name: Marksmen
+  class: Riflemen
+  health: 3
+  attack: 6
+  defense: 3
+  speed: 8
+  power: 48
+  load: 9
+  upkeep: -1.4
+  strength: Atk Cav
+- type: Distance
+  tier: T6
+  name: Heavy Bombardiers
+  class: Grenadiers
+  health: 3
+  attack: 6
+  defense: 3
+  speed: 8
+  power: 37
+  load: 9
+  upkeep: -1.2
+  strength: Grenadiers have an increased Attack against Musketeers
+- type: Distance
+  tier: T5
+  name: Bombardiers
+  class: Grenadiers
+  health: 2
+  attack: 5
+  defense: 2
+  speed: 8
+  power: 29
+  load: 8
+  upkeep: -1
+  strength: Grenadiers have an increased Attack against Musketeers
+- type: Distance
+  tier: T4
+  name: Fusiliers
+  class: Riflemen
+  health: 2
+  attack: 4
+  defense: 2
+  speed: 8
+  power: 22
+  load: 7
+  upkeep: -0.8
+  strength: Atk Cav
+- type: Distance
+  tier: T3
+  name: Bomb Throwers
+  class: Grenadiers
+  health: 2
+  attack: 4
+  defense: 2
+  speed: 8
+  power: 17
+  load: 6
+  upkeep: -0.6
+  strength: Grenadiers have an increased Attack against Musketeers
+- type: Distance
+  tier: T2
+  name: Fire Starter
+  class: Grenadiers
+  health: 1
+  attack: 3
+  defense: 1
+  speed: 8
+  power: 13
+  load: 6
+  upkeep: -0.4
+  strength: Grenadiers have an increased Attack against Musketeers
+- type: Distance
+  tier: T1
+  name: Huntsmen
+  class: Riflemen
+  health: 1
+  attack: 2
+  defense: 1
+  speed: 8
+  power: 10
+  load: 5
+  upkeep: -0.2
+  strength: Atk Cav
+- type: Artillery
+  tier: T12
+  name: Wall Smashers
+  class: Cannons
+  health: 14
+  attack: 11
+  defense: 19
+  speed: 5
+  power: 194
+  load: 25
+  upkeep: -2.4
+  strength: Cannons absord the brunt of the opposition Trap Attack
+- type: Artillery
+  tier: T11
+  name: Master Mortars
+  class: Mortars
+  health: 11
+  attack: 16
+  defense: 9
+  speed: 7
+  power: 138
+  load: 15
+  upkeep: -2.2
+  strength: Mortars have an increased Attack against Traps
+- type: Artillery
+  tier: T10
+  name: Supper Cannons
+  class: Cannons
+  health: 10
+  attack: 9
+  defense: 14
+  speed: 5
+  power: 106
+  load: 24
+  upkeep: -2
+  strength: Cannons absord the brunt of the opposition Trap Attack
+- type: Artillery
+  tier: T9
+  name: Death Launchers
+  class: Mortars
+  health: 8
+  attack: 12
+  defense: 7
+  speed: 7
+  power: 82
+  load: 14
+  upkeep: -1.8
+  strength: Mortars have an increased Attack against Traps
+- type: Artillery
+  tier: T8
+  name: Double Destroyers
+  class: Cannons
+  health: 8
+  attack: 6
+  defense: 11
+  speed: 5
+  power: 63
+  load: 21
+  upkeep: -1.6
+  strength: Cannons absord the brunt of the opposition Trap Attack
+- type: Artillery
+  tier: T7
+  name: Culverins
+  class: Mortars
+  health: 6
+  attack: 9
+  defense: 6
+  speed: 7
+  power: 48
+  load: 12
+  upkeep: -1.4
+  strength: Mortars have an increased Attack against Traps
+- type: Artillery
+  tier: T6
+  name: Heavy Mortars
+  class: Mortars
+  health: 5
+  attack: 8
+  defense: 4
+  speed: 7
+  power: 37
+  load: 11
+  upkeep: -1.2
+  strength: Mortars have an increased Attack against Traps
+- type: Artillery
+  tier: T5
+  name: Sakers
+  class: Cannons
+  health: 5
+  attack: 4
+  defense: 7
+  speed: 5
+  power: 29
+  load: 16
+  upkeep: -1
+  strength: Cannons absord the brunt of the opposition Trap Attack
+- type: Artillery
+  tier: T4
+  name: Bombards
+  class: Mortars
+  health: 4
+  attack: 6
+  defense: 3
+  speed: 7
+  power: 22
+  load: 9
+  upkeep: -0.8
+  strength: Mortars have an increased Attack against Traps
+- type: Artillery
+  tier: T3
+  name: Falconets
+  class: Cannons
+  health: 4
+  attack: 3
+  defense: 5
+  speed: 5
+  power: 17
+  load: 13
+  upkeep: -0.6
+  strength: Cannons absord the brunt of the opposition Trap Attack
+- type: Artillery
+  tier: T2
+  name: Light Mortars
+  class: Mortars
+  health: 3
+  attack: 4
+  defense: 2
+  speed: 7
+  power: 13
+  load: 7
+  upkeep: -0.4
+  strength: Mortars have an increased Attack against Traps
+- type: Artillery
+  tier: T1
+  name: Minion Cannons
+  class: Cannons
+  health: 3
+  attack: 2
+  defense: 4
+  speed: 5
+  power: 10
+  load: 11
+  upkeep: -0.2
+  strength: Cannons absord the brunt of the opposition Trap Attack
