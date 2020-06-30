@@ -47,6 +47,8 @@ class SummaryViewBase extends React.Component<Props, State> {
         <th className="name">{this.data().name}</th>
         <th className="count">Count</th>
         <th className="percent">%</th>
+        <th className="power">Power</th>
+        <th className="load">Load</th>
       </tr>
     )
   }
@@ -56,8 +58,21 @@ class SummaryViewBase extends React.Component<Props, State> {
       <tr>
         <td>{type}</td>
         <td>{parseInt(this.data().getCountForType(type).toString()).toLocaleString()}</td>
-        <td>{parseFloat(this.data().getPercentForType(type).toString()).toLocaleString()}%</td>
+        <td>{parseFloat(this.data().getPercentForType(type).toString()).toLocaleString()}</td>
+        <td>{parseInt(this.data().getPowerForType(type).toString()).toLocaleString()}</td>
+        <td>{parseInt(this.data().collectAttributeForType(type, 'load').toString()).toLocaleString()}</td>
+      </tr>
+    )
+  }
 
+  summaryFooter() {
+    return (
+      <tr className="sum">
+        <td className="name"></td>
+        <td>{parseInt(this.data().getCapFromTierDefs().toString()).toLocaleString()}</td>
+        <td>{parseFloat(this.data().getTierDefPercentsSum().toString()).toLocaleString()}</td>
+        <td>{parseInt(this.data().collectAttribute('power').toString()).toLocaleString()}</td>
+        <td>{parseInt(this.data().collectAttribute('load').toString()).toLocaleString()}</td>
       </tr>
     )
   }
@@ -71,10 +86,11 @@ class SummaryViewBase extends React.Component<Props, State> {
       <React.Fragment>
         <Row>
           <Col>
-            <div className="SummaryView" style={{margin: '0 auto', display: 'inline-block'}}>
+            <div className="SummaryView">
               <table>
                 {this.summaryHeader()}
                 {[TroopType.Infantry, TroopType.Cavalry, TroopType.Distance].map(type => this.troopTypeRow(type))}
+                {this.summaryFooter()}
               </table>
             </div>
           </Col>

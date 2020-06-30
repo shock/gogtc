@@ -208,7 +208,7 @@ class FormCalcPageBase extends React.Component<Props, State> {
       <Button
         variant={this.state.summary ? "secondary" : "info"}
         onClick={this.handleSummaryClick}
-      >Summary</Button>
+      >{this.state.summary ? "Summary" : "Details"}</Button>
     );
     const sMsg = this.state.summary ? 'Show Calculator' : 'Show Summary';
     const jsonButton = (

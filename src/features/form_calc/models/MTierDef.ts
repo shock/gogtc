@@ -1,7 +1,7 @@
 import { Big } from 'big.js';
 
 import { TierNum, TroopType, toInt, toBig } from '../types';
-import { MTroopDef } from '.';
+import { MTroopDef, TroopData } from '.';
 import config from '../../../config';
 import MBase from './MBase'
 
@@ -122,6 +122,16 @@ class MTierDef extends MBase {
         return sum
       }
     }, toInt(0))
+  }
+
+  getPowerForType(type:TroopType) {
+    const countForType = this.getCountForType(type)
+    return countForType.times(TroopData.forTierAndType(this.tierNum, type).power)
+  }
+
+  collectAttributeForType(type:TroopType, attr:string) {
+    const countForType = this.getCountForType(type)
+    return countForType.times(TroopData.forTierAndType(this.tierNum, type)[attr])
   }
 
   updateCap(capacity:Big) {

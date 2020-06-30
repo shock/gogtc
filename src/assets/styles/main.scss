@@ -142,9 +142,22 @@ $icon-action: rgb(250, 234, 90);
 }
 
 .SummaryView {
+  margin: 1rem auto 0;
+  display: inline-block;
+  th {
+    &.name { width: 15rem; border-width: 0px; font-size: 110%;}
+    &.count { width: 6rem; }
+    &.percent { width: 6rem; }
+    &.power { width: 6rem; }
+  }
   th, td {
     padding: 0.7rem;
     border: 1px solid;
+  }
+  tr.sum {
+    td.name {
+      border: none
+    }
   }
 }
 .fcNameForm {

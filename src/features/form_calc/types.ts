@@ -45,9 +45,30 @@ export enum TierNum {
   T1 = 'T1',
 }
 
+export const TiersDescending = [
+  TierNum.T12,
+  TierNum.T11,
+  TierNum.T10,
+  TierNum.T9,
+  TierNum.T8,
+  TierNum.T7,
+  TierNum.T6,
+  TierNum.T5,
+  TierNum.T4,
+  TierNum.T3,
+  TierNum.T2,
+  TierNum.T1,
+]
+
 export enum TroopType {
   Infantry = "Infantry",
   Cavalry = "Cavalry",
   Distance = "Distance",
   Artillery = "Artillery"
 }
+
+export const TroopTypes = [
+  TroopType.Infantry,
+  TroopType.Cavalry,
+  TroopType.Distance
+]
