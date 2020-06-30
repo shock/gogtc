@@ -1,4 +1,7 @@
-import { MFormCalc, MTierDef, MTroopDef } from '.';
+import { MFormCalc } from './MFormCalc';
+import { MTierDef } from './MTierDef';
+import { MTroopDef } from './MTroopDef';
+import { TroopData } from './TroopData';
 import { TierNum, TroopType, toBig } from '../types';
 
 function buildTroopDefs(tierDef:MTierDef):MTroopDef[] {
@@ -61,6 +64,4 @@ export const TestLibrary:FormCalcDictionary = {
   formCalcs: formCalcs
 };
 
-export * from './MTierDef';
-export * from './MTroopDef';
-export * from './MFormCalc';
+export { MTierDef, MTroopDef, MFormCalc, TroopData }
