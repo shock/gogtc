@@ -1,8 +1,6 @@
 import knexConfig from './knexfile'
 import _dbManager from 'knex-db-manager'
 
-process.env.NODE_ENV
-
 let kCfg
 
 switch(process.env.NODE_ENV) {

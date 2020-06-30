@@ -4,7 +4,7 @@ import { filter, switchMap, map, catchError, mergeMap } from 'rxjs/operators';
 import { RootAction, RootState, Services, isActionOf } from 'typesafe-actions';
 import { ActionCreators as Undoable } from 'redux-undo'
 
-import { createCalcAsync, updateCalcAsync } from './actions';
+import { createCalcAsync, updateCalcAsync, loadUserCalcsAsync } from './actions';
 import { showAlert } from '../modals/actions'
 import { MFormCalc } from './models'
 import history from '../../lib/history'
@@ -50,7 +50,30 @@ export const updateCalcEpic: Epic<
         )),
         catchError((error: any) => of(
           showAlert('Failed to save formation', {variant: 'danger', details: error.toString()}),
-          createCalcAsync.failure(error.toString()))
+          updateCalcAsync.failure(error.toString()))
+        )
+      )
+    )
+  );
+
+export const loadUserCalcsEpic: Epic<
+  RootAction,
+  RootAction,
+  RootState,
+  Services
+> = (action$, state$, { api }) =>
+  action$.pipe(
+    filter(isActionOf(loadUserCalcsAsync.request)),
+    switchMap((action) =>
+      from(api.formCalcs.getUserCalcs()).pipe(
+        mergeMap((formCalcs:[MFormCalc]) => of(
+          // showAlert('Formation Saved'),
+          loadUserCalcsAsync.success(formCalcs),
+          // Undoable.clearHistory()
+        )),
+        catchError((error: any) => of(
+          showAlert('Failed to load formations', {variant: 'danger', details: error.toString()}),
+          loadUserCalcsAsync.failure(error.toString()))
         )
       )
     )

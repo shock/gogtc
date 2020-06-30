@@ -25,11 +25,13 @@ describe( 'MTierDef', () => {
         const formCalc = new MFormCalc('test', toInt(999))
         formCalc.changed = !formCalc.changed
         formCalc.persisted = !formCalc.persisted
+        formCalc.preset = !formCalc.preset
         const clone = formCalc.clone()
         expect(clone.name).toEqual('test')
         expect(clone.marchCap.toString()).toEqual('999')
         expect(clone.changed).toEqual(formCalc.changed)
         expect(clone.persisted).toEqual(formCalc.persisted)
+        expect(clone.preset).toEqual(formCalc.preset)
     })
   })
 
@@ -151,7 +153,7 @@ describe( 'MTierDef', () => {
 
     describe('round trip', () => {
       it('should work', () => {
-        const origFormCalc = new MFormCalc('test', toInt(999))
+        const origFormCalc = new MFormCalc('test', toInt(999), true)
         const reconstructedFormCalc = MFormCalc.fromJsonObject(origFormCalc.toJsonObject())
         reconstructedFormCalc.key = origFormCalc.key
         expect( origFormCalc ).toEqual(reconstructedFormCalc)

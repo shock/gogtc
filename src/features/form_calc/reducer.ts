@@ -32,7 +32,20 @@ const initialState:FCState = {
   currentId: Object.values(TestLibrary.formCalcs)[0].id
 }
 
-const formCalc = createReducer(initialState)
+const _formCalcReducer = createReducer(BlankFCState)
+.handleAction(actions.loadUserCalcsAsync.success, (state, action) => {
+    const formCalcs = action.payload
+    console.log(formCalcs)
+    const reducer = (fd:{[key: string]: MFormCalc}, fc:MFormCalc) => Object.assign(fd, { [fc.id]: fc } )
+    const reduced = formCalcs.reduce(reducer, {} as {[key: string]: MFormCalc})
+    return ({
+      ...state,
+      formCalcs: {
+        ...state.formCalcs,
+        ...reduced
+      }
+    })
+  })
   .handleAction(actions.createCalcAsync.success, (state, action) => {
     const formCalc = action.payload
     formCalc.clearChanged()
@@ -107,7 +120,7 @@ const groupByActionTypeAndId = (rawActions:string[] | string) => {
 
 }
 
-const formCalcReducer = undoable(formCalc, {
+const formCalcReducer = undoable(_formCalcReducer, {
   filter: excludeAction([getType(actions.resetState)]),
   groupBy: groupByActionTypeAndId(
     [actions.updateMarchCap, actions.updateTroopCount,
@@ -116,5 +129,6 @@ const formCalcReducer = undoable(formCalc, {
       .map( a => { return getType(a)} )
   )
 })
+
 export default formCalcReducer;
 export type FormCalcState = ReturnType<typeof formCalcReducer>;

@@ -1,4 +1,3 @@
-import FormCalc from '../client_server/interfaces/FormCalc'
 import { MFormCalc } from '../features/form_calc/models'
 
 const createCalcEndpoint = '/api/form_calcs/create'
@@ -55,6 +54,34 @@ export function update(formCalc:MFormCalc): Promise<MFormCalc> {
     const endPoint = `${updateCalcEndpoint}/${formCalc.id}`
     request(endPoint, preparedBody).then(
       resp => resolve(formCalc)
+    ).catch(error => reject(error))
+  })
+}
+
+const getUserCalcsEndpoint = '/api/form_calcs/user'
+
+export function getUserCalcs(): Promise<[MFormCalc]> {
+  return new Promise((resolve, reject) => {
+    // Default options are marked with *
+    async function request(url = '', data = {}) {
+      const response = await fetch(url, {
+        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        headers: { 'Content-Type': 'application/json' }
+      })
+      if( response.status === 200 )
+        return response.json(); // parses JSON response into native JavaScript objects
+      else
+        throw `received status code ${response.status}`
+    }
+    request(getUserCalcsEndpoint).then(
+      resp => resolve(resp.formCalcs.map((dbObj:any) => {
+        const formCalc = MFormCalc.fromJsonObject(dbObj.json)
+        formCalc.id = dbObj.id
+        formCalc.name = dbObj.name
+        formCalc.persisted = true
+        formCalc.preset = dbObj.preset
+        return formCalc
+      }))
     ).catch(error => reject(error))
   })
 }

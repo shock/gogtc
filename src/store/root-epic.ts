@@ -1,14 +1,13 @@
-import { combineEpics, Epic } from 'redux-observable';
+import { combineEpics } from 'redux-observable'
 
-import { loginUserEpic, logoutUserEpic, createUserEpic } from '../features/users/epics';
-import { createCalcEpic, updateCalcEpic } from '../features/form_calc/epics';
-import { showAlertEpic } from '../features/modals/epics';
+import * as userEpics from '../features/users/epics'
+import * as formCalcEpics from '../features/form_calc/epics'
+import * as modalEpics from '../features/modals/epics'
 
 export default combineEpics(
-  loginUserEpic,
-  logoutUserEpic,
-  createUserEpic,
-  createCalcEpic,
-  updateCalcEpic,
-  showAlertEpic
-);
+  ...[
+    ...Object.values(userEpics),
+    ...Object.values(formCalcEpics),
+    ...Object.values(modalEpics),
+  ]
+)

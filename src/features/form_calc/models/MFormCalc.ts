@@ -5,6 +5,7 @@ import MBase from './MBase'
 import { MTierDef, MTroopDef } from '.';
 import { toInt, toBig, IdString, IdBoolean, IdOnly } from '../types';
 import config from '../../../config';
+import { AnyAction } from 'redux';
 
 const PercentDeltaEpsilon = toBig(0.1).pow(config.viewPrecision);
 
@@ -14,15 +15,17 @@ class MFormCalc extends MBase {
   marchCap:Big = toInt(0);
   id:string = cuid()
   persisted:boolean = false
+  preset:boolean = false
 
-  constructor(name:string, marchCap:Big = toInt(0)) {
+  constructor(name:string, marchCap:Big = toInt(0), preset:boolean = false) {
     super();
     this.name = name;
     this.marchCap = toInt(marchCap)
+    this.preset = preset || false
   }
 
   clone():MFormCalc {
-    const clone = new MFormCalc(this.name, this.marchCap);
+    const clone = new MFormCalc(this.name, this.marchCap, this.preset);
     clone.tierDefs = this.tierDefs.map( tierDef => {
       return tierDef.clone();
     });
@@ -49,24 +52,25 @@ class MFormCalc extends MBase {
   }
 
   toJsonObject() {
-    let obj:any = {};
-    obj.name = this.name;
+    let obj:any = {}
+    obj.name = this.name
     obj.id = this.id
-    obj.marchCap = this.marchCap;
+    obj.marchCap = this.marchCap
+    obj.preset = this.preset
     obj.tierDefs = this.tierDefs.map( tierDef => {
       return tierDef.toJsonObject();
-    });
-    return obj;
+    })
+    return obj
   }
 
-  static fromJsonObject(obj:any) {
+  static fromJsonObject(obj:AnyAction) {
     ['name', 'marchCap'].forEach( prop => {
       if( !obj.hasOwnProperty(prop) ) {
         throw new Error(`must have property: ${prop}`)
       }
     })
 
-    const formCalc = new MFormCalc( obj.name, obj.marchCap )
+    const formCalc = new MFormCalc( obj.name, obj.marchCap, obj.preset )
     formCalc.id = obj.id
 
     const objTierDefs = obj.tierDefs
