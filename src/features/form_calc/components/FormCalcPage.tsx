@@ -8,7 +8,7 @@ import * as actions from '../actions';
 import { showAlert } from '../../modals/actions';
 import { showGeneralModal } from '../../modals/actions';
 import * as selectors from '../selectors';
-import { FormCalcView } from './FormCalcView';
+import { CalculatorView } from './CalculatorView';
 import { MFormCalc } from '../models'
 import TT from '../../../components/tooltips';
 
@@ -182,7 +182,7 @@ class FormCalcPageBase extends React.Component<Props, State> {
     return (
       <Row>
         <Col>
-          <FormCalcView id={this.state.fcId} debug={this.state.debug}/>
+          <CalculatorView id={this.state.fcId} debug={this.state.debug}/>
         </Col>
       </Row>
     )

@@ -23,18 +23,18 @@ const dispatchProps = {
   saveFormCalc: actions.saveFormCalc
 };
 
-interface FormCalcViewProps {
+interface CalculatorViewProps {
   id: string;
   debug: boolean;
 }
 
-type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & FormCalcViewProps;
+type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & CalculatorViewProps;
 type State = {
   name: string
   editingName: boolean
 }
 
-class FormCalcViewBase extends React.Component<Props, State> {
+class CalculatorViewBase extends React.Component<Props, State> {
   private nameInputRef = React.createRef<HTMLInputElement>()
 
   constructor(props: Props) {
@@ -218,9 +218,9 @@ class FormCalcViewBase extends React.Component<Props, State> {
   }
 }
 
-const FormCalcView = connect(
+const CalculatorView = connect(
   mapStateToProps,
   dispatchProps
-)(FormCalcViewBase);
+)(CalculatorViewBase);
 
-export { FormCalcView };
+export { CalculatorView };
