@@ -128,9 +128,12 @@ class FormCalcPageBase extends React.Component<Props, State> {
     const presetCalcs = formCalcs.filter(fc => fc.preset)
     const userCalcs = formCalcs.filter(fc => !fc.preset)
     let index = 0
-    const mapOptions = (formCalcs:MFormCalc[]) => formCalcs.map(formCalc => (
-      <option key={index++} value={formCalc.id}>{formCalc.name}</option>
-    ))
+    const mapOptions = (formCalcs:MFormCalc[]) => formCalcs.map(formCalc => {
+      // this docs for Form.Control select say setting defaultValue handles the selected option,
+      // but I can't get it to work
+      const selected = (formCalc.id === this.props.currentId)
+      return <option key={index++} value={formCalc.id} selected={selected}>{formCalc.name}</option>
+    })
 
     const userOptions = mapOptions(userCalcs)
     const presetOptions = mapOptions(presetCalcs)
@@ -225,21 +228,21 @@ class FormCalcPageBase extends React.Component<Props, State> {
           <Col>
             <Form onSubmit={this.handleNameSubmit}>
               <Form.Group as={Row} controlId="formBasicEmail">
-                <Form.Label column sm={2}>Load Preset</Form.Label>
-                <Col sm={4}>
+                <Form.Label column sm={2}>Load</Form.Label>
+                <Col>
                   {/* <Form.Control type="text" placeholder="form name" value={this.state.fcId} onChange={this.handeSelectChange}/> */}
                   <Form.Control
                     as="select"
                     custom
                     onChange={this.handeSelectChange}
-                    defaultValue={this.state.fcId}
+                    defaultValue={this.props.currentId}
                   >
                     {this.selectOptions()}
                   </Form.Control>
                 </Col>
-                <Col sm={2}>
+                {/* <Col sm={2}>
                   <Button variant="primary" onClick={this.handleNameSubmit}>OK</Button>
-                </Col>
+                </Col> */}
               </Form.Group>
             </Form>
           </Col>
