@@ -48,10 +48,8 @@ class CalculatorViewBase extends React.Component<Props, State> {
       editingName: false
     }
     this.handleMarchCapChange = this.handleMarchCapChange.bind(this);
-    this.handleNameChange = this.handleNameChange.bind(this)
     this.handleNameSubmit = this.handleNameSubmit.bind(this)
     this.handleNameClick = this.handleNameClick.bind(this)
-    this.handleSaveClick = this.handleSaveClick.bind(this)
   }
 
   static defaultProps = {
@@ -132,36 +130,33 @@ class CalculatorViewBase extends React.Component<Props, State> {
     } else return null
   }
 
-  handleNameChange(event:React.ChangeEvent<HTMLInputElement>) {
-    this.setState({name: event.target.value})
-  }
-
   handleNameSubmit(e:any) {
     this.setState({editingName: false})
     if( this.state.name !== this.data().name ) {this.props.updateName(this.props.id, this.state.name)}
   }
 
   handleNameClick(e:any) {
-    this.setState({editingName: true})
-
-    // nameInputRef.current won't be set until the input element is rendered, so wait until the next event cycle
-    setTimeout(() => {
+    this.setState({editingName: true}, () => {
       const node = this.nameInputRef.current
-      if( node ) {
-        console.log('WE BE HERE')
-        node.focus()
-      }
-    }, 0)
+      if( node ) { node.focus() }
+    })
   }
 
   renderName() {
+    const onChange = (event:React.ChangeEvent<HTMLInputElement>) => this.setState({name: event.target.value})
+    const onKeyUp = (event:React.KeyboardEvent<HTMLInputElement>) => {
+      if( event.keyCode === 27 ) {
+        this.setState({editingName: false, name: this.data().name} )
+      }
+    }
     if( this.state.editingName ) {
       return (
         <Form onSubmit={this.handleNameSubmit}>
           <Form.Control
             as="input"
             value={this.state.name}
-            onChange={this.handleNameChange}
+            onChange={onChange}
+            onKeyUp={onKeyUp}
             ref={this.nameInputRef}
           />
           <Button variant="primary" onClick={this.handleNameSubmit}>OK</Button>
@@ -177,22 +172,22 @@ class CalculatorViewBase extends React.Component<Props, State> {
     }
   }
 
-  handleSaveClick(e:any) {
-    this.props.saveFormCalc(this.data())
-  }
-
   renderSave() {
     const disabled = !this.data()?.isChanged()
+    const onClick = () => this.props.saveFormCalc(this.data())
     return (
       <Col sm={1}>
-        <Button variant='info' disabled={disabled} onClick={this.handleSaveClick}>SAVE</Button>
+        <Button
+          variant='info'
+          disabled={disabled}
+          onClick={onClick}
+        >SAVE</Button>
       </Col>
     )
   }
 
   renderAdminRow() {
     const admin = this.isAdmin()
-    console.log(`admin: ${admin}`)
     const onClick = (e:any) => {
       this.props.updatePresetFlag(this.props.id, !this.isPreset())
     }
