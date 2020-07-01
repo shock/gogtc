@@ -76,6 +76,9 @@ const _formCalcReducer = createReducer(BlankFCState)
   .handleAction(actions.updateName, (state, action) => {
     return fcReturnState(state, getFormationById(state, action.payload.id).updateNameHandler(action.payload));
   })
+  .handleAction(actions.updatePresetFlag, (state, action) => {
+    return fcReturnState(state, getFormationById(state, action.payload.id).updatePresetFlagHandler(action.payload));
+  })
   .handleAction(actions.updateTroopCount, (state, action) => {
     return fcReturnState(state, getFormationById(state, action.payload.id).updateTroopCountHandler(action.payload));
   })

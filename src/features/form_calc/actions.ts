@@ -44,6 +44,11 @@ export const updateName = createAction('UPDATE_NAME', (id: string, value: string
   value: value
 }))<IdString>();
 
+export const updatePresetFlag = createAction('UPDATE_PRESET', (id: string, boolean: boolean) => ({
+  id: id,
+  boolean: boolean
+}))<IdBoolean>();
+
 export const updateTroopCount = createAction('UPDATE_TROOP_COUNT', (id: string, value: string) => ({
   id: id,
   value: value
