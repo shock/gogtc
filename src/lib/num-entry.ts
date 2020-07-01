@@ -26,7 +26,9 @@ export const parsePercent = (strVal:string) => {
 export const onFocus = (e:React.FocusEvent<HTMLInputElement>) => {
   const input = e.target
   const value = input.value
-  input.selectionStart = 0
-  input.selectionEnd = value.length
-  input.dispatchEvent(new Event('select'))
+  if( value ) {
+    input.selectionStart = 0
+    input.selectionEnd = value.length
+    input.dispatchEvent(new Event('select'))
+  }
 }
