@@ -7,7 +7,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "backend": "cd server && yarn start"
+    "backend": "cd server && yarn start",
+    "console": "ts-node-dev -r esm --experimental-repl-await --respawn --transpileOnly src/console.ts"
   },
   "proxy": "http://localhost:8080",
   "dependencies": {
@@ -22,6 +23,7 @@
     "connected-react-router": "^6.8.0",
     "cuid": "^2.1.8",
     "eslint-config-prettier": "^6.11.0",
+    "esm": "^3.2.25",
     "express": "^4.17.1",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
@@ -37,6 +39,7 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-observable": "^1.2.0",
     "redux-undo": "^1.0.1",
+    "repl.history": "^0.1.4",
     "ts-node": "^8.10.2",
     "ts-node-dev": "^1.0.0-pre.49",
     "typesafe-actions": "^5.1.0",
@@ -88,7 +91,7 @@
     "@types/react-router-dom": "^5.1.5",
     "@typescript-eslint/eslint-plugin": "^3.0.0",
     "@typescript-eslint/parser": "^3.0.0",
-    "express-generator-typescript": "^1.6.5",
-    "babel-jest": "^24.9.0"
+    "babel-jest": "^24.9.0",
+    "express-generator-typescript": "^1.6.5"
   }
 }

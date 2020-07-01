@@ -8,9 +8,10 @@ import * as actions from '../actions';
 import { showAlert } from '../../modals/actions';
 import { showGeneralModal } from '../../modals/actions';
 import * as selectors from '../selectors';
-import { FormCalcView } from './FormCalcView';
+import { CalculatorView } from './CalculatorView';
 import { MFormCalc } from '../models'
 import TT from '../../../components/tooltips';
+import { SummaryView } from './SummaryView'
 
 const mapStateToProps = (state: RootState) => ({
   formCalcs: selectors.getFormCalcs(state.formCalc),
@@ -35,7 +36,8 @@ type State = {
   fcId: string,
   debug: boolean,
   showJson: boolean,
-  jsonState: boolean
+  jsonState: boolean,
+  summary: boolean
 }
 
 class FormCalcPageBase extends React.Component<Props, State> {
@@ -46,11 +48,13 @@ class FormCalcPageBase extends React.Component<Props, State> {
       fcId: this.props.fcId,
       debug: false,
       showJson: false,
-      jsonState: true
+      jsonState: true,
+      summary: false
     }
     this.handeSelectChange = this.handeSelectChange.bind(this);
     this.handleNameSubmit = this.handleNameSubmit.bind(this);
     this.handleDebugClick = this.handleDebugClick.bind(this);
+    this.handleSummaryClick = this.handleSummaryClick.bind(this);
     this.handleJsonClick = this.handleJsonClick.bind(this);
     this.handleStateClick = this.handleStateClick.bind(this);
   }
@@ -90,6 +94,10 @@ class FormCalcPageBase extends React.Component<Props, State> {
     this.setState({debug: !this.state.debug});
   }
 
+  handleSummaryClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    this.setState({summary: !this.state.summary});
+  }
+
   handleJsonClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     this.setState({showJson: !this.state.showJson});
   }
@@ -120,9 +128,12 @@ class FormCalcPageBase extends React.Component<Props, State> {
     const presetCalcs = formCalcs.filter(fc => fc.preset)
     const userCalcs = formCalcs.filter(fc => !fc.preset)
     let index = 0
-    const mapOptions = (formCalcs:MFormCalc[]) => formCalcs.map(formCalc => (
-      <option key={index++} value={formCalc.id}>{formCalc.name}</option>
-    ))
+    const mapOptions = (formCalcs:MFormCalc[]) => formCalcs.map(formCalc => {
+      // this docs for Form.Control select say setting defaultValue handles the selected option,
+      // but I can't get it to work
+      const selected = (formCalc.id === this.props.currentId)
+      return <option key={index++} value={formCalc.id} selected={selected}>{formCalc.name}</option>
+    })
 
     const userOptions = mapOptions(userCalcs)
     const presetOptions = mapOptions(presetCalcs)
@@ -182,7 +193,7 @@ class FormCalcPageBase extends React.Component<Props, State> {
     return (
       <Row>
         <Col>
-          <FormCalcView id={this.state.fcId} debug={this.state.debug}/>
+          <CalculatorView id={this.state.fcId} debug={this.state.debug}/>
         </Col>
       </Row>
     )
@@ -194,8 +205,15 @@ class FormCalcPageBase extends React.Component<Props, State> {
         variant={this.state.debug ? "secondary" : "info"}
         onClick={this.handleDebugClick}
       >Debug</Button>
+    )
+    const dMsg = this.state.debug ? 'Hide Debug Info' : 'Show Debug Info'
+    const summaryButton = (
+      <Button
+        variant={this.state.summary ? "secondary" : "info"}
+        onClick={this.handleSummaryClick}
+      >{this.state.summary ? "Summary" : "Details"}</Button>
     );
-    const dMsg = this.state.debug ? 'Hide Debug Info' : 'Show Debug Info';
+    const sMsg = this.state.summary ? 'Show Calculator' : 'Show Summary';
     const jsonButton = (
       <Button
         variant={this.state.showJson ? "secondary" : "info"}
@@ -210,21 +228,21 @@ class FormCalcPageBase extends React.Component<Props, State> {
           <Col>
             <Form onSubmit={this.handleNameSubmit}>
               <Form.Group as={Row} controlId="formBasicEmail">
-                <Form.Label column sm={2}>Load Preset</Form.Label>
-                <Col sm={4}>
+                <Form.Label column sm={2}>Load</Form.Label>
+                <Col>
                   {/* <Form.Control type="text" placeholder="form name" value={this.state.fcId} onChange={this.handeSelectChange}/> */}
                   <Form.Control
                     as="select"
                     custom
                     onChange={this.handeSelectChange}
-                    defaultValue={this.state.fcId}
+                    defaultValue={this.props.currentId}
                   >
                     {this.selectOptions()}
                   </Form.Control>
                 </Col>
-                <Col sm={2}>
+                {/* <Col sm={2}>
                   <Button variant="primary" onClick={this.handleNameSubmit}>OK</Button>
-                </Col>
+                </Col> */}
               </Form.Group>
             </Form>
           </Col>
@@ -232,7 +250,9 @@ class FormCalcPageBase extends React.Component<Props, State> {
             {/* <TT tip={sMsg}>{stateButton}</TT> */}
             {/* &nbsp;&nbsp;&nbsp; */}
             {/* <InlineButton text="SA" onClick={() => {this.props.showAlert('test')}} /> */}
-            <TT tip={jMsg}>{jsonButton}</TT>
+            {/* <TT tip={jMsg}>{jsonButton}</TT>
+            &nbsp;&nbsp;&nbsp; */}
+            <TT tip={sMsg}>{summaryButton}</TT>
             &nbsp;&nbsp;&nbsp;
             <TT tip={dMsg}>{debugButton}</TT>
           </Col>
@@ -240,7 +260,9 @@ class FormCalcPageBase extends React.Component<Props, State> {
         {
           this.state.showJson
             ? this.renderJsonView()
-            : this.renderCalcView()
+            : this.state.summary
+              ? <SummaryView id={this.state.fcId} debug={this.state.debug}/>
+              : this.renderCalcView()
         }
       </React.Fragment>
     );

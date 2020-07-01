@@ -67,9 +67,8 @@ export const loadUserCalcsEpic: Epic<
     switchMap((action) =>
       from(api.formCalcs.getUserCalcs()).pipe(
         mergeMap((formCalcs:[MFormCalc]) => of(
-          // showAlert('Formation Saved'),
           loadUserCalcsAsync.success(formCalcs),
-          // Undoable.clearHistory()
+          Undoable.clearHistory()
         )),
         catchError((error: any) => of(
           showAlert('Failed to load formations', {variant: 'danger', details: error.toString()}),

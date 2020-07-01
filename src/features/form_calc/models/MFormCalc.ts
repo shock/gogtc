@@ -3,7 +3,7 @@ import { getTierNum, getTroopType } from '../lib/IdParser';
 import { Big } from 'big.js';
 import MBase from './MBase'
 import { MTierDef, MTroopDef } from '.';
-import { toInt, toBig, IdString, IdBoolean, IdOnly } from '../types';
+import { toInt, toBig, IdString, IdBoolean, IdOnly, TroopType, TroopTypes } from '../types';
 import config from '../../../config';
 import { AnyAction } from 'redux';
 
@@ -243,6 +243,35 @@ class MFormCalc extends MBase {
       sum = sum.plus(tierDef.percent);
     });
     return sum;
+  }
+
+  getCountForType(type:TroopType) {
+    return this.tierDefs.reduce((sum, td) => {
+      return sum.plus(td.getCountForType(type))
+    }, toInt(0))
+  }
+
+  getPercentForType(type:TroopType) {
+    const countForType = this.getCountForType(type)
+    return countForType.times(100).div(this.marchCap)
+  }
+
+  getPowerForType(type:TroopType) {
+    return this.tierDefs.reduce((sum, td) => {
+      return sum.plus(td.getPowerForType(type))
+    }, toInt(0))
+  }
+
+  collectAttributeForType(type:TroopType, attr:string) {
+    return this.tierDefs.reduce((sum, td) => {
+      return sum.plus(td.collectAttributeForType(type, attr))
+    }, toInt(0))
+  }
+
+  collectAttribute(attr:string) {
+    return TroopTypes.reduce((sum, type) => {
+      return sum.plus(this.collectAttributeForType(type, attr))
+    }, toInt(0))
   }
 
   updateMarchCap(marchCap:Big) {

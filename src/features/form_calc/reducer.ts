@@ -38,8 +38,13 @@ const _formCalcReducer = createReducer(BlankFCState)
     console.log(formCalcs)
     const reducer = (fd:{[key: string]: MFormCalc}, fc:MFormCalc) => Object.assign(fd, { [fc.id]: fc } )
     const reduced = formCalcs.reduce(reducer, {} as {[key: string]: MFormCalc})
+    let currentId = state.currentId
+    if( !currentId ) {
+      currentId = formCalcs[formCalcs.length-1]?.id
+    }
     return ({
       ...state,
+      currentId: currentId,
       formCalcs: {
         ...state.formCalcs,
         ...reduced
