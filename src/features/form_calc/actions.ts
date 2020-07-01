@@ -39,6 +39,8 @@ export const setFcId = createAction('SET_FC_ID', (id:string) => ({
   id: id
 }))<IdOnly>()
 
+export const clearCalculators = createAction('CLEAR_CALCULATORS', () => {})<void>()
+
 export const updateName = createAction('UPDATE_NAME', (id: string, value: string) => ({
   id: id,
   value: value

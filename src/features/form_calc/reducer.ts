@@ -73,6 +73,9 @@ const _formCalcReducer = createReducer(BlankFCState)
       currentId: action.payload.id
     }
   })
+  .handleAction(actions.clearCalculators, (state, action) => {
+    return BlankFCState
+  })
   .handleAction(actions.updateName, (state, action) => {
     return fcReturnState(state, getFormationById(state, action.payload.id).updateNameHandler(action.payload));
   })
