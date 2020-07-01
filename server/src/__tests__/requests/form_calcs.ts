@@ -23,8 +23,13 @@ beforeEach( async () => {
   await dbManager.truncateDb(['knex_migrations', 'knex_migrations_lock'])
 })
 
-const createUserFormCalc = async (name:string, json:any) => {
-  const user = await createRegularUser('password')
+const createUserFormCalc = async (name:string, json:any, admin=false) => {
+  let user
+  if( admin ) {
+    user = await createAdminUser('password')
+  } else {
+    user = await createRegularUser('password')
+  }
   const jwt = await user.getJwtToken()
   const formCalc = await FormCalc.query().insert({
     name: name,
@@ -37,7 +42,8 @@ const createUserFormCalc = async (name:string, json:any) => {
 describe('FormCalc routes', () => {
   const formCalc = {
     name: faker.random.word(),
-    json: '{"a":"b"}'
+    json: '{"a":"b"}',
+    preset: false
   }
   describe('POST /create', () => {
     describe('with no JWT cookie', () => {
@@ -49,7 +55,7 @@ describe('FormCalc routes', () => {
           .end(done)
       })
     })
-    describe('with valid JWT cookie', () => {
+    describe('with valid JWT cookie for non-admin user', () => {
       describe('with valid params', () => {
         it('should return 201 ', async (done) => {
           const user = await createRegularUser('password')
@@ -62,9 +68,10 @@ describe('FormCalc routes', () => {
             .expect(201)
             .end(done)
         })
-        it('should create a record in the DB ', async (done) => {
+        it('should create a record in the DB ignoring preset flag', async (done) => {
           const user = await createRegularUser('password')
           const jwt = await user.getJwtToken()
+          formCalc.preset = true
           request(app)
             .post('/api/form_calcs/create')
             .send(formCalc)
@@ -77,10 +84,12 @@ describe('FormCalc routes', () => {
               expect(resObj.name).toEqual(formCalc.name)
               expect(resObj.json).toEqual(formCalc.json)
               expect(resObj.user_id).toEqual(user.id.toString())
+              expect(resObj.preset).toEqual(false)
 
               const fcRecord = await FormCalc.findByUserIdAndName(user.id, formCalc.name)
               expect(fcRecord).toBeTruthy()
               expect(fcRecord.name).toEqual(formCalc.name)
+              expect(fcRecord.preset).toEqual(false)
               expect(fcRecord.json).toEqual(JSON.parse(formCalc.json))
               done()
             })
@@ -89,6 +98,60 @@ describe('FormCalc routes', () => {
       describe('with invalid params', () => {
         it('it should return 400 ', async (done) => {
           const user = await createRegularUser('password')
+          const jwt = await user.getJwtToken()
+
+          request(app)
+            .post('/api/form_calcs/create')
+            .send({ json: '{}' })
+            .set('Cookie', [`${cookieProps.key}=${jwt}`])
+            .expect(400)
+            .end(done)
+        })
+      })
+    })
+    describe('with valid JWT cookie for admin user', () => {
+      describe('with valid params', () => {
+        it('should return 201 ', async (done) => {
+          const user = await createAdminUser('password')
+          const jwt = await user.getJwtToken()
+
+          request(app)
+            .post('/api/form_calcs/create')
+            .send(formCalc)
+            .set('Cookie', [`${cookieProps.key}=${jwt}`])
+            .expect(201)
+            .end(done)
+        })
+        it('should create a record in the DB with the preset flag and no user_id', async (done) => {
+          const user = await createAdminUser('password')
+          const jwt = await user.getJwtToken()
+          formCalc.preset = true
+          request(app)
+            .post('/api/form_calcs/create')
+            .send(formCalc)
+            .set('Cookie', [`${cookieProps.key}=${jwt}`])
+            .expect(201)
+            .end(async (err,res) => {
+              if(err) return(done(err))
+
+              const resObj = res.body
+              expect(resObj.name).toEqual(formCalc.name)
+              expect(resObj.json).toEqual(formCalc.json)
+              expect(resObj.user_id).toEqual(null)
+              expect(resObj.preset).toEqual(true)
+
+              const fcRecord = await FormCalc.findOne(resObj.id) as FormCalc
+              expect(fcRecord).toBeTruthy()
+              expect(fcRecord.name).toEqual(formCalc.name)
+              expect(fcRecord.preset).toEqual(true)
+              expect(fcRecord.json).toEqual(JSON.parse(formCalc.json))
+              done()
+            })
+        })
+      })
+      describe('with invalid params', () => {
+        it('it should return 400 ', async (done) => {
+          const user = await createAdminUser('password')
           const jwt = await user.getJwtToken()
 
           request(app)
@@ -111,7 +174,7 @@ describe('FormCalc routes', () => {
         .end(done)
       })
     })
-    describe('with valid JWT cookie', () => {
+    describe('with valid JWT cookie for non-admin user', () => {
       describe('with valid params', () => {
         it('should return 200', async (done) => {
           const { formCalc, jwt } = await createUserFormCalc('fc1', {a:'b'})
@@ -122,9 +185,10 @@ describe('FormCalc routes', () => {
             .expect(200)
             .end(done)
         })
-        it('should update the record in the DB', async (done) => {
+        it('should update the record in the DB without the preset flag', async (done) => {
           const { formCalc, user, jwt } = await createUserFormCalc('fc1', {a:'b'})
           formCalc.name = 'newName'
+          formCalc.preset = true
           request(app)
             .put(`/api/form_calcs/update/${formCalc.id}`)
             .send(formCalc)
@@ -136,6 +200,7 @@ describe('FormCalc routes', () => {
               const fcRecord = await formCalc.$reload()
               expect(fcRecord).toBeTruthy()
               expect(fcRecord.name).toEqual(formCalc.name)
+              expect(fcRecord.preset).toEqual(false)
               expect(fcRecord.json).toEqual(JSON.parse(formCalc.json))
               done()
             })
@@ -144,6 +209,52 @@ describe('FormCalc routes', () => {
       describe('with invalid params', () => {
         it('it should return 400 ', async (done) => {
           const { formCalc, jwt } = await createUserFormCalc('fc1', {a:'b'})
+
+          request(app)
+            .put(`/api/form_calcs/update/${formCalc.id}`)
+            .send({ asdf: '{}' })
+            .set('Cookie', [`${cookieProps.key}=${jwt}`])
+            .expect(400)
+            .end(done)
+        })
+      })
+    })
+    describe('with valid JWT cookie for admin user', () => {
+      describe('with valid params', () => {
+        it('should return 200', async (done) => {
+          const { formCalc, jwt } = await createUserFormCalc('fc1', {a:'b'}, true)
+          request(app)
+            .put(`/api/form_calcs/update/${formCalc.id}`)
+            .send(formCalc)
+            .set('Cookie', [`${cookieProps.key}=${jwt}`])
+            .expect(200)
+            .end(done)
+        })
+        it('should update the record in the DB the preset flag and null user_id', async (done) => {
+          const { formCalc, user, jwt } = await createUserFormCalc('fc1', {a:'b'}, true)
+          formCalc.name = 'newName'
+          formCalc.preset = true
+          request(app)
+            .put(`/api/form_calcs/update/${formCalc.id}`)
+            .send(formCalc)
+            .set('Cookie', [`${cookieProps.key}=${jwt}`])
+            .expect(200)
+            .end(async (err,res) => {
+              if(err) return(done(err))
+              expect(res.body).toEqual(1)
+              const fcRecord = await formCalc.$reload()
+              expect(fcRecord).toBeTruthy()
+              expect(fcRecord.name).toEqual(formCalc.name)
+              expect(fcRecord.preset).toEqual(true)
+              expect(fcRecord.user_id).toEqual(null)
+              expect(fcRecord.json).toEqual(JSON.parse(formCalc.json))
+              done()
+            })
+        })
+      })
+      describe('with invalid params', () => {
+        it('it should return 400 ', async (done) => {
+          const { formCalc, jwt } = await createUserFormCalc('fc1', {a:'b'}, true)
 
           request(app)
             .put(`/api/form_calcs/update/${formCalc.id}`)

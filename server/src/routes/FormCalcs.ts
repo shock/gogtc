@@ -43,6 +43,15 @@ router.post('/create', async (req: Request, res: Response) => {
   formCalc.json = req.body.json
   const user_id = res.locals.userId
   formCalc.user_id = user_id
+  const admin = res.locals.admin
+  if( admin ) {
+    formCalc.preset = req.body.preset && true
+    if( formCalc.preset ) {
+      formCalc.user_id = null
+    }
+  } else {
+    formCalc.preset = false
+  }
   try {
     formCalc.$validate()
   } catch (err) {
@@ -70,6 +79,15 @@ router.put('/update/:id', async (req: Request, res: Response) => {
   }
   if(formCalc.id) { formCalc.id = Number(formCalc.id) }
   if(formCalc.user_id) { formCalc.user_id = Number(formCalc.user_id) }
+  const admin = res.locals.admin
+  if( admin ) {
+    formCalc.preset = req.body.preset && true
+    if( formCalc.preset ) {
+      formCalc.user_id = null
+    }
+  } else {
+    formCalc.preset = false
+  }
   try {
     const rowsUpdated = await FormCalc.patch(Number(id), formCalc)
     return res.status(OK).json(rowsUpdated)

@@ -4,7 +4,7 @@ export type FormCalc = {
   description: string
   json: string,
   preset: boolean,
-  user_id: number
+  user_id: number | null
 }
 
 export default FormCalc
