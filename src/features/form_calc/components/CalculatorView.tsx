@@ -169,7 +169,7 @@ class CalculatorViewBase extends React.Component<Props, State> {
     const disabled = !this.data()?.isChanged()
     return (
       <Col sm={1}>
-        <Button disabled={disabled} onClick={this.handleSaveClick}>SAVE</Button>
+        <Button variant='info' disabled={disabled} onClick={this.handleSaveClick}>SAVE</Button>
       </Col>
     )
   }
