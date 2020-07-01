@@ -10,6 +10,15 @@ import { userMW } from './middleware'
 // Init shared
 const router = Router().use(userMW)
 
+const getIdFromParams = (req:Request) => {
+  const { id } = req.params as ParamsDictionary
+  return Number(id)
+}
+
+const getParam = (req:Request, name:string) => {
+  const params = req.params as ParamsDictionary
+  return params[name]
+}
 
 /******************************************************************************
  *                      Get All FormCalcs - "GET /api/form_calcs/all"
@@ -70,15 +79,21 @@ router.post('/create', async (req: Request, res: Response) => {
 
 router.put('/update/:id', async (req: Request, res: Response) => {
   // Check Parameters
-  const { id } = req.params as ParamsDictionary
+  const id = getIdFromParams(req)
   const formCalc = req.body
   if (!formCalc) {
     return res.status(BAD_REQUEST).json({
       error: paramMissingError,
     })
   }
-  if(formCalc.id) { formCalc.id = Number(formCalc.id) }
-  if(formCalc.user_id) { formCalc.user_id = Number(formCalc.user_id) }
+  if(formCalc.id) {
+    formCalc.id = Number(formCalc.id)
+    if( formCalc.id !== id ) {
+      return res.status(BAD_REQUEST).json('Mismatched IDs')
+    }
+  }
+  const user_id = res.locals.userId
+  formCalc.user_id = user_id
   const admin = res.locals.admin
   if( admin ) {
     formCalc.preset = req.body.preset && true
@@ -89,7 +104,7 @@ router.put('/update/:id', async (req: Request, res: Response) => {
     formCalc.preset = false
   }
   try {
-    const rowsUpdated = await FormCalc.patch(Number(id), formCalc)
+    const rowsUpdated = await FormCalc.patch(id, formCalc)
     return res.status(OK).json(rowsUpdated)
   } catch(err) {
     return res.status(BAD_REQUEST).json({
