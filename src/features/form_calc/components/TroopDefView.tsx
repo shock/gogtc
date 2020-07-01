@@ -116,6 +116,7 @@ class TroopDefViewBase extends React.Component<Props> {
             format={NumEntry.formatPercent}
             parse={NumEntry.parsePercent}
             onChange={this.handlePercentChange}
+            onFocus={NumEntry.onFocus}
             tabIndex={2}
           />
         </div>
@@ -134,6 +135,7 @@ class TroopDefViewBase extends React.Component<Props> {
             format={NumEntry.formatInteger}
             parse={NumEntry.parseInteger}
             onChange={this.handleCountChange}
+            onFocus={NumEntry.onFocus}
             tabIndex={3}
           />
         </div>

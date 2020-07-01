@@ -164,6 +164,7 @@ class TierDefViewBase extends React.Component<Props> {
                 format={NumEntry.formatPercent}
                 parse={NumEntry.parsePercent}
                 onChange={this.handleTierPercentChange}
+                onFocus={NumEntry.onFocus}
                 tabIndex={1}
               />
             </div>

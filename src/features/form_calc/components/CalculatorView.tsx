@@ -201,6 +201,7 @@ class CalculatorViewBase extends React.Component<Props, State> {
               format={NumEntry.formatInteger}
               parse={NumEntry.parseInteger}
               onChange={this.handleMarchCapChange}
+              onFocus={NumEntry.onFocus}
             />
           </Col>
           <Col sm={2}>
