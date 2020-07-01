@@ -347,8 +347,11 @@ class MFormCalc extends MBase {
   // logicless setters
 
   updateName(name:string) {
-    this.name = name
-    this.markForUpdate()
+    name = name.trim()
+    if( this.name !== name ) {
+      this.name = name
+      this.markForUpdate()
+    }
   }
 
 };

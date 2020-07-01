@@ -15,7 +15,7 @@ import { SummaryView } from './SummaryView'
 
 const mapStateToProps = (state: RootState) => ({
   formCalcs: selectors.getFormCalcs(state.formCalc),
-  currentId: state.formCalc.present.currentId
+  currentId: selectors.getCurrentId(state.formCalc)
 });
 
 const dispatchProps = {

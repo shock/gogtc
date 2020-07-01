@@ -7,8 +7,8 @@ import TT from '../../../components/tooltips';
 
 const mapStateToProps = (state:RootState) => {
   return {
-    canUndo: state.formCalc.past.length > 0,
-    canRedo: state.formCalc.future.length > 0
+    canUndo: state.formCalc.formCalcs.past.length > 0,
+    canRedo: state.formCalc.formCalcs.future.length > 0
   }
 }
 
