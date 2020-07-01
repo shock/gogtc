@@ -1,18 +1,18 @@
-import { RootState } from 'typesafe-actions';
-import * as React from 'react';
-import { connect } from 'react-redux';
-import { Row, Col, Form, Button } from 'react-bootstrap';
-import NumericInput from 'react-numeric-input';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { RootState } from 'typesafe-actions'
+import * as React from 'react'
+import { connect } from 'react-redux'
+import { Row, Col, Form, Button } from 'react-bootstrap'
+import NumericInput from 'react-numeric-input'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import * as NumEntry from '../../../lib/num-entry';
-import * as actions from '../actions';
-import * as selectors from '../selectors';
+import * as NumEntry from '../../../lib/num-entry'
+import * as actions from '../actions'
+import * as selectors from '../selectors'
 import * as usersSelector from '../../users/selectors'
 import { UserRoles } from '../../../client_server/interfaces/User'
-import { TierDefView } from './TierDefView';
-import config from '../../../config';
-import UndoRedo from './UndoRedo';
+import { TierDefView } from './TierDefView'
+import config from '../../../config'
+import UndoRedo from './UndoRedo'
 
 const mapStateToProps = (state: RootState) => ({
   currentUser: usersSelector.currentUser(state.users),
@@ -47,9 +47,6 @@ class CalculatorViewBase extends React.Component<Props, State> {
       name: this.data()?.name,
       editingName: false
     }
-    this.handleMarchCapChange = this.handleMarchCapChange.bind(this);
-    this.handleNameSubmit = this.handleNameSubmit.bind(this)
-    this.handleNameClick = this.handleNameClick.bind(this)
   }
 
   static defaultProps = {
@@ -57,7 +54,7 @@ class CalculatorViewBase extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps:Props) {
-    if((this.props.formCalcs != prevProps.formCalcs) || ( this.props.id !== prevProps.id )) {
+    if((this.props.formCalcs != prevProps.formCalcs) || ( this.id() !== prevProps.id )) {
       this.setState({
         name: this.data()?.name,
         editingName: false
@@ -65,30 +62,18 @@ class CalculatorViewBase extends React.Component<Props, State> {
     }
   }
 
-  id():string {
-    return this.props.id;
-  }
+  id():string { return this.props.id }
 
   data() {
-    const formCalc = this.props.formCalcs[this.props.id];
+    const formCalc = this.props.formCalcs[this.id()]
     return formCalc;
   }
 
-  isPreset() {
-    return this.data()?.preset
-  }
+  isPreset() { return this.data()?.preset }
 
-  currentUser() {
-    return this.props.currentUser
-  }
+  currentUser() { return this.props.currentUser }
 
-  isAdmin() {
-    return this.currentUser()?.role === UserRoles.Admin
-  }
-
-  hasModel() {
-    return this.data() !== undefined;
-  }
+  isAdmin() { return this.currentUser()?.role === UserRoles.Admin }
 
   buildTierDefViews() {
     return this.data().tierDefs.map( (tierDef, index) => {
@@ -103,10 +88,6 @@ class CalculatorViewBase extends React.Component<Props, State> {
         />
       );
     });
-  }
-
-  handleMarchCapChange(numVal:number|null, strVal:string, target:HTMLInputElement) {
-    this.props.updateMarchCap(this.props.id, ''+numVal);
   }
 
   renderDebug() {
@@ -130,18 +111,6 @@ class CalculatorViewBase extends React.Component<Props, State> {
     } else return null
   }
 
-  handleNameSubmit(e:any) {
-    this.setState({editingName: false})
-    if( this.state.name !== this.data().name ) {this.props.updateName(this.props.id, this.state.name)}
-  }
-
-  handleNameClick(e:any) {
-    this.setState({editingName: true}, () => {
-      const node = this.nameInputRef.current
-      if( node ) { node.focus() }
-    })
-  }
-
   renderName() {
     const onChange = (event:React.ChangeEvent<HTMLInputElement>) => this.setState({name: event.target.value})
     const onKeyUp = (event:React.KeyboardEvent<HTMLInputElement>) => {
@@ -149,9 +118,19 @@ class CalculatorViewBase extends React.Component<Props, State> {
         this.setState({editingName: false, name: this.data().name} )
       }
     }
+    const nameSubmit = (e:any) => {
+      this.setState({editingName: false})
+      if( this.state.name !== this.data().name ) {this.props.updateName(this.id(), this.state.name)}
+    }
+    const nameClick = (e:any) => {
+      this.setState({editingName: true}, () => {
+        const node = this.nameInputRef.current
+        if( node ) { node.focus() }
+      })
+    }
     if( this.state.editingName ) {
       return (
-        <Form onSubmit={this.handleNameSubmit}>
+        <Form onSubmit={nameSubmit}>
           <Form.Control
             as="input"
             value={this.state.name}
@@ -159,12 +138,12 @@ class CalculatorViewBase extends React.Component<Props, State> {
             onKeyUp={onKeyUp}
             ref={this.nameInputRef}
           />
-          <Button variant="primary" onClick={this.handleNameSubmit}>OK</Button>
+          <Button variant="primary" onClick={nameSubmit}>OK</Button>
         </Form>
       )
     } else {
       return (
-        <div onClick={this.handleNameClick}>
+        <div onClick={nameClick}>
           <span className="fcName">{this.state.name}</span>
           <span className="fcNicon"><FontAwesomeIcon icon={'pencil-alt'} fixedWidth/></span>
         </div>
@@ -189,7 +168,7 @@ class CalculatorViewBase extends React.Component<Props, State> {
   renderAdminRow() {
     const admin = this.isAdmin()
     const onClick = (e:any) => {
-      this.props.updatePresetFlag(this.props.id, !this.isPreset())
+      this.props.updatePresetFlag(this.id(), !this.isPreset())
     }
     if( admin ) {
       return (
@@ -211,12 +190,16 @@ class CalculatorViewBase extends React.Component<Props, State> {
   render() {
     if( !this.data() ) {
       if( this.props.debug ) {
-        return (<h4>Can't find form calc with id '{this.props.id}'</h4>)
+        return (<h4>Can't find form calc with id '{this.id()}'</h4>)
       } else {
         return (<h4>Please select a calculator</h4>)
       }
     }
     const formCalc = this.data();
+    const marchCapChange = (numVal:number|null, strVal:string, target:HTMLInputElement) => {
+      this.props.updateMarchCap(this.id(), ''+numVal);
+    }
+
     return (
       <React.Fragment>
         <Row>
@@ -234,7 +217,7 @@ class CalculatorViewBase extends React.Component<Props, State> {
               value={formCalc.marchCap.toString()}
               format={NumEntry.formatInteger}
               parse={NumEntry.parseInteger}
-              onChange={this.handleMarchCapChange}
+              onChange={marchCapChange}
               onFocus={NumEntry.onFocus}
             />
           </Col>
