@@ -122,7 +122,7 @@ class CalculatorViewBase extends React.Component<Props, State> {
 
   handleNameSubmit(e:any) {
     this.setState({editingName: false})
-    this.props.updateName(this.props.id, this.state.name)
+    if( this.state.name !== this.data().name ) {this.props.updateName(this.props.id, this.state.name)}
   }
 
   handleNameClick(e:any) {
