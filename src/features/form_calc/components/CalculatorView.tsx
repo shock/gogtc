@@ -75,7 +75,7 @@ class CalculatorViewBase extends React.Component<Props, State> {
 
   isAdmin() { return this.currentUser()?.role === UserRoles.Admin }
 
-  buildTierDefViews() {
+  renderTierDefViews() {
     return this.data().tierDefs.map( (tierDef, index) => {
       return (
         <TierDefView
@@ -90,7 +90,7 @@ class CalculatorViewBase extends React.Component<Props, State> {
     })
   }
 
-  renderDebug() {
+  renderDebugRow() {
     if( !this.data() ) return (null)
     const formCalc = this.data()
     if( this.props.debug ) {
@@ -152,7 +152,7 @@ class CalculatorViewBase extends React.Component<Props, State> {
     }
   }
 
-  renderSave() {
+  renderSaveCol() {
     const disabled = !this.data()?.isChanged()
     const onClick = () => this.props.saveFormCalc(this.data())
     return (
@@ -188,6 +188,29 @@ class CalculatorViewBase extends React.Component<Props, State> {
     } else { return (null) }
   }
 
+  renderMarchCapCol() {
+    const marchCapChange = (numVal:number|null, strVal:string, target:HTMLInputElement) => {
+      this.props.updateMarchCap(this.id(), ''+numVal)
+    }
+
+    return (
+      <Col >
+        <label>March Cap</label>&nbsp;
+        <NumericInput
+          step={1000}
+          snap
+          min={0}
+          max={999999}
+          value={this.data().marchCap.toString()}
+          format={NumEntry.formatInteger}
+          parse={NumEntry.parseInteger}
+          onChange={marchCapChange}
+          onFocus={NumEntry.onFocus}
+        />
+      </Col>
+    )
+  }
+
   render() {
     if( !this.data() ) {
       if( this.props.debug ) {
@@ -197,40 +220,23 @@ class CalculatorViewBase extends React.Component<Props, State> {
       }
     }
 
-    const marchCapChange = (numVal:number|null, strVal:string, target:HTMLInputElement) => {
-      this.props.updateMarchCap(this.id(), ''+numVal)
-    }
-
     return (
       <React.Fragment>
         <Row>
           <Col sm={5} className="fcNameForm">
             {this.renderName()}
           </Col>
-          {this.renderSave()}
-          <Col >
-            <label>March Cap</label>&nbsp;
-            <NumericInput
-              step={1000}
-              snap
-              min={0}
-              max={999999}
-              value={this.data().marchCap.toString()}
-              format={NumEntry.formatInteger}
-              parse={NumEntry.parseInteger}
-              onChange={marchCapChange}
-              onFocus={NumEntry.onFocus}
-            />
-          </Col>
+          {this.renderSaveCol()}
+          {this.renderMarchCapCol()}
           <Col sm={2}>
             <UndoRedo/>
           </Col>
         </Row>
         {this.renderAdminRow()}
-        {this.renderDebug()}
+        {this.renderDebugRow()}
         <Row>
           <Col>
-            {this.buildTierDefViews()}
+            {this.renderTierDefViews()}
           </Col>
         </Row>
       </React.Fragment>
