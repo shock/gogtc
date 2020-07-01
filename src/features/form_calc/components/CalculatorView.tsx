@@ -17,7 +17,7 @@ import UndoRedo from './UndoRedo'
 const mapStateToProps = (state: RootState) => ({
   currentUser: usersSelector.currentUser(state.users),
   formCalcs: selectors.getFormCalcs(state.formCalc),
-});
+})
 
 const dispatchProps = {
   resetState: actions.resetState,
@@ -25,14 +25,14 @@ const dispatchProps = {
   updateMarchCap: actions.updateMarchCap,
   updatePresetFlag: actions.updatePresetFlag,
   saveFormCalc: actions.saveFormCalc
-};
-
-interface CalculatorViewProps {
-  id: string;
-  debug: boolean;
 }
 
-type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & CalculatorViewProps;
+interface CalculatorViewProps {
+  id: string
+  debug: boolean
+}
+
+type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & CalculatorViewProps
 type State = {
   name: string
   editingName: boolean
@@ -42,7 +42,7 @@ class CalculatorViewBase extends React.Component<Props, State> {
   private nameInputRef = React.createRef<HTMLInputElement>()
 
   constructor(props: Props) {
-    super(props);
+    super(props)
     this.state = {
       name: this.data()?.name,
       editingName: false
@@ -66,7 +66,7 @@ class CalculatorViewBase extends React.Component<Props, State> {
 
   data() {
     const formCalc = this.props.formCalcs[this.id()]
-    return formCalc;
+    return formCalc
   }
 
   isPreset() { return this.data()?.preset }
@@ -86,13 +86,13 @@ class CalculatorViewBase extends React.Component<Props, State> {
           index={index}
           debug={this.props.debug}
         />
-      );
-    });
+      )
+    })
   }
 
   renderDebug() {
-    if( !this.data() ) return (null);
-    const formCalc = this.data();
+    if( !this.data() ) return (null)
+    const formCalc = this.data()
     if( this.props.debug ) {
       return (
         <Row>
@@ -122,6 +122,7 @@ class CalculatorViewBase extends React.Component<Props, State> {
       this.setState({editingName: false})
       if( this.state.name !== this.data().name ) {this.props.updateName(this.id(), this.state.name)}
     }
+
     const nameClick = (e:any) => {
       this.setState({editingName: true}, () => {
         const node = this.nameInputRef.current
@@ -195,9 +196,10 @@ class CalculatorViewBase extends React.Component<Props, State> {
         return (<h4>Please select a calculator</h4>)
       }
     }
-    const formCalc = this.data();
+
+    const formCalc = this.data()
     const marchCapChange = (numVal:number|null, strVal:string, target:HTMLInputElement) => {
-      this.props.updateMarchCap(this.id(), ''+numVal);
+      this.props.updateMarchCap(this.id(), ''+numVal)
     }
 
     return (
@@ -233,13 +235,13 @@ class CalculatorViewBase extends React.Component<Props, State> {
           </Col>
         </Row>
       </React.Fragment>
-    );
+    )
   }
 }
 
 const CalculatorView = connect(
   mapStateToProps,
   dispatchProps
-)(CalculatorViewBase);
+)(CalculatorViewBase)
 
-export { CalculatorView };
+export { CalculatorView }
