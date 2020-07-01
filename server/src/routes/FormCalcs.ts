@@ -86,6 +86,12 @@ router.put('/update/:id', async (req: Request, res: Response) => {
       error: paramMissingError,
     })
   }
+  const tryFormCalc = await FormCalc.query().findById(id) as FormCalc
+  if( !tryFormCalc ) {
+    return res.status(NOT_FOUND).json({
+      error: `No form_calc exists with id: '${id}'`
+    })
+  }
   if(formCalc.id) {
     formCalc.id = Number(formCalc.id)
     if( formCalc.id !== id ) {
@@ -93,7 +99,6 @@ router.put('/update/:id', async (req: Request, res: Response) => {
     }
   }
   const user_id = res.locals.userId
-  formCalc.user_id = user_id
   const admin = res.locals.admin
   if( admin ) {
     formCalc.preset = req.body.preset && true
@@ -101,6 +106,11 @@ router.put('/update/:id', async (req: Request, res: Response) => {
       formCalc.user_id = null
     }
   } else {
+    if( tryFormCalc.user_id !== user_id ) {
+      return res.status(UNAUTHORIZED).json({
+        error: 'Not owned by user'
+      })
+    }
     formCalc.preset = false
   }
   try {

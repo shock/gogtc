@@ -185,26 +185,49 @@ describe('FormCalc routes', () => {
             .expect(200)
             .end(done)
         })
-        it('should update the record in the DB without the preset flag', async (done) => {
-          const { formCalc, user, jwt } = await createUserFormCalc('fc1', {a:'b'})
-          formCalc.name = 'newName'
-          formCalc.preset = true
-          request(app)
-            .put(`/api/form_calcs/update/${formCalc.id}`)
-            .send(formCalc)
-            .set('Cookie', [`${cookieProps.key}=${jwt}`])
-            .expect(200)
-            .end(async (err,res) => {
-              if(err) return(done(err))
-              expect(res.body).toEqual(1)
-              const fcRecord = await formCalc.$reload()
-              expect(fcRecord).toBeTruthy()
-              expect(fcRecord.name).toEqual(formCalc.name)
-              expect(fcRecord.preset).toEqual(false)
-              expect(fcRecord.json).toEqual(JSON.parse(formCalc.json))
-              done()
-            })
-        })
+        describe('record does not belong to user', () => {
+          it('should return a 401 and not update the record', async (done) => {
+            const otherRecords = await createUserFormCalc('fc2', {a:'b'})
+            const otherFormCalc = otherRecords.formCalc
+            const { formCalc, user, jwt } = await createUserFormCalc('fc1', {a:'b'})
+            otherFormCalc.name = 'newName'
+            otherFormCalc.preset = true
+            request(app)
+              .put(`/api/form_calcs/update/${otherFormCalc.id}`)
+              .send(otherFormCalc)
+              .set('Cookie', [`${cookieProps.key}=${jwt}`])
+              .expect(401)
+              .end(async (err,res) => {
+                if(err) return(done(err))
+                const fcRecord = await otherFormCalc.$reload()
+                expect(fcRecord).toBeTruthy()
+                expect(fcRecord.name).toEqual('fc2')
+                done()
+              })
+          })
+        });
+        describe('record belongs to user', () => {
+          it('should update the record in the DB without the preset flag', async (done) => {
+            const { formCalc, user, jwt } = await createUserFormCalc('fc1', {a:'b'})
+            formCalc.name = 'newName'
+            formCalc.preset = true
+            request(app)
+              .put(`/api/form_calcs/update/${formCalc.id}`)
+              .send(formCalc)
+              .set('Cookie', [`${cookieProps.key}=${jwt}`])
+              .expect(200)
+              .end(async (err,res) => {
+                if(err) return(done(err))
+                expect(res.body).toEqual(1)
+                const fcRecord = await formCalc.$reload()
+                expect(fcRecord).toBeTruthy()
+                expect(fcRecord.name).toEqual(formCalc.name)
+                expect(fcRecord.preset).toEqual(false)
+                expect(fcRecord.json).toEqual(JSON.parse(formCalc.json))
+                done()
+              })
+          })
+        });
       })
       describe('with invalid params', () => {
         it('it should return 400 ', async (done) => {
