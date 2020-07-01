@@ -24,7 +24,8 @@ const dispatchProps = {
   updateName: actions.updateName,
   updateMarchCap: actions.updateMarchCap,
   updatePresetFlag: actions.updatePresetFlag,
-  saveFormCalc: actions.saveFormCalc
+  saveFormCalc: actions.saveFormCalc,
+  deleteFormCalc: actions.deleteCalcAsync.request
 }
 
 interface CalculatorViewProps {
@@ -160,7 +161,7 @@ class CalculatorViewBase extends React.Component<Props, State> {
     const saveDisabled = !this.data()?.isChanged()
     const deleteDisabled = !canDelete()
     const onSaveClick = () => this.props.saveFormCalc(this.data())
-    const onDeleteClick = () => this.props.saveFormCalc(this.data())
+    const onDeleteClick = () => this.props.deleteFormCalc(this.data())
     const style={margin: '0 0 2px'}
     return (
       <Col sm={2}>
@@ -169,7 +170,7 @@ class CalculatorViewBase extends React.Component<Props, State> {
           variant='danger'
           disabled={deleteDisabled}
           style={style}
-          // onClick={onDeleteClick}
+          onClick={onDeleteClick}
         >DELETE</Button>&nbsp;
         <Button
           size='sm'

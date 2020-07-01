@@ -164,11 +164,16 @@ export const isUpdatingCalc = createReducer(false as boolean)
   .handleAction(actions.updateCalcAsync.request, (state, action) => ( true ))
   .handleAction([actions.updateCalcAsync.success,actions.updateCalcAsync.failure], (state, action) => ( false ))
 
+export const isDeletingCalc = createReducer(false as boolean)
+  .handleAction(actions.deleteCalcAsync.request, (state, action) => ( true ))
+  .handleAction([actions.deleteCalcAsync.success,actions.deleteCalcAsync.failure], (state, action) => ( false ))
+
 const formCalcReducers = combineReducers({
   formCalcs: formCalcReducer,
   isCreatingCalc,
   isLoadingUserCalcs,
   isUpdatingCalc,
+  isDeletingCalc
 });
 
 export default formCalcReducers;
