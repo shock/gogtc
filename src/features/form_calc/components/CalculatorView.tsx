@@ -122,7 +122,6 @@ class CalculatorViewBase extends React.Component<Props, State> {
       this.setState({editingName: false})
       if( this.state.name !== this.data().name ) {this.props.updateName(this.id(), this.state.name)}
     }
-
     const nameClick = (e:any) => {
       this.setState({editingName: true}, () => {
         const node = this.nameInputRef.current
@@ -153,14 +152,31 @@ class CalculatorViewBase extends React.Component<Props, State> {
   }
 
   renderSaveCol() {
-    const disabled = !this.data()?.isChanged()
-    const onClick = () => this.props.saveFormCalc(this.data())
+    const canDelete = () => {
+      if( this.isAdmin() ) { return true }
+      if( this.isPreset() ) { return false }
+      return true
+    }
+    const saveDisabled = !this.data()?.isChanged()
+    const deleteDisabled = !canDelete()
+    const onSaveClick = () => this.props.saveFormCalc(this.data())
+    const onDeleteClick = () => this.props.saveFormCalc(this.data())
+    const style={margin: '0 0 2px'}
     return (
-      <Col sm={1}>
+      <Col sm={2}>
         <Button
+          size='sm'
+          variant='danger'
+          disabled={deleteDisabled}
+          style={style}
+          // onClick={onDeleteClick}
+        >DELETE</Button>&nbsp;
+        <Button
+          size='sm'
           variant='info'
-          disabled={disabled}
-          onClick={onClick}
+          disabled={saveDisabled}
+          onClick={onSaveClick}
+          style={style}
         >SAVE</Button>
       </Col>
     )
