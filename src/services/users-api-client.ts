@@ -28,7 +28,7 @@ export function loginUser(loginUser:LoginUser): Promise<User> {
     postData(authEndpoint, loginUser).then(
       resp => {
         console.log('loginUser resp: ', resp)
-        resolve(resp)
+        resolve(resp.user)
       }
     ).catch(error => reject(error))
   });
