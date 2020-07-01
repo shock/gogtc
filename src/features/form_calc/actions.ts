@@ -29,6 +29,12 @@ export const updateCalcAsync = createAsyncAction(
   'UPDATE_CALC_FAILURE'
 )<MFormCalc, MFormCalc, string>();
 
+export const deleteCalcAsync = createAsyncAction(
+  'DELETE_CALC_REQUEST',
+  'DELETE_CALC_SUCCESS',
+  'DELETE_CALC_FAILURE'
+)<MFormCalc, MFormCalc, string>();
+
 export const loadUserCalcsAsync = createAsyncAction(
   'LOAD_USER_CALCS_REQUEST',
   'LOAD_USER_CALCS_SUCCESS',
