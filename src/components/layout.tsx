@@ -7,6 +7,7 @@ import { RootState } from 'typesafe-actions'
 import * as actions from '../features/users/actions'
 import * as usersSelector from '../features/users/selectors'
 import { GeneralModal, GeneralAlert } from '../features/modals/components'
+import { getAsyncBusy } from '../store/root-selectors'
 
 export interface LayoutProps {
   title: string,
@@ -15,7 +16,8 @@ export interface LayoutProps {
 }
 
 const mapState = (state:RootState) => ({
-  currentUser: usersSelector.currentUser(state.users)
+  currentUser: usersSelector.currentUser(state.users),
+  asyncBusy: getAsyncBusy(state)
 })
 
 const mapDispatch = {
@@ -51,8 +53,10 @@ class Layout extends React.Component<Props> {
   }
 
   render () {
+    const displayBusy = this.props.asyncBusy ? 'block' : 'none'
     return (
       <main>
+        <div className='async_busy' style={{display: displayBusy}}></div>
         <Container fluid>
           <GeneralAlert/>
           <Row>

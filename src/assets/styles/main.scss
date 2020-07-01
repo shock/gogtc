@@ -7,6 +7,21 @@
 @import './custom-classes';
 @import './colors';
 
+div.async_busy {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  z-index: 10000000;
+  cursor: progress;
+  display: none;
+  background-image: url('../images/busy-2.gif');
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.5;
+
+}
+
 span.react-numeric-input input {
   max-width: 6.1rem;
 }

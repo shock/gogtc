@@ -1,3 +1,4 @@
+import { combineReducers } from 'redux'
 import undoable, { excludeAction } from 'redux-undo';
 import { createReducer, getType } from 'typesafe-actions';
 import * as actions from './actions';
@@ -135,5 +136,24 @@ const formCalcReducer = undoable(_formCalcReducer, {
   )
 })
 
-export default formCalcReducer;
-export type FormCalcState = ReturnType<typeof formCalcReducer>;
+export const isCreatingCalc = createReducer(false as boolean)
+  .handleAction(actions.createCalcAsync.request, (state, action) => ( true ))
+  .handleAction([actions.createCalcAsync.success,actions.createCalcAsync.failure], (state, action) => ( false ))
+
+export const isLoadingUserCalcs = createReducer(false as boolean)
+  .handleAction(actions.loadUserCalcsAsync.request, (state, action) => ( true ))
+  .handleAction([actions.loadUserCalcsAsync.success,actions.loadUserCalcsAsync.failure], (state, action) => ( false ))
+
+export const isUpdatingCalc = createReducer(false as boolean)
+  .handleAction(actions.updateCalcAsync.request, (state, action) => ( true ))
+  .handleAction([actions.updateCalcAsync.success,actions.updateCalcAsync.failure], (state, action) => ( false ))
+
+const formCalcReducers = combineReducers({
+  formCalcs: formCalcReducer,
+  isCreatingCalc,
+  isLoadingUserCalcs,
+  isUpdatingCalc,
+});
+
+export default formCalcReducers;
+export type FormCalcState = ReturnType<typeof formCalcReducers>;
