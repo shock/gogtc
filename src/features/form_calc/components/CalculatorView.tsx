@@ -197,7 +197,6 @@ class CalculatorViewBase extends React.Component<Props, State> {
       }
     }
 
-    const formCalc = this.data()
     const marchCapChange = (numVal:number|null, strVal:string, target:HTMLInputElement) => {
       this.props.updateMarchCap(this.id(), ''+numVal)
     }
@@ -216,7 +215,7 @@ class CalculatorViewBase extends React.Component<Props, State> {
               snap
               min={0}
               max={999999}
-              value={formCalc.marchCap.toString()}
+              value={this.data().marchCap.toString()}
               format={NumEntry.formatInteger}
               parse={NumEntry.parseInteger}
               onChange={marchCapChange}
