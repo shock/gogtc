@@ -22,10 +22,10 @@ const Seeds:any = {
   seedData: {
     "User": [
       {
-        "name":"Sean Maxwell",
-        "email":"sean.maxwell@gmail.com",
+        "name":"regular user",
+        "email":"user@example.com",
         "password":"password", // password is "password"
-        "role":1
+        "role":0
       },
       {
         "name":"Admin",

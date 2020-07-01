@@ -8,18 +8,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as NumEntry from '../../../lib/num-entry';
 import * as actions from '../actions';
 import * as selectors from '../selectors';
+import * as usersSelector from '../../users/selectors'
+import { UserRoles } from '../../../client_server/interfaces/User'
 import { TierDefView } from './TierDefView';
 import config from '../../../config';
 import UndoRedo from './UndoRedo';
 
 const mapStateToProps = (state: RootState) => ({
-  formCalcs: selectors.getFormCalcs(state.formCalc)
+  currentUser: usersSelector.currentUser(state.users),
+  formCalcs: selectors.getFormCalcs(state.formCalc),
 });
 
 const dispatchProps = {
   resetState: actions.resetState,
   updateName: actions.updateName,
   updateMarchCap: actions.updateMarchCap,
+  updatePresetFlag: actions.updatePresetFlag,
   saveFormCalc: actions.saveFormCalc
 };
 
@@ -70,6 +74,18 @@ class CalculatorViewBase extends React.Component<Props, State> {
   data() {
     const formCalc = this.props.formCalcs[this.props.id];
     return formCalc;
+  }
+
+  isPreset() {
+    return this.data()?.preset
+  }
+
+  currentUser() {
+    return this.props.currentUser
+  }
+
+  isAdmin() {
+    return this.currentUser()?.role === UserRoles.Admin
   }
 
   hasModel() {
@@ -174,6 +190,29 @@ class CalculatorViewBase extends React.Component<Props, State> {
     )
   }
 
+  renderAdminRow() {
+    const admin = this.isAdmin()
+    console.log(`admin: ${admin}`)
+    const onClick = (e:any) => {
+      this.props.updatePresetFlag(this.props.id, !this.isPreset())
+    }
+    if( admin ) {
+      return (
+        <Row>
+          <Col>
+            <Form.Group>
+              <Form.Check
+                checked={this.data().preset}
+                label="Preset"
+                onClick={onClick}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+      )
+    } else { return (null) }
+  }
+
   render() {
     if( !this.data() ) {
       if( this.props.debug ) {
@@ -208,6 +247,7 @@ class CalculatorViewBase extends React.Component<Props, State> {
             <UndoRedo/>
           </Col>
         </Row>
+        {this.renderAdminRow()}
         {this.renderDebug()}
         <Row>
           <Col>

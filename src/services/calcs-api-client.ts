@@ -36,7 +36,8 @@ const updateCalcEndpoint = '/api/form_calcs/update'
 export function update(formCalc:MFormCalc): Promise<MFormCalc> {
   const preparedBody = {
     name: formCalc.name,
-    json: formCalc.toJsonObject()
+    json: formCalc.toJsonObject(),
+    preset: formCalc.preset
   }
   return new Promise((resolve, reject) => {
     async function request(url = '', data = {}) {
@@ -48,8 +49,11 @@ export function update(formCalc:MFormCalc): Promise<MFormCalc> {
       })
       if( response.status === 200 )
         return response.json(); // parses JSON response into native JavaScript objects
-      else
-        throw `received status code ${response.status}`
+      else {
+        const json = await response.json()
+        throw `received status code ${response.status}\n`+json
+      }
+
     }
     const endPoint = `${updateCalcEndpoint}/${formCalc.id}`
     request(endPoint, preparedBody).then(
@@ -70,8 +74,10 @@ export function getUserCalcs(): Promise<[MFormCalc]> {
       })
       if( response.status === 200 )
         return response.json(); // parses JSON response into native JavaScript objects
-      else
-        throw `received status code ${response.status}`
+      else {
+        const json = await response.json()
+        throw `received status code ${response.status}\n`+json
+      }
     }
     request(getUserCalcsEndpoint).then(
       resp => resolve(resp.formCalcs.map((dbObj:any) => {

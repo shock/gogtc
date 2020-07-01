@@ -119,6 +119,12 @@ class MFormCalc extends MBase {
     return this.objectForState();
   }
 
+  // Handles simple change to name
+  updatePresetFlagHandler(payload:IdBoolean) {
+    this.updatePresetFlag(payload.boolean)
+    return this.objectForState();
+  }
+
   // Handles change to main march cap.
   // should update entire formation based on new march cap
   updateMarchCapHandler(payload:IdString) {
@@ -350,6 +356,13 @@ class MFormCalc extends MBase {
     name = name.trim()
     if( this.name !== name ) {
       this.name = name
+      this.markForUpdate()
+    }
+  }
+
+  updatePresetFlag(preset:boolean) {
+    if( this.preset !== preset ) {
+      this.preset = preset
       this.markForUpdate()
     }
   }

@@ -3,7 +3,7 @@
   json:
     name: Grim Reaper
     id: ckbzwhr4100473h5x419v8k5k
-    marchCap: '144000'
+    marchCap: '500000'
     tierDefs:
       - tierNum: T12
         capacity: '79085'

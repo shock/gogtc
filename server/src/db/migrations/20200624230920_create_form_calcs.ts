@@ -8,7 +8,7 @@ export async function up(knex: Knex): Promise<any> {
       table.string('name').notNullable()
       table.string('description', 4096).notNullable().defaultTo('')
       table.json('json').notNullable().defaultTo('{}')
-      table.boolean('preset').defaultTo(false)
+      table.boolean('preset').defaultTo(false).notNullable()
       table
         .bigInteger('user_id')
         .unsigned()

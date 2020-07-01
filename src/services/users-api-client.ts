@@ -28,7 +28,7 @@ export function loginUser(loginUser:LoginUser): Promise<User> {
     postData(authEndpoint, loginUser).then(
       resp => {
         console.log('loginUser resp: ', resp)
-        resolve(resp)
+        resolve(resp.user)
       }
     ).catch(error => reject(error))
   });
@@ -55,8 +55,10 @@ export function logoutUser() {
       });
       if( response.status === 200 )
         return response
-      else
-        throw `received status code ${response.status}`
+      else {
+        const json = await response.json()
+        throw `received status code ${response.status}\n`+json
+      }
     }
     getData(logoutEndpoint).then(
       resp => {
@@ -91,8 +93,10 @@ export function createUser(createUser:CreateUser): Promise<CreateUser> {
       });
       if( response.status === 201 )
         return response.json() // parses JSON response into native JavaScript objects
-      else
-        throw `received status code ${response.status}`
+      else {
+        const json = await response.json()
+        throw `received status code ${response.status}\n`+json
+      }
     }
     postData(createUserEndpoint, {user: createUser}).then(
       resp => {
