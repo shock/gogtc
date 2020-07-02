@@ -208,7 +208,7 @@ class FormCalcPageBase extends React.Component<Props, State> {
     )
   }
 
-  render() {
+  renderActions() {
     const debugButton = (
       <Button
         variant={this.state.debug ? "secondary" : "info"}
@@ -223,13 +223,16 @@ class FormCalcPageBase extends React.Component<Props, State> {
       >{this.state.summary ? "Summary" : "Details"}</Button>
     );
     const sMsg = this.state.summary ? 'Show Calculator' : 'Show Summary';
-    const jsonButton = (
-      <Button
-        variant={this.state.showJson ? "secondary" : "info"}
-        onClick={this.handleJsonClick}
-      >Json</Button>
-    );
-    const jMsg = this.state.showJson ? 'Hide Json' : 'Show Json';
+    return (
+      <>
+        <TT tip={sMsg}>{summaryButton}</TT>
+        &nbsp;&nbsp;&nbsp;
+        <TT tip={dMsg}>{debugButton}</TT>
+      </>
+    )
+  }
+
+  render() {
 
     return (
       <React.Fragment>
@@ -256,14 +259,7 @@ class FormCalcPageBase extends React.Component<Props, State> {
             </Form>
           </Col>
           <Col sm={4}>
-            {/* <TT tip={sMsg}>{stateButton}</TT> */}
-            {/* &nbsp;&nbsp;&nbsp; */}
-            {/* <InlineButton text="SA" onClick={() => {this.props.showAlert('test')}} /> */}
-            {/* <TT tip={jMsg}>{jsonButton}</TT>
-            &nbsp;&nbsp;&nbsp; */}
-            <TT tip={sMsg}>{summaryButton}</TT>
-            &nbsp;&nbsp;&nbsp;
-            <TT tip={dMsg}>{debugButton}</TT>
+            {this.formCalc() ? this.renderActions() : null}
           </Col>
         </Row>
         {
