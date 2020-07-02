@@ -6,6 +6,21 @@ import * as actions from './actions';
 import { MFormCalc, FCState, BlankFCState, FormCalcDictionary, TestLibrary } from './models';
 import { getFormCalcId } from './lib/IdParser';
 
+const createCopyName = (state:FCState, formCalc:MFormCalc) => {
+  let copyName = formCalc.name+' - Copy'
+  const formCalcsArray = Object.values(state.formCalcs) as [MFormCalc]
+  const nameExists = (name:string, formCalcs:[MFormCalc]) => {
+    return formCalcs.reduce((exists:boolean, fc:MFormCalc) => {
+      exists = exists || fc.name === copyName
+      return exists
+    }, false)
+  }
+  while( nameExists(copyName, formCalcsArray) ) {
+    copyName = copyName+'+'
+  }
+  return copyName
+}
+
 const getFormationById = (state:FCState, id: string) => {
   const formId = getFormCalcId(id);
 
@@ -42,7 +57,7 @@ const _formCalcReducer = createReducer(BlankFCState)
   const currentFC = state.formCalcs[state.currentId]
   if( currentFC ) {
     const newFC = currentFC.clone()
-    newFC.updateName(newFC.name+' - Copy')
+    newFC.updateName(createCopyName(state, newFC))
     newFC.id = cuid()
     newFC.persisted = false
     newFC.preset = false
