@@ -142,8 +142,12 @@ class FormCalcPageBase extends React.Component<Props, State> {
 
     const userOptions = mapOptions(userCalcs)
     const presetOptions = mapOptions(presetCalcs)
+    const placeHolder = this.props.currentId === ''
+      ? <option value={''}>Select a Calculator to Load</option>
+      : null
     return (
       <>
+        {placeHolder}
         <optgroup label="Preset Calculators">
           {presetOptions}
         </optgroup>

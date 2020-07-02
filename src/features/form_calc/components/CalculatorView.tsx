@@ -25,7 +25,7 @@ const dispatchProps = {
   updateMarchCap: actions.updateMarchCap,
   updatePresetFlag: actions.updatePresetFlag,
   saveFormCalc: actions.saveFormCalc,
-  deleteFormCalc: actions.deleteCalcAsync.request,
+  deleteFormCalc: actions.deleteFormCalc,
   copyFormCalc: actions.copyFormCalc
 }
 

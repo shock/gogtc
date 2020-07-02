@@ -17,6 +17,14 @@ export const saveFormCalc = (formCalc:MFormCalc) => {
   }
 }
 
+export const deleteFormCalc = (formCalc:MFormCalc) => {
+  if(formCalc.persisted) {
+    return deleteCalcAsync.request(formCalc)
+  } else {
+    return removeFromState(formCalc.id)
+  }
+}
+
 export const createCalcAsync = createAsyncAction(
   'CREATE_CALC_REQUEST',
   'CREATE_CALC_SUCCESS',
@@ -46,6 +54,10 @@ export const setFcId = createAction('SET_FC_ID', (id:string) => ({
 }))<IdOnly>()
 
 export const clearCalculators = createAction('CLEAR_CALCULATORS', () => {})<void>()
+
+export const removeFromState = createAction('REMOVE_CALC_FROM_STATE', (id:string) => ({
+  id: id
+}))<IdOnly>()
 
 export const updateName = createAction('UPDATE_NAME', (id: string, value: string) => ({
   id: id,

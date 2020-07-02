@@ -90,6 +90,14 @@ const _formCalcReducer = createReducer(BlankFCState)
     formCalc.persisted = true
     return fcReturnState(state, formCalc)
   })
+  .handleAction(actions.removeFromState, (state, action) => {
+    const formCalcs = state.formCalcs
+    delete formCalcs[action.payload.id]
+    return {
+      formCalcs,
+      currentId: ''
+    }
+  })
   .handleAction(actions.deleteCalcAsync.success, (state, action) => {
     const formCalc = action.payload
     const formCalcs = state.formCalcs
