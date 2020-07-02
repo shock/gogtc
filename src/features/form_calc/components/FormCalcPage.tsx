@@ -128,11 +128,16 @@ class FormCalcPageBase extends React.Component<Props, State> {
     const presetCalcs = formCalcs.filter(fc => fc.preset)
     const userCalcs = formCalcs.filter(fc => !fc.preset)
     let index = 0
+    const markedName = (formCalc:MFormCalc) => {
+      if( formCalc.isChanged() ) {
+        return `${formCalc.name} *`
+      } else { return formCalc.name}
+    }
     const mapOptions = (formCalcs:MFormCalc[]) => formCalcs.map(formCalc => {
       // this docs for Form.Control select say setting defaultValue handles the selected option,
       // but I can't get it to work
       const selected = (formCalc.id === this.props.currentId)
-      return <option key={index++} value={formCalc.id} selected={selected}>{formCalc.name}</option>
+      return <option key={index++} value={formCalc.id} selected={selected}>{markedName(formCalc)}</option>
     })
 
     const userOptions = mapOptions(userCalcs)

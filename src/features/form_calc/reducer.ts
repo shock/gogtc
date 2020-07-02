@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import cuid from 'cuid'
 import undoable, { excludeAction } from 'redux-undo';
 import { createReducer, getType } from 'typesafe-actions';
 import * as actions from './actions';
@@ -34,6 +35,25 @@ const initialState:FCState = {
 }
 
 const _formCalcReducer = createReducer(BlankFCState)
+.handleAction(actions.copyFormCalc, (state, action) => {
+  const currentFC = state.formCalcs[state.currentId]
+  if( currentFC ) {
+    const newFC = currentFC.clone()
+    newFC.updateName(newFC.name+' - Copy')
+    newFC.id = cuid()
+    newFC.persisted = false
+    newFC.preset = false
+    const formCalcs = state.formCalcs
+    formCalcs[newFC.id] = newFC
+    return {
+      ...state,
+      formCalcs,
+      currentId: newFC.id
+    }
+  } else {
+    return state;
+  }
+})
 .handleAction(actions.loadUserCalcsAsync.success, (state, action) => {
     const formCalcs = action.payload
     console.log(formCalcs)

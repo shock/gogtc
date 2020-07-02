@@ -95,6 +95,10 @@ export const fixTierPercent = createAction('FIX_TIER_PERCENT', (id:string) => ({
   id: id
 }))<IdOnly>();
 
+export const copyFormCalc = createAction('COPY_FORM_CALC', (id:string) => ({
+  id: id
+}))<IdOnly>();
+
 export type UpdateIdValueAction = typeof updateTroopCount | typeof updateTroopPercent |
   typeof updateMarchCap | typeof updateTierPercent;
 

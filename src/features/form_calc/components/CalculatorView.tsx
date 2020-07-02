@@ -25,7 +25,8 @@ const dispatchProps = {
   updateMarchCap: actions.updateMarchCap,
   updatePresetFlag: actions.updatePresetFlag,
   saveFormCalc: actions.saveFormCalc,
-  deleteFormCalc: actions.deleteCalcAsync.request
+  deleteFormCalc: actions.deleteCalcAsync.request,
+  copyFormCalc: actions.copyFormCalc
 }
 
 interface CalculatorViewProps {
@@ -160,9 +161,35 @@ class CalculatorViewBase extends React.Component<Props, State> {
     }
     const saveDisabled = !this.data()?.isChanged()
     const deleteDisabled = !canDelete()
+    const onCopyClick = () => this.props.copyFormCalc(this.id())
     const onSaveClick = () => this.props.saveFormCalc(this.data())
     const onDeleteClick = () => this.props.deleteFormCalc(this.data())
     const style={margin: '0 0 2px'}
+    const copyButton = () => {
+      if( this.isAdmin() || this.isPreset() ) {
+        return (
+          <Button
+            size='sm'
+            variant='info'
+            onClick={onCopyClick}
+            style={style}
+          >COPY</Button>
+        )
+      } else { return null }
+    }
+    const saveButton = () => {
+      if( this.isAdmin() || !this.isPreset() ) {
+        return (
+          <Button
+            size='sm'
+            variant='info'
+            disabled={saveDisabled}
+            onClick={onSaveClick}
+            style={style}
+          >SAVE</Button>
+        )
+      } else { return null }
+    }
     return (
       <Col sm={2}>
         <Button
@@ -172,13 +199,8 @@ class CalculatorViewBase extends React.Component<Props, State> {
           style={style}
           onClick={onDeleteClick}
         >DELETE</Button>&nbsp;
-        <Button
-          size='sm'
-          variant='info'
-          disabled={saveDisabled}
-          onClick={onSaveClick}
-          style={style}
-        >SAVE</Button>
+        {copyButton()}
+        {saveButton()}
       </Col>
     )
   }
