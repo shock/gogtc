@@ -1,9 +1,25 @@
 import { combineReducers } from 'redux'
+import cuid from 'cuid'
 import undoable, { excludeAction } from 'redux-undo';
 import { createReducer, getType } from 'typesafe-actions';
 import * as actions from './actions';
 import { MFormCalc, FCState, BlankFCState, FormCalcDictionary, TestLibrary } from './models';
 import { getFormCalcId } from './lib/IdParser';
+
+const createCopyName = (state:FCState, formCalc:MFormCalc) => {
+  let copyName = formCalc.name+' - Copy'
+  const formCalcsArray = Object.values(state.formCalcs) as [MFormCalc]
+  const nameExists = (name:string, formCalcs:[MFormCalc]) => {
+    return formCalcs.reduce((exists:boolean, fc:MFormCalc) => {
+      exists = exists || fc.name === copyName
+      return exists
+    }, false)
+  }
+  while( nameExists(copyName, formCalcsArray) ) {
+    copyName = copyName+'+'
+  }
+  return copyName
+}
 
 const getFormationById = (state:FCState, id: string) => {
   const formId = getFormCalcId(id);
@@ -16,10 +32,13 @@ const getFormationById = (state:FCState, id: string) => {
   return formCalcModel;
 }
 
-const fcReturnState = (state:FCState, formCalc:MFormCalc) => {
+const fcReturnState = (state:FCState, formCalc:MFormCalc, purgeId:string|undefined = undefined) => {
   const formCalcDictionary:FormCalcDictionary = {
     formCalcs: {...state.formCalcs}
   };
+  if( purgeId ) {
+    delete formCalcDictionary.formCalcs[purgeId]
+  }
   formCalcDictionary.formCalcs[formCalc.id] = formCalc;
   const returnState = {
     ...state,
@@ -34,6 +53,25 @@ const initialState:FCState = {
 }
 
 const _formCalcReducer = createReducer(BlankFCState)
+.handleAction(actions.copyFormCalc, (state, action) => {
+  const currentFC = state.formCalcs[state.currentId]
+  if( currentFC ) {
+    const newFC = currentFC.clone()
+    newFC.updateName(createCopyName(state, newFC))
+    newFC.id = cuid()
+    newFC.persisted = false
+    newFC.preset = false
+    const formCalcs = state.formCalcs
+    formCalcs[newFC.id] = newFC
+    return {
+      ...state,
+      formCalcs,
+      currentId: newFC.id
+    }
+  } else {
+    return state;
+  }
+})
 .handleAction(actions.loadUserCalcsAsync.success, (state, action) => {
     const formCalcs = action.payload
     console.log(formCalcs)
@@ -53,11 +91,11 @@ const _formCalcReducer = createReducer(BlankFCState)
     })
   })
   .handleAction(actions.createCalcAsync.success, (state, action) => {
-    const formCalc = action.payload
+    const { formCalc, oldId } = action.payload
     formCalc.clearChanged()
     formCalc.persisted = true
     return {
-      ...fcReturnState(state, formCalc),
+      ...fcReturnState(state, formCalc, oldId),
       currentId: formCalc.id
     }
   })
@@ -66,6 +104,24 @@ const _formCalcReducer = createReducer(BlankFCState)
     formCalc.clearChanged()
     formCalc.persisted = true
     return fcReturnState(state, formCalc)
+  })
+  .handleAction(actions.removeFromState, (state, action) => {
+    const formCalcs = state.formCalcs
+    delete formCalcs[action.payload.id]
+    return {
+      formCalcs,
+      currentId: ''
+    }
+  })
+  .handleAction(actions.deleteCalcAsync.success, (state, action) => {
+    const formCalc = action.payload
+    const formCalcs = state.formCalcs
+    delete formCalcs[formCalc.id]
+    return {
+      ...state,
+      formCalcs,
+      currentId: ''
+    }
   })
   .handleAction(actions.setFcId, (state, action) => {
     return {
@@ -154,11 +210,16 @@ export const isUpdatingCalc = createReducer(false as boolean)
   .handleAction(actions.updateCalcAsync.request, (state, action) => ( true ))
   .handleAction([actions.updateCalcAsync.success,actions.updateCalcAsync.failure], (state, action) => ( false ))
 
+export const isDeletingCalc = createReducer(false as boolean)
+  .handleAction(actions.deleteCalcAsync.request, (state, action) => ( true ))
+  .handleAction([actions.deleteCalcAsync.success,actions.deleteCalcAsync.failure], (state, action) => ( false ))
+
 const formCalcReducers = combineReducers({
   formCalcs: formCalcReducer,
   isCreatingCalc,
   isLoadingUserCalcs,
   isUpdatingCalc,
+  isDeletingCalc
 });
 
 export default formCalcReducers;

@@ -17,16 +17,30 @@ export const saveFormCalc = (formCalc:MFormCalc) => {
   }
 }
 
+export const deleteFormCalc = (formCalc:MFormCalc) => {
+  if(formCalc.persisted) {
+    return deleteCalcAsync.request(formCalc)
+  } else {
+    return removeFromState(formCalc.id)
+  }
+}
+
 export const createCalcAsync = createAsyncAction(
   'CREATE_CALC_REQUEST',
   'CREATE_CALC_SUCCESS',
   'CREATE_CALC_FAILURE'
-)<MFormCalc, MFormCalc, string>();
+)<MFormCalc, { formCalc: MFormCalc, oldId: string }, string>();
 
 export const updateCalcAsync = createAsyncAction(
   'UPDATE_CALC_REQUEST',
   'UPDATE_CALC_SUCCESS',
   'UPDATE_CALC_FAILURE'
+)<MFormCalc, MFormCalc, string>();
+
+export const deleteCalcAsync = createAsyncAction(
+  'DELETE_CALC_REQUEST',
+  'DELETE_CALC_SUCCESS',
+  'DELETE_CALC_FAILURE'
 )<MFormCalc, MFormCalc, string>();
 
 export const loadUserCalcsAsync = createAsyncAction(
@@ -40,6 +54,10 @@ export const setFcId = createAction('SET_FC_ID', (id:string) => ({
 }))<IdOnly>()
 
 export const clearCalculators = createAction('CLEAR_CALCULATORS', () => {})<void>()
+
+export const removeFromState = createAction('REMOVE_CALC_FROM_STATE', (id:string) => ({
+  id: id
+}))<IdOnly>()
 
 export const updateName = createAction('UPDATE_NAME', (id: string, value: string) => ({
   id: id,
@@ -86,6 +104,10 @@ export const fixTroopPercent = createAction('FIX_TROOP_PERCENT', (id:string) => 
 }))<IdOnly>();
 
 export const fixTierPercent = createAction('FIX_TIER_PERCENT', (id:string) => ({
+  id: id
+}))<IdOnly>();
+
+export const copyFormCalc = createAction('COPY_FORM_CALC', (id:string) => ({
   id: id
 }))<IdOnly>();
 

@@ -128,17 +128,26 @@ class FormCalcPageBase extends React.Component<Props, State> {
     const presetCalcs = formCalcs.filter(fc => fc.preset)
     const userCalcs = formCalcs.filter(fc => !fc.preset)
     let index = 0
+    const markedName = (formCalc:MFormCalc) => {
+      if( formCalc.isChanged() ) {
+        return `${formCalc.name} *`
+      } else { return formCalc.name}
+    }
     const mapOptions = (formCalcs:MFormCalc[]) => formCalcs.map(formCalc => {
       // this docs for Form.Control select say setting defaultValue handles the selected option,
       // but I can't get it to work
       const selected = (formCalc.id === this.props.currentId)
-      return <option key={index++} value={formCalc.id} selected={selected}>{formCalc.name}</option>
+      return <option key={index++} value={formCalc.id} selected={selected}>{markedName(formCalc)}</option>
     })
 
     const userOptions = mapOptions(userCalcs)
     const presetOptions = mapOptions(presetCalcs)
+    const placeHolder = this.props.currentId === ''
+      ? <option value={''}>Select a Calculator to Load</option>
+      : null
     return (
       <>
+        {placeHolder}
         <optgroup label="Preset Calculators">
           {presetOptions}
         </optgroup>
@@ -199,7 +208,7 @@ class FormCalcPageBase extends React.Component<Props, State> {
     )
   }
 
-  render() {
+  renderActions() {
     const debugButton = (
       <Button
         variant={this.state.debug ? "secondary" : "info"}
@@ -214,13 +223,16 @@ class FormCalcPageBase extends React.Component<Props, State> {
       >{this.state.summary ? "Summary" : "Details"}</Button>
     );
     const sMsg = this.state.summary ? 'Show Calculator' : 'Show Summary';
-    const jsonButton = (
-      <Button
-        variant={this.state.showJson ? "secondary" : "info"}
-        onClick={this.handleJsonClick}
-      >Json</Button>
-    );
-    const jMsg = this.state.showJson ? 'Hide Json' : 'Show Json';
+    return (
+      <>
+        <TT tip={sMsg}>{summaryButton}</TT>
+        &nbsp;&nbsp;&nbsp;
+        <TT tip={dMsg}>{debugButton}</TT>
+      </>
+    )
+  }
+
+  render() {
 
     return (
       <React.Fragment>
@@ -247,14 +259,7 @@ class FormCalcPageBase extends React.Component<Props, State> {
             </Form>
           </Col>
           <Col sm={4}>
-            {/* <TT tip={sMsg}>{stateButton}</TT> */}
-            {/* &nbsp;&nbsp;&nbsp; */}
-            {/* <InlineButton text="SA" onClick={() => {this.props.showAlert('test')}} /> */}
-            {/* <TT tip={jMsg}>{jsonButton}</TT>
-            &nbsp;&nbsp;&nbsp; */}
-            <TT tip={sMsg}>{summaryButton}</TT>
-            &nbsp;&nbsp;&nbsp;
-            <TT tip={dMsg}>{debugButton}</TT>
+            {this.formCalc() ? this.renderActions() : null}
           </Col>
         </Row>
         {
