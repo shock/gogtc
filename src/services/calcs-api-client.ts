@@ -5,7 +5,7 @@ import { MFormCalc } from '../features/form_calc/models'
 // POST - /api/form_calcs/create
 const createCalcEndpoint = '/api/form_calcs/create'
 
-export function create(formCalc:MFormCalc): Promise<MFormCalc> {
+export function create(formCalc:MFormCalc): Promise<{formCalc: MFormCalc, oldId: string}> {
   const preparedBody = {
     name: formCalc.name,
     json: formCalc.toJsonObject()
@@ -26,9 +26,10 @@ export function create(formCalc:MFormCalc): Promise<MFormCalc> {
     postData(createCalcEndpoint, preparedBody).then(
       resp => {
         const formCalc = MFormCalc.fromJsonObject(resp.json)
+        const oldId = formCalc.id
         formCalc.id = resp.id
         formCalc.name = resp.name
-        resolve(formCalc)
+        resolve({formCalc, oldId})
       }
     ).catch(error => reject(error))
   })
@@ -83,7 +84,7 @@ export function _delete(formCalc:MFormCalc): Promise<MFormCalc> {
         body: JSON.stringify(data)
       })
       if( response.status === 200 )
-        return response.json(); // parses JSON response into native JavaScript objects
+        return null; // parses JSON response into native JavaScript objects
       else {
         const json = await response.json()
         throw `received status code ${response.status}\n`+json

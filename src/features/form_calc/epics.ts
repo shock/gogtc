@@ -11,6 +11,11 @@ import { MFormCalc } from './models'
 import history from '../../lib/history'
 import { push } from 'connected-react-router'
 
+type createSuccessType = {
+  formCalc: MFormCalc,
+  oldId: string
+}
+
 export const createCalcEpic: Epic<
   RootAction,
   RootAction,
@@ -21,9 +26,9 @@ export const createCalcEpic: Epic<
     filter(isActionOf(createCalcAsync.request)),
     switchMap((action) =>
       from(api.formCalcs.create(action.payload)).pipe(
-        mergeMap((formCalc:MFormCalc) => of(
+        mergeMap((obj:createSuccessType) => of(
           showAlert('Formation Saved'),
-          createCalcAsync.success(formCalc),
+          createCalcAsync.success(obj),
           Undoable.clearHistory()
         )),
         catchError((error: any) => of(

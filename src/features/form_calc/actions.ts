@@ -21,7 +21,7 @@ export const createCalcAsync = createAsyncAction(
   'CREATE_CALC_REQUEST',
   'CREATE_CALC_SUCCESS',
   'CREATE_CALC_FAILURE'
-)<MFormCalc, MFormCalc, string>();
+)<MFormCalc, { formCalc: MFormCalc, oldId: string }, string>();
 
 export const updateCalcAsync = createAsyncAction(
   'UPDATE_CALC_REQUEST',

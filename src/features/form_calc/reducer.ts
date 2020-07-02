@@ -17,10 +17,13 @@ const getFormationById = (state:FCState, id: string) => {
   return formCalcModel;
 }
 
-const fcReturnState = (state:FCState, formCalc:MFormCalc) => {
+const fcReturnState = (state:FCState, formCalc:MFormCalc, purgeId:string|undefined = undefined) => {
   const formCalcDictionary:FormCalcDictionary = {
     formCalcs: {...state.formCalcs}
   };
+  if( purgeId ) {
+    delete formCalcDictionary.formCalcs[purgeId]
+  }
   formCalcDictionary.formCalcs[formCalc.id] = formCalc;
   const returnState = {
     ...state,
@@ -73,11 +76,11 @@ const _formCalcReducer = createReducer(BlankFCState)
     })
   })
   .handleAction(actions.createCalcAsync.success, (state, action) => {
-    const formCalc = action.payload
+    const { formCalc, oldId } = action.payload
     formCalc.clearChanged()
     formCalc.persisted = true
     return {
-      ...fcReturnState(state, formCalc),
+      ...fcReturnState(state, formCalc, oldId),
       currentId: formCalc.id
     }
   })
