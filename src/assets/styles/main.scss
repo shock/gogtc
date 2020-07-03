@@ -175,7 +175,33 @@ $icon-action: rgb(250, 234, 90);
     }
   }
 }
+
+.FormEntryView {
+  h3 {
+    min-width: 4em;
+  }
+}
+.FCP-form-select {
+  select {
+    max-width: 73%;
+  }
+}
+
+.FCP-view-select {
+  display: inline-block;
+  select{
+    width: 8rem;
+  }
+}
+
+.FCP-select {
+  label {
+    margin-right: 0.3rem;
+  }
+}
+
 .fcNameForm {
+  min-width: 20rem;
   & > div {
     cursor: pointer;
   }
@@ -192,6 +218,19 @@ $icon-action: rgb(250, 234, 90);
     display: inline-block;
   }
 
+}
+
+$fe-inf-color: rgb(169, 227, 253);
+$fe-cav-color: rgb(253, 204, 170);
+$fe-dst-color: rgb(189, 255, 173);
+.FEV-troop-view {
+  margin-bottom: 0.5rem;
+  .troop-entry {
+    margin-bottom: 2px;
+    &.Infantry { background-color: $fe-inf-color; }
+    &.Cavalry { background-color: $fe-cav-color; }
+    &.Distance { background-color: $fe-dst-color; }
+  }
 }
 
 div.alert {

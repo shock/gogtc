@@ -1,13 +1,14 @@
 import cuid from 'cuid'
-import { getTierNum, getTroopType } from '../lib/IdParser';
-import { Big } from 'big.js';
+import { getTierNum, getTroopType } from '../lib/IdParser'
+import { Big } from 'big.js'
 import MBase from './MBase'
-import { MTierDef, MTroopDef } from '.';
-import { toInt, toBig, IdString, IdBoolean, IdOnly, TroopType, TroopTypes } from '../types';
-import config from '../../../config';
-import { AnyAction } from 'redux';
+import { MTierDef, MTroopDef } from '.'
+import { TierNum } from '../types'
+import { toInt, toBig, IdString, IdBoolean, IdOnly, TroopType, TroopTypes } from '../types'
+import config from '../../../config'
+import { AnyAction } from 'redux'
 
-const PercentDeltaEpsilon = toBig(0.1).pow(config.viewPrecision);
+const PercentDeltaEpsilon = toBig(0.1).pow(config.viewPrecision)
 
 class MFormCalc extends MBase {
   name: string
@@ -193,11 +194,15 @@ class MFormCalc extends MBase {
     return this.objectForState();
   }
 
-  // toggleFormCalcDebugHandler(payload:IdOnly) {
-  //   this.debug = !this.debug;
-  //   this.markForUpdate();
-  //   return this.objectForState();
-  // }
+  /* selectors */
+
+  getTroopDefsForType(type:TroopType) {
+    return this.tierDefs.reduce((troopDefs, tierDef) => {
+      const selected = tierDef.troopDefs.filter(troopDef => troopDef.type === type)
+      troopDefs.push({tierNum:tierDef.tierNum, troopDef:selected[0]})
+      return troopDefs
+    }, [] as {tierNum:TierNum,troopDef:MTroopDef}[])
+  }
 
   /*
     COMPUTATION FUNCTIONS

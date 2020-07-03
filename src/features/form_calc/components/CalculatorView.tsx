@@ -191,7 +191,7 @@ class CalculatorViewBase extends React.Component<Props, State> {
       } else { return null }
     }
     return (
-      <Col sm={2}>
+      <Col sm='auto'>
         <Button
           size='sm'
           variant='danger'
@@ -199,7 +199,7 @@ class CalculatorViewBase extends React.Component<Props, State> {
           style={style}
           onClick={onDeleteClick}
         >DELETE</Button>&nbsp;
-        {copyButton()}
+        {copyButton()}&nbsp;
         {saveButton()}
       </Col>
     )
@@ -233,7 +233,7 @@ class CalculatorViewBase extends React.Component<Props, State> {
     }
 
     return (
-      <Col >
+      <Col sm='auto'>
         <label>March Cap</label>&nbsp;
         <NumericInput
           step={1000}
@@ -250,6 +250,21 @@ class CalculatorViewBase extends React.Component<Props, State> {
     )
   }
 
+  renderControlsRow() {
+    return (
+      <Row>
+        <Col className="fcNameForm">
+          {this.renderName()}
+        </Col>
+        {this.renderSaveCol()}
+        {this.renderMarchCapCol()}
+        <Col sm={2}>
+          <UndoRedo/>
+        </Col>
+      </Row>
+    )
+  }
+
   render() {
     if( !this.data() ) {
       if( this.props.debug ) {
@@ -261,16 +276,7 @@ class CalculatorViewBase extends React.Component<Props, State> {
 
     return (
       <React.Fragment>
-        <Row>
-          <Col sm={5} className="fcNameForm">
-            {this.renderName()}
-          </Col>
-          {this.renderSaveCol()}
-          {this.renderMarchCapCol()}
-          <Col sm={2}>
-            <UndoRedo/>
-          </Col>
-        </Row>
+        {this.renderControlsRow()}
         {this.renderAdminRow()}
         {this.renderDebugRow()}
         <Row>

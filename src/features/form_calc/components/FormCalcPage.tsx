@@ -1,22 +1,26 @@
-import { RootState, isOfType } from 'typesafe-actions';
-import * as React from 'react';
-import { connect } from 'react-redux';
-import { Row, Col, Form, Button } from 'react-bootstrap';
+import { RootState, isOfType } from 'typesafe-actions'
+import * as React from 'react'
+import { connect } from 'react-redux'
+import { Row, Col, Form, Button } from 'react-bootstrap'
 import { ActionCreators as UndoActionCreators } from 'redux-undo'
 
-import * as actions from '../actions';
-import { showAlert } from '../../modals/actions';
-import { showGeneralModal } from '../../modals/actions';
-import * as selectors from '../selectors';
-import { CalculatorView } from './CalculatorView';
+import { UserRoles } from '../../../client_server/interfaces/User'
+import * as actions from '../actions'
+import { showAlert } from '../../modals/actions'
+import { showGeneralModal } from '../../modals/actions'
+import * as selectors from '../selectors'
+import { currentUser} from '../../users/selectors'
+import { CalculatorView } from './CalculatorView'
+import { FormEntryView } from './FormEntryView'
 import { MFormCalc } from '../models'
-import TT from '../../../components/tooltips';
+import TT from '../../../components/tooltips'
 import { SummaryView } from './SummaryView'
 
 const mapStateToProps = (state: RootState) => ({
   formCalcs: selectors.getFormCalcs(state.formCalc),
-  currentId: selectors.getCurrentId(state.formCalc)
-});
+  currentId: selectors.getCurrentId(state.formCalc),
+  currentUser: currentUser(state.users)
+})
 
 const dispatchProps = {
   resetState: actions.resetState,
@@ -25,7 +29,7 @@ const dispatchProps = {
   showAlert: showAlert,
   showModal: showGeneralModal,
   loadUserCalcs: actions.loadUserCalcsAsync.request
-};
+}
 
 interface FormCalcPageProps {
   fcId: string
@@ -35,9 +39,7 @@ type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & FormCal
 type State = {
   fcId: string,
   debug: boolean,
-  showJson: boolean,
-  jsonState: boolean,
-  summary: boolean
+  view: string
 }
 
 class FormCalcPageBase extends React.Component<Props, State> {
@@ -47,21 +49,14 @@ class FormCalcPageBase extends React.Component<Props, State> {
     this.state = {
       fcId: this.props.fcId,
       debug: false,
-      showJson: false,
-      jsonState: true,
-      summary: false
+      view: 'calculator'
     }
-    this.handeSelectChange = this.handeSelectChange.bind(this);
     this.handleNameSubmit = this.handleNameSubmit.bind(this);
-    this.handleDebugClick = this.handleDebugClick.bind(this);
-    this.handleSummaryClick = this.handleSummaryClick.bind(this);
-    this.handleJsonClick = this.handleJsonClick.bind(this);
-    this.handleStateClick = this.handleStateClick.bind(this);
   }
 
-  formCalc() {
-    return this.props.formCalcs[this.state.fcId];
-  }
+  formCalc() { return this.props.formCalcs[this.state.fcId]; }
+  currentUser() { return this.props.currentUser }
+  isAdmin() { return this.currentUser()?.role === UserRoles.Admin }
 
   componentDidUpdate(prevProps:Props) {
     if(prevProps.fcId !== this.props.fcId) {
@@ -88,29 +83,6 @@ class FormCalcPageBase extends React.Component<Props, State> {
     }
     if( this.state.debug )
       this.props.showModal('Error', `No MFormCalc found with id '${this.state.fcId}'`, );
-  }
-
-  handleDebugClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-    this.setState({debug: !this.state.debug});
-  }
-
-  handleSummaryClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-    this.setState({summary: !this.state.summary});
-  }
-
-  handleJsonClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-    this.setState({showJson: !this.state.showJson});
-  }
-
-  handleStateClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-    this.setState({jsonState: !this.state.jsonState});
-  }
-
-  handeSelectChange(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({
-      fcId: event.target.value
-    })
-    setTimeout( () => this.handleNameSubmit(event), 0);
   }
 
   handleNameSubmit(event: any) {
@@ -178,16 +150,8 @@ class FormCalcPageBase extends React.Component<Props, State> {
   }
 
   renderJsonView() {
-    const obj = this.state.jsonState
-      ? this.formCalc()?.toJsonObject()
-      : this.props.formCalcs[this.state.fcId]?.toJsonObject();
-    if( !obj ) {
-      if( this.state.debug ) {
-        return <h4>Can't find formCalc with id '{this.state.fcId}'</h4>
-      } else {
-        return <h4>Please load a calculator.</h4>
-      }
-    }
+    const obj = this.formCalc().toJsonObject()
+    if( !obj ) { return <h4>Please load a calculator.</h4> }
     const json = JSON.stringify(obj, null, 2);
     return (
       <Row>
@@ -208,67 +172,109 @@ class FormCalcPageBase extends React.Component<Props, State> {
     )
   }
 
+  renderFormEntryView() {
+    return (
+      <Row>
+        <Col>
+          <FormEntryView formCalc={this.formCalc()} debug={this.state.debug}/>
+        </Col>
+      </Row>
+    )
+  }
+
+  renderViewSelect() {
+    const capitalize = (s:string) => {
+      return s.charAt(0).toUpperCase() + s.slice(1)
+    }
+
+    const opt_vals  = ['json', 'summary', 'calculator', 'troop_entry']
+      .filter(val => ( this.isAdmin() || (val !== 'json') ) )
+
+    const options = opt_vals.map(val => {
+      const selected = this.state.view === val
+      return (
+        <option value={val} selected={selected}>{val.split('_').map(capitalize).join(' ')}</option>
+      )
+    })
+
+    const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value
+      this.setState({view: value})
+    }
+
+    return (
+      <Form.Group controlId="formName" className='FCP-view-select FCP-select'>
+        <Form.Label>View</Form.Label>
+        <Form.Control
+          as="select"
+          custom
+          onChange={onChange}
+          defaultValue={this.state.view}
+        >{options}</Form.Control>
+      </Form.Group>
+    )
+  }
+
   renderActions() {
+    const onDebugClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      this.setState({debug: !this.state.debug});
+    }
     const debugButton = (
       <Button
         variant={this.state.debug ? "secondary" : "info"}
-        onClick={this.handleDebugClick}
+        onClick={onDebugClick}
       >Debug</Button>
     )
     const dMsg = this.state.debug ? 'Hide Debug Info' : 'Show Debug Info'
-    const summaryButton = (
-      <Button
-        variant={this.state.summary ? "secondary" : "info"}
-        onClick={this.handleSummaryClick}
-      >{this.state.summary ? "Summary" : "Details"}</Button>
-    );
-    const sMsg = this.state.summary ? 'Show Calculator' : 'Show Summary';
     return (
       <>
-        <TT tip={sMsg}>{summaryButton}</TT>
+        {this.renderViewSelect()}
         &nbsp;&nbsp;&nbsp;
         <TT tip={dMsg}>{debugButton}</TT>
       </>
     )
   }
 
+  renderView() {
+    switch( this.state.view ) {
+      case 'json' :
+        return this.renderJsonView()
+      case 'summary' :
+        return <SummaryView id={this.state.fcId} debug={this.state.debug}/>
+      case 'troop_entry' :
+        return this.renderFormEntryView()
+      default:
+        return this.renderCalcView()
+    }
+  }
   render() {
+    const onSelectChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      this.setState({fcId: event.target.value}, () => this.handleNameSubmit(event))
+    }
 
     return (
       <React.Fragment>
         <Row>
           <Col>
             <Form onSubmit={this.handleNameSubmit}>
-              <Form.Group as={Row} controlId="formBasicEmail">
-                <Form.Label column sm={2}>Load</Form.Label>
-                <Col>
-                  {/* <Form.Control type="text" placeholder="form name" value={this.state.fcId} onChange={this.handeSelectChange}/> */}
-                  <Form.Control
-                    as="select"
-                    custom
-                    onChange={this.handeSelectChange}
-                    defaultValue={this.props.currentId}
-                  >
-                    {this.selectOptions()}
-                  </Form.Control>
-                </Col>
-                {/* <Col sm={2}>
-                  <Button variant="primary" onClick={this.handleNameSubmit}>OK</Button>
-                </Col> */}
+              <Form.Group controlId="formName" className="FCP-form-select FCP-select">
+                <Form.Label>Load</Form.Label>
+                <Form.Control
+                  as="select"
+                  custom
+                  onChange={onSelectChange}
+                  defaultValue={this.props.currentId}
+                >
+                  {this.selectOptions()}
+                </Form.Control>
               </Form.Group>
             </Form>
           </Col>
-          <Col sm={4}>
+          <Col sm='auto'>
             {this.formCalc() ? this.renderActions() : null}
           </Col>
         </Row>
-        {
-          this.state.showJson
-            ? this.renderJsonView()
-            : this.state.summary
-              ? <SummaryView id={this.state.fcId} debug={this.state.debug}/>
-              : this.renderCalcView()
-        }
+        {this.renderView()}
       </React.Fragment>
     );
   }
