@@ -45,16 +45,16 @@ type State = {
 class FormCalcPageBase extends React.Component<Props, State> {
 
   constructor(props: Props) {
-    super(props);
+    super(props)
     this.state = {
       fcId: this.props.fcId,
       debug: false,
       view: 'calculator'
     }
-    this.handleNameSubmit = this.handleNameSubmit.bind(this);
+    this.handleNameSubmit = this.handleNameSubmit.bind(this)
   }
 
-  formCalc() { return this.props.formCalcs[this.state.fcId]; }
+  formCalc() { return this.props.formCalcs[this.state.fcId] }
   currentUser() { return this.props.currentUser }
   isAdmin() { return this.currentUser()?.role === UserRoles.Admin }
 
@@ -69,29 +69,29 @@ class FormCalcPageBase extends React.Component<Props, State> {
 
   componentDidMount() {
     if( !this.formCalc() ) {
-      this.resetReduxState();
+      this.resetReduxState()
     }
     this.props.loadUserCalcs()
   }
 
   resetReduxState() {
-    const formCalc = this.props.formCalcs[this.state.fcId];
+    const formCalc = this.props.formCalcs[this.state.fcId]
     if( formCalc ) {
-      this.props.resetState(this.state.fcId, formCalc.clone());
-      this.props.clearUndoHistory();
-      return;
+      this.props.resetState(this.state.fcId, formCalc.clone())
+      this.props.clearUndoHistory()
+      return
     }
     if( this.state.debug )
-      this.props.showModal('Error', `No MFormCalc found with id '${this.state.fcId}'`, );
+      this.props.showModal('Error', `No MFormCalc found with id '${this.state.fcId}'`, )
   }
 
   handleNameSubmit(event: any) {
-    const formCalc = this.props.formCalcs[this.state.fcId];
+    const formCalc = this.props.formCalcs[this.state.fcId]
     if( !formCalc ) {
-      alert(`Couldn't find model with id: '${this.state.fcId}'`);
-      return;
+      alert(`Couldn't find model with id: '${this.state.fcId}'`)
+      return
     }
-    setTimeout( ()  => this.resetReduxState(), 0);
+    setTimeout( ()  => this.resetReduxState(), 0)
     this.props.setFcId(this.state.fcId)
   }
 
@@ -133,26 +133,26 @@ class FormCalcPageBase extends React.Component<Props, State> {
   syntaxHighlight(json:string) {
     json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?)/g, function (match) {
-        var cls = 'number';
+        var cls = 'number'
         if (/^"/.test(match)) {
             if (/:$/.test(match)) {
-                cls = 'key';
+                cls = 'key'
             } else {
-                cls = 'string';
+                cls = 'string'
             }
         } else if (/true|false/.test(match)) {
-            cls = 'boolean';
+            cls = 'boolean'
         } else if (/null/.test(match)) {
-            cls = 'null';
+            cls = 'null'
         }
-        return '<span class="' + cls + '">' + match + '</span>';
-    });
+        return '<span class="' + cls + '">' + match + '</span>'
+    })
   }
 
   renderJsonView() {
     const obj = this.formCalc().toJsonObject()
     if( !obj ) { return <h4>Please load a calculator.</h4> }
-    const json = JSON.stringify(obj, null, 2);
+    const json = JSON.stringify(obj, null, 2)
     return (
       <Row>
         <Col style={{textAlign: 'left'}}>
@@ -217,7 +217,7 @@ class FormCalcPageBase extends React.Component<Props, State> {
 
   renderActions() {
     const onDebugClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      this.setState({debug: !this.state.debug});
+      this.setState({debug: !this.state.debug})
     }
     const debugButton = (
       <Button
@@ -276,13 +276,13 @@ class FormCalcPageBase extends React.Component<Props, State> {
         </Row>
         {this.renderView()}
       </React.Fragment>
-    );
+    )
   }
 }
 
 const FormCalcPage = connect(
   mapStateToProps,
   dispatchProps
-)(FormCalcPageBase);
+)(FormCalcPageBase)
 
-export { FormCalcPage };
+export { FormCalcPage }
