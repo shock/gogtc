@@ -74,9 +74,6 @@ const replServer = repl.start({
   prompt: 'server > '
 });
 
-require('repl.history')(replServer, process.env.HOME + '/.node_history');
-
-replServer.context.db = models;
 
 const parseTroopDataCsv = () => {
   const csvData = fs.readFileSync('../data/troop_info.csv', 'utf-8')
@@ -105,6 +102,22 @@ const parseTroopDataYaml = () => {
   const ymlRecords = yaml.safeLoad(ymlData)
   console.log(ymlRecords)
 }
+const savePresetsToFile = async () => {
+  const presets = await models.FormCalc.findAll().where('preset', true)
+  const yml = yaml.safeDump(presets.map(formCalc => {
+    delete formCalc['id']
+    delete formCalc['created_at']
+    delete formCalc['updated_at']
+    delete formCalc['user_id']
+    return formCalc
+  }))
+  fs.writeFileSync('src/db/formCalcPresets.yml', yml, 'utf-8')
+}
 
 // parseTroopDataCsv()
 // parseTroopDataYaml()
+
+require('repl.history')(replServer, process.env.HOME + '/.node_history');
+
+replServer.context.db = models;
+replServer.context.dumpPresets = savePresetsToFile;
