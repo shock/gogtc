@@ -8,7 +8,8 @@ const createCalcEndpoint = '/api/form_calcs/create'
 export function create(formCalc:MFormCalc): Promise<{formCalc: MFormCalc, oldId: string}> {
   const preparedBody = {
     name: formCalc.name,
-    json: formCalc.toJsonObject()
+    json: formCalc.toJsonObject(),
+    preset: formCalc.preset
   }
   return new Promise((resolve, reject) => {
     async function postData(url = '', data = {}) {
