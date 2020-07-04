@@ -126,7 +126,7 @@ class TroopDefViewBase extends React.Component<Props> {
             onClick={this.handleCountLockClick}
           />
           <NumericInput
-            step={100}
+            step={1000}
             snap
             className={troopDef.type}
             min={0}

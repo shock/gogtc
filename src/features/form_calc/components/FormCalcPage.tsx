@@ -254,7 +254,7 @@ class FormCalcPageBase extends React.Component<Props, State> {
 
     return (
       <React.Fragment>
-        <Row>
+        <Row className='controls-row'>
           <Col>
             <Form onSubmit={this.handleNameSubmit}>
               <Form.Group controlId="formName" className="FCP-form-select FCP-select">

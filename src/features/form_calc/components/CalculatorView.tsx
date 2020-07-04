@@ -252,7 +252,7 @@ class CalculatorViewBase extends React.Component<Props, State> {
 
   renderControlsRow() {
     return (
-      <Row>
+      <Row className='controls-row'>
         <Col className="fcNameForm">
           {this.renderName()}
         </Col>
