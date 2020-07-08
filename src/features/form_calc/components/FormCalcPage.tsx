@@ -3,6 +3,7 @@ import * as React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col, Form, Button } from 'react-bootstrap'
 import { ActionCreators as UndoActionCreators } from 'redux-undo'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { UserRoles } from '../../../client_server/interfaces/User'
 import * as actions from '../actions'
@@ -35,7 +36,8 @@ interface FormCalcPageProps {
   fcId: string
 }
 
-type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & FormCalcPageProps;
+type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & FormCalcPageProps
+
 type State = {
   fcId: string,
   debug: boolean,
@@ -235,6 +237,10 @@ class FormCalcPageBase extends React.Component<Props, State> {
     )
   }
 
+  renderSettings() {
+
+  }
+
   renderView() {
     switch( this.state.view ) {
       case 'json' :
@@ -247,6 +253,7 @@ class FormCalcPageBase extends React.Component<Props, State> {
         return this.renderCalcView()
     }
   }
+
   render() {
     const onSelectChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       this.setState({fcId: event.target.value}, () => this.handleNameSubmit(event))
