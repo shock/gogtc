@@ -7,12 +7,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import * as NumEntry from '../../../lib/num-entry';
 import * as actions from '../actions';
+import * as selectors from '../selectors'
 import { TroopDefView } from './TroopDefView';
 import { LockState } from './LockState';
 import { MTierDef } from '../models';
+import { getTierNum, getTroopType, getFormCalcId } from '../lib/IdParser'
 import config from '../../../config';
 
 const mapStateToProps = (state: RootState) => ({
+  formCalcs: selectors.getFormCalcs(state.formCalc),
 });
 
 const dispatchProps = {
@@ -45,6 +48,10 @@ class TierDefViewBase extends React.Component<Props> {
 
   data() {
     return this.props.tierDef
+  }
+
+  formCalc() {
+    return this.props.formCalcs[getFormCalcId(this.props.id)]
   }
 
   handleTierPercentChange(numVal:number|null, strVal:string, target:HTMLInputElement) {
@@ -85,7 +92,7 @@ class TierDefViewBase extends React.Component<Props> {
           <span className="sum">{this.data().getCapFromTroopDefs().toString()}</span>
         </div>
         <div className={'inline nobr troopPercCalculated'}>
-          <span>{this.data().getActualTroopDefPercentSum().toFixed(config.calcPrecision)+'%'}</span>
+          <span>{this.data().getActualTroopDefPercentSum().toFixed(config.calcPrecision)}%</span>
         </div>
       </div>
     ) } else return null;
@@ -122,7 +129,7 @@ class TierDefViewBase extends React.Component<Props> {
 
   renderTierCap() {
     return (
-      <div className="TierProps NumCell nobr">
+      <div className="TierProps nobr">
         <label>Tier Cap</label>
         <div className='PercentDelta inline'>
           <FontAwesomeIcon
@@ -133,6 +140,24 @@ class TierDefViewBase extends React.Component<Props> {
         </div>
         <div className="nobr inline">
           <span className="sum">{this.data().capacity.toString()}</span>
+        </div>
+      </div>
+    )
+  }
+
+  renderTierPercent() {
+    return (
+      <div className="TierProps nobr">
+        <label>Actual Tier %</label>
+        <div className='PercentDelta inline'>
+          <FontAwesomeIcon
+            icon={'check'}
+            fixedWidth
+            color='transparent'
+          />
+        </div>
+        <div className="nobr inline">
+          <span className="sum">{this.formCalc().getActualTierPercent(this.data()).toFixed(config.calcPrecision)}%</span>
         </div>
       </div>
     );
@@ -152,7 +177,7 @@ class TierDefViewBase extends React.Component<Props> {
         </div>
         <div className={`TierProps`} >
           <div className={`TierPercent nobr ${hasDelta} ${locked}`}>
-            <label>Tier %</label>
+            <label>Alloc Tier %</label>
             <div className="nobr inline">
               { this.fixThisPercent() }
               <NumericInput
@@ -169,6 +194,7 @@ class TierDefViewBase extends React.Component<Props> {
               />
             </div>
           </div>
+          {this.renderTierPercent()}
           {this.renderTierCap()}
         </div>
         <div className="TierDefs">

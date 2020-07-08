@@ -35,6 +35,7 @@ interface CalculatorViewProps {
 }
 
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & CalculatorViewProps
+
 type State = {
   name: string
   editingName: boolean
@@ -100,11 +101,11 @@ class CalculatorViewBase extends React.Component<Props, State> {
         <Row>
           <Col>
             <div className="NumCell inline nobr">
-              <label>Troops Sum</label>
+              <label>Troops Sum: </label>&nbsp;
               <span className="sum">{formCalc.getCapFromTierDefs().toString()}</span>
             </div>
             <div className="NumCell inline nobr">
-              <label>Tier % Sum</label>
+              <label>Tier % Sum: </label>&nbsp;
               <span className="sum">{formCalc.getTierDefPercentsSum().toFixed(config.calcPrecision)}</span>
             </div>
           </Col>
@@ -256,8 +257,8 @@ class CalculatorViewBase extends React.Component<Props, State> {
         <Col className="fcNameForm">
           {this.renderName()}
         </Col>
-        {this.renderSaveCol()}
         {this.renderMarchCapCol()}
+        {this.renderSaveCol()}
         <Col sm={2}>
           <UndoRedo/>
         </Col>
