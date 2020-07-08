@@ -7,6 +7,15 @@
 @import './custom-classes';
 @import './colors';
 
+body {
+  // font-size: calc([minimum size] + ([maximum size] - [minimum size]) * ((100vw - [minimum viewport width]) / ([maximum viewport width] - [minimum viewport width])));
+  font-size: calc(14px + (20 - 14) * ((100vw - 300px) / (1800 - 300)));
+}
+
+.custom-select {
+  font-size: 1.02rem;
+}
+
 div.async_busy {
   position: fixed;
   width: 100%;
@@ -23,7 +32,7 @@ div.async_busy {
 }
 
 span.react-numeric-input input {
-  max-width: 6.1rem;
+  max-width: 7.5rem;
 }
 
 $inc-dec-bg: #eee;
@@ -33,7 +42,7 @@ $inc-dec-color: #000;
   display: inline-block;
   padding: 0.01rem;
   span.react-numeric-input input, span.sum {
-    width: 6.1rem;
+    width: 100%;
   }
   span.sum {
     display: inline-block;
@@ -50,7 +59,7 @@ $troopDefSpace: 1rem;
   margin-bottom: 0.5rem;
   label {
     text-align: left;
-    min-width: 4rem;
+    min-width: 5.6rem;
     margin: 0 $troopDefSpace 0 0;
   }
 
@@ -90,13 +99,13 @@ $troopDefSpace: 1rem;
     padding: 0 1rem;
   }
   .TierNum {
-    min-width: 5rem;
+    min-width: 6rem;
   }
   .TierProps {
     min-width: 10rem;
     text-align: left;
     label {
-      width: 6rem;
+      width: 10rem;
     }
     .TierPercent {
       &.hasDelta {
@@ -119,7 +128,7 @@ $troopDefSpace: 1rem;
     background-color: rgba(255,255,255,0.08)
   }
   label.tierLabel {
-    font-size: 2em;
+    font-size: 2.3rem;
   }
 }
 
@@ -178,7 +187,7 @@ $icon-action: rgb(250, 234, 90);
 
 .FormEntryView {
   h3 {
-    min-width: 4em;
+    min-width: 4.4rem;
   }
 }
 .FCP-form-select {
@@ -228,6 +237,10 @@ $fe-inf-color: rgb(169, 227, 253);
 $fe-cav-color: rgb(253, 204, 170);
 $fe-dst-color: rgb(189, 255, 173);
 .FEV-troop-view {
+  .troop-type {
+    width: 6rem;
+    font-size: 1.5rem;
+  }
   margin-bottom: 0.5rem;
   .troop-entry {
     margin-bottom: 2px;

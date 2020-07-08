@@ -52,7 +52,7 @@ class FormEntryViewBase extends React.Component<Props, State> {
 
     return (
       <Row>
-        <Col sm={1}>
+        <Col xs={1}>
           {tierNum}
         </Col>
         <Col sm={1}>
@@ -77,7 +77,7 @@ class FormEntryViewBase extends React.Component<Props, State> {
   renderTroopView(troopType: TroopType) {
     return (
       <Row className="FEV-troop-view">
-        <Col sm='auto'><h3>{troopType}</h3></Col>
+        <Col sm='auto'><h3 className='troop-type'>{troopType}</h3></Col>
         <Col>
           {
             this.data().getTroopDefsForType(troopType).map(
