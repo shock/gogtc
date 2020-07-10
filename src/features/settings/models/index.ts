@@ -1,0 +1,1 @@
+export { MSettings } from './MSettings'
