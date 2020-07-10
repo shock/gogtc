@@ -103,7 +103,7 @@ const parseTroopDataYaml = () => {
   console.log(ymlRecords)
 }
 const savePresetsToFile = async () => {
-  const presets = await models.FormCalc.findAll().where('preset', true)
+  const presets = await models.FormCalc.findAll().where('preset', true).orderBy('id')
   const yml = yaml.safeDump(presets.map(formCalc => {
     delete formCalc['id']
     delete formCalc['created_at']
