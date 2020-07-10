@@ -233,7 +233,9 @@ class MFormCalc extends MBase {
   }
 
   getActualTierPercent(tierDef:MTierDef) {
-    return tierDef.capacity.times(100).div(this.getCapFromTierDefs())
+    const actualMarchCap = this.getCapFromTierDefs()
+    if( actualMarchCap.eq(0) ) { return toBig(0) }
+    return tierDef.capacity.times(100).div(actualMarchCap)
   }
 
   getLockedTierCap():Big {
