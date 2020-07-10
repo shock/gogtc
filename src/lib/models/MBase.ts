@@ -5,8 +5,8 @@ class MBase {
   changed:boolean = false
 
   markForUpdate() {
-    this.key = cuid();
-    this.changed = true;
+    this.key = cuid()
+    this.changed = true
   }
 
   isChanged () {

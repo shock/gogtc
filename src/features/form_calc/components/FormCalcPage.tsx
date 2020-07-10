@@ -1,9 +1,8 @@
-import { RootState, isOfType } from 'typesafe-actions'
+import { RootState } from 'typesafe-actions'
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col, Form, Button } from 'react-bootstrap'
 import { ActionCreators as UndoActionCreators } from 'redux-undo'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { UserRoles } from '../../../client_server/interfaces/User'
 import * as actions from '../actions'
@@ -16,6 +15,7 @@ import { FormEntryView } from './FormEntryView'
 import { MFormCalc } from '../models'
 import TT from '../../../components/tooltips'
 import { SummaryView } from './SummaryView'
+import { CalcView } from '../../../lib/fc-types'
 
 const mapStateToProps = (state: RootState) => ({
   formCalcs: selectors.getFormCalcs(state.formCalc),
@@ -41,7 +41,7 @@ type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & FormCal
 type State = {
   fcId: string,
   debug: boolean,
-  view: string
+  view: CalcView
 }
 
 class FormCalcPageBase extends React.Component<Props, State> {
@@ -201,7 +201,7 @@ class FormCalcPageBase extends React.Component<Props, State> {
 
     const onChange = (e:React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value
-      this.setState({view: value})
+      this.setState({view: value as CalcView})
     }
 
     return (

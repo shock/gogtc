@@ -1,9 +1,9 @@
-import { Epic } from 'redux-observable';
-import { from, of } from 'rxjs';
-import { filter, switchMap, map, catchError, mergeMap } from 'rxjs/operators';
-import { RootAction, RootState, Services, isActionOf } from 'typesafe-actions';
+import { Epic } from 'redux-observable'
+import { from, of } from 'rxjs'
+import { filter, switchMap, map, catchError, mergeMap } from 'rxjs/operators'
+import { RootAction, RootState, Services, isActionOf } from 'typesafe-actions'
 
-import { loginUserAsync, logoutUserAsync, createUserAsync } from './actions';
+import { loginUserAsync, logoutUserAsync, createUserAsync } from './actions'
 import { showAlert } from '../modals/actions'
 import { clearCalculators } from '../form_calc/actions'
 import User from '../../client_server/interfaces/User'
@@ -32,7 +32,7 @@ export const loginUserEpic: Epic<
         ))
       )
     )
-  );
+  )
 
 export const logoutUserEpic: Epic<
   RootAction,
@@ -54,7 +54,7 @@ export const logoutUserEpic: Epic<
         ))
       )
     )
-  );
+  )
 
 export const createUserEpic: Epic<
   RootAction,
@@ -76,4 +76,4 @@ export const createUserEpic: Epic<
         })
       )
     )
-  );
+  )

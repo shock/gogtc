@@ -4,11 +4,10 @@ import { connect } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
 import NumericInput from 'react-numeric-input'
 
-import * as NumEntry from '../../../lib/num-entry';
-import { MFormCalc, MTierDef, MTroopDef } from '../models'
-import { TierNum, TroopType, TroopTypes } from '../types'
+import * as NumEntry from '../../../lib/num-entry'
+import { MFormCalc, MTroopDef } from '../models'
+import { TierNum, TroopType, TroopTypes } from '../../../lib/fc-types'
 import * as actions from '../actions'
-import * as selectors from '../selectors'
 
 const mapStateToProps = (state: RootState) => ({
 })
@@ -47,7 +46,7 @@ class FormEntryViewBase extends React.Component<Props, State> {
     const type = troopDef.type
     const id = `${this.props.formCalc.id}:${tierNum}:${type}`
     const onChange = (numVal:number|null, strVal:string, target:HTMLInputElement) => {
-      this.props.updateTroopCount(id, ''+numVal);
+      this.props.updateTroopCount(id, ''+numVal)
     }
 
     return (

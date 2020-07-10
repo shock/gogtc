@@ -20,7 +20,7 @@ export function create(formCalc:MFormCalc): Promise<{formCalc: MFormCalc, oldId:
         body: JSON.stringify(data)
       })
       if( response.status === 201 )
-        return response.json(); // parses JSON response into native JavaScript objects
+        return response.json() // parses JSON response into native JavaScript objects
       else
         throw `received status code ${response.status}`
     }
@@ -56,7 +56,7 @@ export function update(formCalc:MFormCalc): Promise<MFormCalc> {
         body: JSON.stringify(data)
       })
       if( response.status === 200 )
-        return response.json(); // parses JSON response into native JavaScript objects
+        return response.json() // parses JSON response into native JavaScript objects
       else {
         const json = await response.json()
         throw `received status code ${response.status}\n`+json
@@ -85,7 +85,7 @@ export function _delete(formCalc:MFormCalc): Promise<MFormCalc> {
         body: JSON.stringify(data)
       })
       if( response.status === 200 )
-        return null; // parses JSON response into native JavaScript objects
+        return null // parses JSON response into native JavaScript objects
       else {
         const json = await response.json()
         throw `received status code ${response.status}\n`+json
@@ -110,7 +110,7 @@ export function getUserCalcs(): Promise<[MFormCalc]> {
         headers: { 'Content-Type': 'application/json' }
       })
       if( response.status === 200 )
-        return response.json(); // parses JSON response into native JavaScript objects
+        return response.json() // parses JSON response into native JavaScript objects
       else {
         const json = await response.json()
         throw `received status code ${response.status}\n`+json

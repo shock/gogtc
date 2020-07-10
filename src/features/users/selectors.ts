@@ -1,6 +1,4 @@
-// import { createSelector } from 'reselect';
+import { UsersState } from './reducer'
 
-import { UsersState } from './reducer';
-
-export const currentUser = (state: UsersState) => state.users.currentUser;
-export const getUsers = (state: UsersState) => state.users.users;
+export const currentUser = (state: UsersState) => state.users.currentUser
+export const getUsers = (state: UsersState) => state.users.users

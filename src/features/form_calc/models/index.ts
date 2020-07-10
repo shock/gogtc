@@ -1,8 +1,9 @@
-import { MFormCalc } from './MFormCalc';
-import { MTierDef } from './MTierDef';
-import { MTroopDef } from './MTroopDef';
-import { TroopData } from './TroopData';
-import { TierNum, TroopType, toBig } from '../types';
+import { MFormCalc } from './MFormCalc'
+import { MTierDef } from './MTierDef'
+import { MTroopDef } from './MTroopDef'
+import { TroopData } from './TroopData'
+import { TierNum, TroopType } from '../../../lib/fc-types'
+import { toBig } from '../../../lib/fixed-point'
 
 function buildTroopDefs(tierDef:MTierDef):MTroopDef[] {
   const troopDefs =  [
@@ -18,27 +19,27 @@ function buildTroopDefs(tierDef:MTierDef):MTroopDef[] {
       TroopType.Distance,
       toBig(6000),
     ),
-  ];
-  return troopDefs;
+  ]
+  return troopDefs
 }
 
 function buildTierDefWithTroopDefs(tierNum:TierNum, formCalc:MFormCalc):MTierDef {
-  let tierDef = new MTierDef(tierNum);
-  tierDef.troopDefs = buildTroopDefs(tierDef);
-  // tierDef.formCalc = formCalc;
-  return tierDef;
+  let tierDef = new MTierDef(tierNum)
+  tierDef.troopDefs = buildTroopDefs(tierDef)
+  // tierDef.formCalc = formCalc
+  return tierDef
 }
 
 function buildFormCalc(name:string) {
-  const formCalc = new MFormCalc(name);
-  let tierDefs:MTierDef[] = [];
+  const formCalc = new MFormCalc(name)
+  let tierDefs:MTierDef[] = []
   for (const tierNum in TierNum) {
-    tierDefs.push(buildTierDefWithTroopDefs(tierNum as TierNum, formCalc));
+    tierDefs.push(buildTierDefWithTroopDefs(tierNum as TierNum, formCalc))
   }
-  formCalc.tierDefs = tierDefs;
-  formCalc.updateMarchCap(formCalc.getCapFromTierDefs());
-  formCalc.updatePercentsFromCounts();
-  return formCalc;
+  formCalc.tierDefs = tierDefs
+  formCalc.updateMarchCap(formCalc.getCapFromTierDefs())
+  formCalc.updatePercentsFromCounts()
+  return formCalc
 }
 
 export type FormCalcDictionary = {
@@ -62,6 +63,6 @@ formCalcs[test.id] = test
 
 export const TestLibrary:FormCalcDictionary = {
   formCalcs: formCalcs
-};
+}
 
 export { MTierDef, MTroopDef, MFormCalc, TroopData }

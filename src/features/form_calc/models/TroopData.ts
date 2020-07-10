@@ -1,4 +1,4 @@
-import { TierNum, TroopType } from '../types'
+import { TierNum, TroopType } from '../../../lib/fc-types'
 import troopData from './troop_data'
 import { Big } from 'big.js'
 

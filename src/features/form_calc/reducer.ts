@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
 import cuid from 'cuid'
-import undoable, { excludeAction } from 'redux-undo';
-import { createReducer, getType } from 'typesafe-actions';
-import * as actions from './actions';
-import { MFormCalc, FCState, BlankFCState, FormCalcDictionary, TestLibrary } from './models';
-import { getFormCalcId } from './lib/IdParser';
+import undoable, { excludeAction } from 'redux-undo'
+import { createReducer, getType } from 'typesafe-actions'
+import * as actions from './actions'
+import { MFormCalc, FCState, BlankFCState, FormCalcDictionary } from './models'
+import { getFormCalcId } from './lib/IdParser'
 
 const createCopyName = (state:FCState, formCalc:MFormCalc) => {
   let copyName = formCalc.name+' - Copy'
@@ -22,34 +22,29 @@ const createCopyName = (state:FCState, formCalc:MFormCalc) => {
 }
 
 const getFormationById = (state:FCState, id: string) => {
-  const formId = getFormCalcId(id);
+  const formId = getFormCalcId(id)
 
   // NOTE: we have to clone the formCalc here, otherwise the UNDO history won't be preserved
-  const formCalcModel = state.formCalcs[formId].clone();
+  const formCalcModel = state.formCalcs[formId].clone()
 
   if( !(formCalcModel instanceof MFormCalc) )
-    throw new Error(`Can't find formCalc with id: ${formId}`);
-  return formCalcModel;
+    throw new Error(`Can't find formCalc with id: ${formId}`)
+  return formCalcModel
 }
 
 const fcReturnState = (state:FCState, formCalc:MFormCalc, purgeId:string|undefined = undefined) => {
   const formCalcDictionary:FormCalcDictionary = {
     formCalcs: {...state.formCalcs}
-  };
+  }
   if( purgeId ) {
     delete formCalcDictionary.formCalcs[purgeId]
   }
-  formCalcDictionary.formCalcs[formCalc.id] = formCalc;
+  formCalcDictionary.formCalcs[formCalc.id] = formCalc
   const returnState = {
     ...state,
     ...formCalcDictionary,
   }
-  return returnState;
-};
-
-const initialState:FCState = {
-  formCalcs: TestLibrary.formCalcs,
-  currentId: Object.values(TestLibrary.formCalcs)[0].id
+  return returnState
 }
 
 const _formCalcReducer = createReducer(BlankFCState)
@@ -69,7 +64,7 @@ const _formCalcReducer = createReducer(BlankFCState)
       currentId: newFC.id
     }
   } else {
-    return state;
+    return state
   }
 })
 .handleAction(actions.loadUserCalcsAsync.success, (state, action) => {
@@ -133,37 +128,37 @@ const _formCalcReducer = createReducer(BlankFCState)
     return BlankFCState
   })
   .handleAction(actions.updateName, (state, action) => {
-    return fcReturnState(state, getFormationById(state, action.payload.id).updateNameHandler(action.payload));
+    return fcReturnState(state, getFormationById(state, action.payload.id).updateNameHandler(action.payload))
   })
   .handleAction(actions.updatePresetFlag, (state, action) => {
-    return fcReturnState(state, getFormationById(state, action.payload.id).updatePresetFlagHandler(action.payload));
+    return fcReturnState(state, getFormationById(state, action.payload.id).updatePresetFlagHandler(action.payload))
   })
   .handleAction(actions.updateTroopCount, (state, action) => {
-    return fcReturnState(state, getFormationById(state, action.payload.id).updateTroopCountHandler(action.payload));
+    return fcReturnState(state, getFormationById(state, action.payload.id).updateTroopCountHandler(action.payload))
   })
   .handleAction(actions.updateTroopPercent, (state, action) => {
-    return fcReturnState(state, getFormationById(state, action.payload.id).updateTroopPercentHandler(action.payload));
+    return fcReturnState(state, getFormationById(state, action.payload.id).updateTroopPercentHandler(action.payload))
   })
   .handleAction(actions.updateTroopCountLock, (state, action) => {
-    return fcReturnState(state, getFormationById(state, action.payload.id).updateTroopCountLockHandler(action.payload));
+    return fcReturnState(state, getFormationById(state, action.payload.id).updateTroopCountLockHandler(action.payload))
   })
   .handleAction(actions.updateTierPercent, (state, action) => {
-    return fcReturnState(state, getFormationById(state, action.payload.id).updateTierPercentHandler(action.payload));
+    return fcReturnState(state, getFormationById(state, action.payload.id).updateTierPercentHandler(action.payload))
   })
   .handleAction(actions.updateTierCapacityLock, (state, action) => {
-    return fcReturnState(state, getFormationById(state, action.payload.id).updateTierCapacityLockHandler(action.payload));
+    return fcReturnState(state, getFormationById(state, action.payload.id).updateTierCapacityLockHandler(action.payload))
   })
   .handleAction(actions.updateMarchCap, (state, action) => {
-    return fcReturnState(state, getFormationById(state, action.payload.id).updateMarchCapHandler(action.payload));
+    return fcReturnState(state, getFormationById(state, action.payload.id).updateMarchCapHandler(action.payload))
   })
   .handleAction(actions.fixTroopPercent, (state, action) => {
-    return fcReturnState(state, getFormationById(state, action.payload.id).fixTroopPercentHandler(action.payload));
+    return fcReturnState(state, getFormationById(state, action.payload.id).fixTroopPercentHandler(action.payload))
   })
   .handleAction(actions.fixTierPercent, (state, action) => {
-    return fcReturnState(state, getFormationById(state, action.payload.id).fixTierPercentHandler(action.payload));
+    return fcReturnState(state, getFormationById(state, action.payload.id).fixTierPercentHandler(action.payload))
   })
   .handleAction(actions.resetState, (state, action) => {
-    return fcReturnState(state, action.payload.formCalc);
+    return fcReturnState(state, action.payload.formCalc)
   })
 
 
@@ -178,7 +173,7 @@ const parseActions = (rawActions:string[] | string, defaultValue=[]):string[] =>
 }
 
 const groupByActionTypeAndId = (rawActions:string[] | string) => {
-  const actions = parseActions(rawActions);
+  const actions = parseActions(rawActions)
   return (action:any) =>  {
     if(actions.indexOf(action.type) >= 0)
       return action.type+action.payload.id
@@ -220,7 +215,7 @@ const formCalcReducers = combineReducers({
   isLoadingUserCalcs,
   isUpdatingCalc,
   isDeletingCalc
-});
+})
 
-export default formCalcReducers;
-export type FormCalcState = ReturnType<typeof formCalcReducers>;
+export default formCalcReducers
+export type FormCalcState = ReturnType<typeof formCalcReducers>

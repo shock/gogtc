@@ -1,4 +1,4 @@
-import { TierNum, TroopType } from "../types";
+import { TierNum, TroopType } from "../../../lib/fc-types"
 
 /*
   id strings are used to to uniquely identify model instances in a form calculator model hierarchy
@@ -14,15 +14,15 @@ import { TierNum, TroopType } from "../types";
 
   eg.
 
-    const formCalcId:string;
-    const tierNum:TierNum;
-    const troopType:TroopType;
+    const formCalcId:string
+    const tierNum:TierNum
+    const troopType:TroopType
 
     // identifies a unique MTroopDef model instance
-    const troopDefId = `${formCalcId}:${tierNum}:${troopType}`;
+    const troopDefId = `${formCalcId}:${tierNum}:${troopType}`
 
 */
 
-export const getFormCalcId = (id:string) => ( id.split(':')[0] );
+export const getFormCalcId = (id:string) => ( id.split(':')[0] )
 export const getTierNum = (id: string) => ( id.split(':')[1] as TierNum )
 export const getTroopType = (id: string) => ( id.split(':')[2] as TroopType )

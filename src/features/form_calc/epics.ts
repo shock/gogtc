@@ -1,15 +1,13 @@
-import { Epic } from 'redux-observable';
-import { from, of } from 'rxjs';
-import { filter, switchMap, map, catchError, mergeMap } from 'rxjs/operators';
-import { RootAction, RootState, Services, isActionOf } from 'typesafe-actions';
+import { Epic } from 'redux-observable'
+import { from, of } from 'rxjs'
+import { filter, switchMap, catchError, mergeMap } from 'rxjs/operators'
+import { RootAction, RootState, Services, isActionOf } from 'typesafe-actions'
 import { ActionCreators as Undoable } from 'redux-undo'
 
 import { createCalcAsync, updateCalcAsync,
-  loadUserCalcsAsync, deleteCalcAsync } from './actions';
+  loadUserCalcsAsync, deleteCalcAsync } from './actions'
 import { showAlert } from '../modals/actions'
 import { MFormCalc } from './models'
-import history from '../../lib/history'
-import { push } from 'connected-react-router'
 
 type createSuccessType = {
   formCalc: MFormCalc,
@@ -37,7 +35,7 @@ export const createCalcEpic: Epic<
         )
       )
     )
-  );
+  )
 
 export const updateCalcEpic: Epic<
   RootAction,
@@ -60,7 +58,7 @@ export const updateCalcEpic: Epic<
         )
       )
     )
-  );
+  )
 
 export const deleteCalcEpic: Epic<
   RootAction,
@@ -83,7 +81,7 @@ export const deleteCalcEpic: Epic<
         )
       )
     )
-  );
+  )
 
 export const loadUserCalcsEpic: Epic<
   RootAction,
@@ -105,4 +103,4 @@ export const loadUserCalcsEpic: Epic<
         )
       )
     )
-  );
+  )

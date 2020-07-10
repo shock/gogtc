@@ -2,10 +2,8 @@ import { RootState } from 'typesafe-actions'
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { Row, Col } from 'react-bootstrap'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as selectors from '../selectors'
-import { MFormCalc } from '../models'
-import { TroopType } from '../types'
+import { TroopType } from '../../../lib/fc-types'
 
 const mapStateToProps = (state: RootState) => ({
   formCalcs: selectors.getFormCalcs(state.formCalc)
@@ -15,8 +13,8 @@ const dispatchProps = {
 }
 
 interface SummaryViewProps {
-  id: string;
-  debug: boolean;
+  id: string
+  debug: boolean
 }
 
 type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & SummaryViewProps
@@ -37,8 +35,8 @@ class SummaryViewBase extends React.Component<Props, State> {
   }
 
   data() {
-    const formCalc = this.props.formCalcs[this.props.id];
-    return formCalc;
+    const formCalc = this.props.formCalcs[this.props.id]
+    return formCalc
   }
 
   summaryHeader() {
@@ -105,4 +103,4 @@ const SummaryView = connect(
   dispatchProps
 )(SummaryViewBase)
 
-export { SummaryView };
+export { SummaryView }

@@ -1,24 +1,24 @@
-import { RootState } from 'typesafe-actions';
-import * as React from 'react';
-import { connect } from 'react-redux';
-import NumericInput from 'react-numeric-input';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { RootState } from 'typesafe-actions'
+import * as React from 'react'
+import { connect } from 'react-redux'
+import NumericInput from 'react-numeric-input'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import * as NumEntry from '../../../lib/num-entry';
-import * as actions from '../actions';
-import { MTroopDef, MTierDef } from '../models';
-import { LockState } from './LockState';
-import config from '../../../config';
+import * as NumEntry from '../../../lib/num-entry'
+import * as actions from '../actions'
+import { MTroopDef, MTierDef } from '../models'
+import { LockState } from './LockState'
+import config from '../../../config'
 
 const mapStateToProps = (state: RootState) => ({
-});
+})
 
 const dispatchProps = {
   updateTroopCount: actions.updateTroopCount,
   updateTroopPercent: actions.updateTroopPercent,
   updateCountLock: actions.updateTroopCountLock,
   fixTroopPercent: actions.fixTroopPercent
-};
+}
 
 type TroopDefViewProps = {
   troopDef: MTroopDef,
@@ -28,40 +28,40 @@ type TroopDefViewProps = {
   hasTroopPercentDelta: boolean
 }
 
-type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & TroopDefViewProps;
+type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & TroopDefViewProps
 
 class TroopDefViewBase extends React.Component<Props> {
 
   constructor(props:Props) {
-    super(props);
-    this.handleCountChange = this.handleCountChange.bind(this);
-    this.handlePercentChange = this.handlePercentChange.bind(this);
-    this.handleCountLockClick = this.handleCountLockClick.bind(this);
-    this.handleFixPercentClick = this.handleFixPercentClick.bind(this);
+    super(props)
+    this.handleCountChange = this.handleCountChange.bind(this)
+    this.handlePercentChange = this.handlePercentChange.bind(this)
+    this.handleCountLockClick = this.handleCountLockClick.bind(this)
+    this.handleFixPercentClick = this.handleFixPercentClick.bind(this)
   }
 
   data() {
-    return this.props.troopDef;
+    return this.props.troopDef
   }
 
   label(troopDef:MTroopDef) {
-    return `${troopDef.type}`.trim();
+    return `${troopDef.type}`.trim()
   }
 
   handleCountChange(numVal:number|null, strVal:string, target:HTMLInputElement) {
-    this.props.updateTroopCount(this.props.id, ''+numVal);
+    this.props.updateTroopCount(this.props.id, ''+numVal)
   }
 
   handlePercentChange(numVal:number|null, strVal:string, target:HTMLInputElement) {
-    this.props.updateTroopPercent(this.props.id, ''+numVal);
+    this.props.updateTroopPercent(this.props.id, ''+numVal)
   }
 
   handleCountLockClick(event: React.MouseEvent<SVGSVGElement, MouseEvent>) {
-    this.props.updateCountLock(this.props.id, !this.data().countLocked);
+    this.props.updateCountLock(this.props.id, !this.data().countLocked)
   }
 
   handleFixPercentClick(event: React.MouseEvent<SVGSVGElement, MouseEvent>) {
-    this.props.fixTroopPercent(this.props.id);
+    this.props.fixTroopPercent(this.props.id)
   }
 
   fixThisPercent() {
@@ -74,33 +74,33 @@ class TroopDefViewBase extends React.Component<Props> {
             onClick={this.handleFixPercentClick}
           />
         </div>
-      );
+      )
     } else {
       return (
         <div className="PercentDelta no-delta inline" >
           <FontAwesomeIcon fixedWidth icon={'check'} />
         </div>
-      );
+      )
     }
   }
 
   renderDebug() {
     if( this.props.debug ) {
-      const troopDef = this.data();
-      const tierDef = this.props.tierDef;
+      const troopDef = this.data()
+      const tierDef = this.props.tierDef
       return (
         <div className={'inline nobr troopPercCalculated'}>
           <span>{troopDef.getActualPercent(tierDef.capacity).toFixed(config.calcPrecision)+'%'}</span>
         </div>
       )
-    } else return null;
+    } else return null
   }
 
   render() {
-    const troopDef = this.data();
-    if( !troopDef ) return <div/>;
-    const locked = troopDef.countLocked ? "locked" : '';
-    const hasDelta = this.props.hasTroopPercentDelta && !troopDef.countLocked ? 'hasDelta' : '';
+    const troopDef = this.data()
+    if( !troopDef ) return <div/>
+    const locked = troopDef.countLocked ? "locked" : ''
+    const hasDelta = this.props.hasTroopPercentDelta && !troopDef.countLocked ? 'hasDelta' : ''
     return (
       <div className="TroopDefView">
         <label>{this.data().type}</label>
@@ -148,6 +148,6 @@ class TroopDefViewBase extends React.Component<Props> {
 const TroopDefView =  connect(
   mapStateToProps,
   dispatchProps
-)(TroopDefViewBase);
+)(TroopDefViewBase)
 
-export { TroopDefView };
+export { TroopDefView }

@@ -1,9 +1,9 @@
-import React from 'react';
+import React from 'react'
 import { ActionCreators as UndoActionCreators } from 'redux-undo'
-import { RootState } from 'typesafe-actions';
-import { connect} from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import TT from '../../../components/tooltips';
+import { RootState } from 'typesafe-actions'
+import { connect} from 'react-redux'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import TT from '../../../components/tooltips'
 
 const mapStateToProps = (state:RootState) => {
   return {
@@ -19,12 +19,12 @@ const mapDispatchToProps = (dispatch:any) => {
   }
 }
 
-type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>
 
 class _UndoRedo extends React.Component<Props> {
   render () {
-    const undoDisabled = !this.props.canUndo;
-    const redoDisabled = !this.props.canRedo;
+    const undoDisabled = !this.props.canUndo
+    const redoDisabled = !this.props.canRedo
     return (
       <p>
         <TT tip='Undo' show={!undoDisabled}>
@@ -45,10 +45,10 @@ class _UndoRedo extends React.Component<Props> {
           </button>
         </TT>
       </p>
-    );
+    )
   }
 }
 
 const UndoRedo = connect(mapStateToProps, mapDispatchToProps)(_UndoRedo)
 
-export default UndoRedo;
+export default UndoRedo

@@ -57,7 +57,7 @@ class CalculatorViewBase extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps:Props) {
-    if((this.props.formCalcs != prevProps.formCalcs) || ( this.id() !== prevProps.id )) {
+    if((this.props.formCalcs !== prevProps.formCalcs) || ( this.id() !== prevProps.id )) {
       this.setState({
         name: this.data()?.name,
         editingName: false

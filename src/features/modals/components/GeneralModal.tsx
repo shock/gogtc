@@ -3,21 +3,21 @@ import { connect } from 'react-redux'
 import { Modal, Button } from 'react-bootstrap'
 import { RootState } from 'typesafe-actions'
 
-import * as actions from '../actions';
-import * as selectors from '../selectors';
+import * as actions from '../actions'
+import * as selectors from '../selectors'
 
 const mapStateToProps = (state: RootState) => ({
   generalModal: selectors.getGeneralModal(state)
-});
+})
 
 const dispatchProps = {
   hide: actions.hideGeneralModal
-};
+}
 
 interface GeneralModalProps {
 }
 
-type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & GeneralModalProps;
+type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & GeneralModalProps
 type State = {
 }
 
@@ -51,6 +51,6 @@ class GeneralModalBase extends React.Component<Props, State> {
 const GeneralModal = connect(
   mapStateToProps,
   dispatchProps
-)(GeneralModalBase);
+)(GeneralModalBase)
 
-export { GeneralModal };
+export { GeneralModal }

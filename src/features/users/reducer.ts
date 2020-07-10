@@ -4,7 +4,7 @@ import { setCurrentUser, clearCurrentUser, currentUser } from '../../lib/user'
 import * as actions from './actions'
 import User from '../../client_server/interfaces/User'
 
-const { loginUserAsync, logoutUserAsync, createUserAsync } = actions;
+const { loginUserAsync, logoutUserAsync, createUserAsync } = actions
 
 export const isLoggingIn = createReducer(false as boolean)
   .handleAction(loginUserAsync.request, (state, action) => ( true ))
@@ -40,7 +40,7 @@ const usersReducer = combineReducers({
   isLoggingIn,
   isRegistering,
   users,
-});
+})
 
 export default usersReducer
 export type UsersState = ReturnType<typeof usersReducer>

@@ -1,5 +1,6 @@
 import Big from 'big.js'
-import { TierNum, toInt, toBig } from '../../types'
+import { toInt, toBig } from '../../../../lib/fixed-point'
+import { TierNum } from '../../../../lib/fc-types'
 import { MFormCalc, MTierDef} from '..'
 import { buildFormCalcWithTiers } from '../../lib/test_helper'
 

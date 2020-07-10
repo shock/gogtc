@@ -1,28 +1,28 @@
-import { RootState } from 'typesafe-actions';
-import * as React from 'react';
-import { connect } from 'react-redux';
-import { Row } from 'react-bootstrap';
-import NumericInput from 'react-numeric-input';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { RootState } from 'typesafe-actions'
+import * as React from 'react'
+import { connect } from 'react-redux'
+import { Row } from 'react-bootstrap'
+import NumericInput from 'react-numeric-input'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import * as NumEntry from '../../../lib/num-entry';
-import * as actions from '../actions';
+import * as NumEntry from '../../../lib/num-entry'
+import * as actions from '../actions'
 import * as selectors from '../selectors'
-import { TroopDefView } from './TroopDefView';
-import { LockState } from './LockState';
-import { MTierDef } from '../models';
-import { getTierNum, getTroopType, getFormCalcId } from '../lib/IdParser'
-import config from '../../../config';
+import { TroopDefView } from './TroopDefView'
+import { LockState } from './LockState'
+import { MTierDef } from '../models'
+import { getFormCalcId } from '../lib/IdParser'
+import config from '../../../config'
 
 const mapStateToProps = (state: RootState) => ({
   formCalcs: selectors.getFormCalcs(state.formCalc),
-});
+})
 
 const dispatchProps = {
   updateTierPercent: actions.updateTierPercent,
   updateTierCapacityLock: actions.updateTierCapacityLock,
   fixTierPercent: actions.fixTierPercent
-};
+}
 
 type TierDefViewProps = {
   tierDef: MTierDef
@@ -32,14 +32,14 @@ type TierDefViewProps = {
   hasTierPercentDelta: boolean
 }
 
-type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & TierDefViewProps;
+type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & TierDefViewProps
 
 class TierDefViewBase extends React.Component<Props> {
   constructor(props:Props) {
-    super(props);
-    this.handleTierPercentChange = this.handleTierPercentChange.bind(this);
-    this.handleCapLockClick = this.handleCapLockClick.bind(this);
-    this.handleFixPercentClick = this.handleFixPercentClick.bind(this);
+    super(props)
+    this.handleTierPercentChange = this.handleTierPercentChange.bind(this)
+    this.handleCapLockClick = this.handleCapLockClick.bind(this)
+    this.handleFixPercentClick = this.handleFixPercentClick.bind(this)
   }
 
   static defaultProps = {
@@ -55,7 +55,7 @@ class TierDefViewBase extends React.Component<Props> {
   }
 
   handleTierPercentChange(numVal:number|null, strVal:string, target:HTMLInputElement) {
-    this.props.updateTierPercent(this.props.id, ''+numVal);
+    this.props.updateTierPercent(this.props.id, ''+numVal)
   }
 
   buildTroopDefViews() {
@@ -68,7 +68,7 @@ class TierDefViewBase extends React.Component<Props> {
         debug={this.props.debug}
         hasTroopPercentDelta={this.data().hasTroopPercentDelta()}
       />
-    ));
+    ))
   }
 
   renderSums() {
@@ -95,15 +95,15 @@ class TierDefViewBase extends React.Component<Props> {
           <span>{this.data().getActualTroopDefPercentSum().toFixed(config.calcPrecision)}%</span>
         </div>
       </div>
-    ) } else return null;
+    ) } else return null
   }
 
   handleCapLockClick(event: React.MouseEvent<SVGSVGElement, MouseEvent>) {
-    this.props.updateTierCapacityLock(this.props.id, !this.data().capacityLocked);
+    this.props.updateTierCapacityLock(this.props.id, !this.data().capacityLocked)
   }
 
   handleFixPercentClick(event: React.MouseEvent<SVGSVGElement, MouseEvent>) {
-    this.props.fixTierPercent(this.props.id);
+    this.props.fixTierPercent(this.props.id)
   }
 
   fixThisPercent() {
@@ -116,14 +116,14 @@ class TierDefViewBase extends React.Component<Props> {
             fixedWidth
           />
         </div>
-      );
+      )
     } else {
       return (
         <LockState
           locked={this.data().capacityLocked}
           onClick={this.handleCapLockClick}
         />
-      );
+      )
     }
   }
 
@@ -160,16 +160,16 @@ class TierDefViewBase extends React.Component<Props> {
           <span className="sum">{this.formCalc().getActualTierPercent(this.data()).toFixed(config.calcPrecision)}%</span>
         </div>
       </div>
-    );
+    )
   }
 
   render() {
-    const tierDef = this.data();
-    let classNames = ['TierDefView'];
-    const cycle = this.props.index%2===1 ? 'odd' : 'even';
-    classNames.push(cycle);
-    const hasDelta = this.props.hasTierPercentDelta && !tierDef.capacityLocked ? 'hasDelta' : '';
-    const locked = tierDef.capacityLocked ? "locked" : '';
+    const tierDef = this.data()
+    let classNames = ['TierDefView']
+    const cycle = this.props.index%2===1 ? 'odd' : 'even'
+    classNames.push(cycle)
+    const hasDelta = this.props.hasTierPercentDelta && !tierDef.capacityLocked ? 'hasDelta' : ''
+    const locked = tierDef.capacityLocked ? "locked" : ''
     return (
       <Row className={classNames.join(' ')}>
         <div className="TierNum">
@@ -209,6 +209,6 @@ class TierDefViewBase extends React.Component<Props> {
 const TierDefView = connect(
   mapStateToProps,
   dispatchProps
-)(TierDefViewBase);
+)(TierDefViewBase)
 
-export { TierDefView };
+export { TierDefView }

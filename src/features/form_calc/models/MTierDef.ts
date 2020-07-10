@@ -1,18 +1,19 @@
-import { Big } from 'big.js';
+import { Big } from 'big.js'
 
-import { TierNum, TroopType, toInt, toBig } from '../types';
-import { MTroopDef, TroopData } from '.';
-import config from '../../../config';
-import MBase from './MBase'
+import { TierNum, TroopType } from '../../../lib/fc-types'
+import { toInt, toBig } from '../../../lib/fixed-point'
+import { MTroopDef, TroopData } from '.'
+import config from '../../../config'
+import MBase from '../../../lib/models/MBase'
 
-const PercentDeltaEpsilon = toBig(0.1).pow(config.viewPrecision);
+const PercentDeltaEpsilon = toBig(0.1).pow(config.viewPrecision)
 
 class MTierDef extends MBase {
-  tierNum: TierNum;
-  troopDefs: MTroopDef[] = [];
-  capacity:Big = toBig(0);
-  percent:Big = toBig(0);
-  capacityLocked:boolean = false;
+  tierNum: TierNum
+  troopDefs: MTroopDef[] = []
+  capacity:Big = toBig(0)
+  percent:Big = toBig(0)
+  capacityLocked:boolean = false
 
   constructor(tierNum:TierNum, capacity:Big = toBig(0), percent:Big = toBig(0), capacityLocked:boolean = false) {
     super()
@@ -44,19 +45,19 @@ class MTierDef extends MBase {
   }
 
   objectForState() {
-    return this;
+    return this
   }
 
   toJsonObject() {
-    let obj:any = {};
-    obj.tierNum = this.tierNum;
-    obj.capacity = this.capacity;
-    obj.percent = this.percent;
-    obj.capacityLocked = this.capacityLocked;
+    let obj:any = {}
+    obj.tierNum = this.tierNum
+    obj.capacity = this.capacity
+    obj.percent = this.percent
+    obj.capacityLocked = this.capacityLocked
     obj.troopDefs = this.troopDefs.map( troopDef => {
-      return troopDef.toJsonObject();
-    });
-    return obj;
+      return troopDef.toJsonObject()
+    })
+    return obj
   }
 
   static fromJsonObject(obj:any) {
@@ -85,10 +86,10 @@ class MTierDef extends MBase {
 
   findTroopDef( troopType: TroopType ) {
 
-    const selected = this.troopDefs.find( troopDef => troopDef.type === troopType );
+    const selected = this.troopDefs.find( troopDef => troopDef.type === troopType )
     if( selected === undefined )
       throw new Error(`could not find MTroopDef with type ==${troopType}`)
-    return selected;
+    return selected
   }
 
   /*
@@ -96,27 +97,27 @@ class MTierDef extends MBase {
   */
 
   getActualTroopDefPercentSum() {
-    let sum = toInt(0);
+    let sum = toInt(0)
     this.troopDefs.forEach( troopDef => {
       sum = sum.plus(troopDef.getActualPercent(this.capacity))
     })
-    return sum;
+    return sum
   }
 
 
   // gets the tier cap using the existing troop def counts
   // does not set this.capacity
   getCapFromTroopDefs() {
-    let capacity = toInt(0);
+    let capacity = toInt(0)
     this.troopDefs.forEach( troopDef => {
-      capacity = capacity.plus(troopDef.count);
-    });
-    return toInt(capacity);
+      capacity = capacity.plus(troopDef.count)
+    })
+    return toInt(capacity)
   }
 
   getCountForType(type:TroopType) {
     return this.troopDefs.reduce((sum, td) => {
-      if( td.type == type ) {
+      if( td.type === type ) {
         return sum.plus(td.count)
       } else {
         return sum
@@ -135,124 +136,124 @@ class MTierDef extends MBase {
   }
 
   updateCap(capacity:Big) {
-    const max = toInt(99999999);
-    const zero = toInt(0);
-    if( capacity.gt(max) ) { capacity = max; };
-    if( capacity.lt(zero) ) { capacity = zero; };
-    this.capacity = capacity;
-    this.markForUpdate();
+    const max = toInt(99999999)
+    const zero = toInt(0)
+    if( capacity.gt(max) ) { capacity = max }
+    if( capacity.lt(zero) ) { capacity = zero }
+    this.capacity = capacity
+    this.markForUpdate()
   }
 
   updatePercent(percent:Big) {
-    if( this.capacityLocked ) return;
-    const max = toInt(100);
-    const zero = toInt(0);
-    if( percent.gt(max) ) { percent = max; };
-    if( percent.lt(zero) ) { percent = zero; };
-    this.percent = percent;
-    this.markForUpdate();
+    if( this.capacityLocked ) return
+    const max = toInt(100)
+    const zero = toInt(0)
+    if( percent.gt(max) ) { percent = max }
+    if( percent.lt(zero) ) { percent = zero }
+    this.percent = percent
+    this.markForUpdate()
   }
 
   updateCapacityLock(state: boolean) {
-    this.capacityLocked = state;
-    this.markForUpdate();
+    this.capacityLocked = state
+    this.markForUpdate()
     if( state ) {
-      this.troopDefs.forEach( troopDef => troopDef.updateCountLock(state) );
+      this.troopDefs.forEach( troopDef => troopDef.updateCountLock(state) )
     }
   }
 
   resolveLockStates() {
-    let allTroopDefsLocked = true;
+    let allTroopDefsLocked = true
     this.troopDefs.forEach( troopDef => {
-      allTroopDefsLocked = allTroopDefsLocked && troopDef.countLocked;
-    });
-    this.updateCapacityLock(allTroopDefsLocked);
-    this.markForUpdate();
+      allTroopDefsLocked = allTroopDefsLocked && troopDef.countLocked
+    })
+    this.updateCapacityLock(allTroopDefsLocked)
+    this.markForUpdate()
   }
 
   getLockedTroopCount():Big {
-    let lockedCount:Big = toInt(0);
+    let lockedCount:Big = toInt(0)
     this.troopDefs.forEach( troopDef => {
       if( troopDef.countLocked ) {
-        lockedCount = lockedCount.plus(troopDef.count);
+        lockedCount = lockedCount.plus(troopDef.count)
       }
-    });
-    return lockedCount;
+    })
+    return lockedCount
   }
 
   getUnlockedCapacity():Big {
-    return this.capacity.minus(this.getLockedTroopCount());
+    return this.capacity.minus(this.getLockedTroopCount())
   }
 
   troopPercentSum():Big {
-    let sum = toInt(0);
-    this.troopDefs.forEach( troopDef => sum = sum.plus(troopDef.percent) );
-    return sum;
+    let sum = toInt(0)
+    this.troopDefs.forEach( troopDef => sum = sum.plus(troopDef.percent) )
+    return sum
   }
 
   troopPercentDelta() {
-    return this.troopPercentSum().minus(toInt(100));;
+    return this.troopPercentSum().minus(toInt(100))
   }
 
   hasTroopPercentDelta() {
-    return this.troopPercentDelta().abs().gt(PercentDeltaEpsilon);
+    return this.troopPercentDelta().abs().gt(PercentDeltaEpsilon)
   }
 
   fixTroopPercent(troopDef:MTroopDef, delta:Big) {
-    let newPercent = troopDef.percent.minus(delta);
-    const hundred = toBig(100);
-    const zero = toBig(0);
-    if( newPercent.lt(zero) ) { newPercent = zero; }
-    if( newPercent.gt(hundred) ) { newPercent = hundred; }
-    troopDef.percent = newPercent;
-    this.markForUpdate();
+    let newPercent = troopDef.percent.minus(delta)
+    const hundred = toBig(100)
+    const zero = toBig(0)
+    if( newPercent.lt(zero) ) { newPercent = zero }
+    if( newPercent.gt(hundred) ) { newPercent = hundred }
+    troopDef.percent = newPercent
+    this.markForUpdate()
   }
 
   calculateAndUpdateTroopPercents(fixDelta:boolean = true) {
     this.troopDefs.forEach( troopDef => {
-      troopDef.calculateAndUpdatePercent(this.getUnlockedCapacity());
-    });
+      troopDef.calculateAndUpdatePercent(this.getUnlockedCapacity())
+    })
     if( fixDelta && this.hasTroopPercentDelta() ) {
       let unlockedTroopDefs = this.troopDefs.filter( troopDef => {
-        return !troopDef.countLocked;
-      });
-      const firstUnlockedTierDef = unlockedTroopDefs[0];
+        return !troopDef.countLocked
+      })
+      const firstUnlockedTierDef = unlockedTroopDefs[0]
       if( firstUnlockedTierDef ) {
-        const initialDelta = this.troopPercentDelta();
-        const partialDelta = initialDelta.div(unlockedTroopDefs.length);
+        const initialDelta = this.troopPercentDelta()
+        const partialDelta = initialDelta.div(unlockedTroopDefs.length)
         unlockedTroopDefs.forEach( troopDef => {
-          this.fixTroopPercent(troopDef, partialDelta);
+          this.fixTroopPercent(troopDef, partialDelta)
         })
-        this.fixTroopPercent(firstUnlockedTierDef, this.troopPercentDelta());
+        this.fixTroopPercent(firstUnlockedTierDef, this.troopPercentDelta())
       }
     }
-    this.markForUpdate();
+    this.markForUpdate()
   }
 
   calculateAndUpdateTroopCounts() {
     this.troopDefs.forEach( troopDef => {
-      troopDef.calculateAndUpdateCount(this.getUnlockedCapacity());
-    });
+      troopDef.calculateAndUpdateCount(this.getUnlockedCapacity())
+    })
   }
 
   calculateAndUpdatePercent(marchCap:Big) {
     if((marchCap.eq(0)) || this.capacityLocked) {
-      this.percent = toBig(0);
+      this.percent = toBig(0)
     } else {
-      this.percent = this.capacity.times(100).div(marchCap);
+      this.percent = this.capacity.times(100).div(marchCap)
     }
-    this.markForUpdate();
-    return this.percent;
+    this.markForUpdate()
+    return this.percent
   }
 
   calculateAndUpdateCap(marchCap:Big) {
     if( !this.capacityLocked ) {
-      this.capacity = this.percent.times(marchCap).div(100).round();
+      this.capacity = this.percent.times(marchCap).div(100).round()
     }
-    this.markForUpdate();
-    return this.capacity;
+    this.markForUpdate()
+    return this.capacity
   }
 
-};
+}
 
-export { MTierDef };
+export { MTierDef }

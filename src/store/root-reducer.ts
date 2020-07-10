@@ -1,6 +1,6 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux'
 
-import formCalcReducer from '../features/form_calc/reducer';
+import formCalcReducer from '../features/form_calc/reducer'
 import usersReducer from '../features/users/reducer'
 import modalsReducer from '../features/modals/reducer'
 import { connectRouter } from 'connected-react-router'
@@ -11,7 +11,7 @@ const createRootReducer = (history:History) => combineReducers({
   router: connectRouter(history),
   users: usersReducer,
   formCalc: formCalcReducer,
-  modals: modalsReducer
+  modals: modalsReducer,
 })
 
 export default createRootReducer(history)

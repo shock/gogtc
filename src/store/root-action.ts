@@ -5,5 +5,5 @@ import * as modals from '../features/modals/actions'
 export default {
   formCalc,
   users,
-  modals
-};
+  modals,
+}

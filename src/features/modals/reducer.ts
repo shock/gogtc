@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
-import { createReducer, getType } from 'typesafe-actions';
-import * as actions from './actions';
+import { createReducer } from 'typesafe-actions'
+import * as actions from './actions'
 import { Alert } from './types'
 
 const gmInitialState = {
