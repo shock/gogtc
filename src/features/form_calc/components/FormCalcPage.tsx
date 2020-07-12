@@ -1,8 +1,9 @@
 import { RootState } from 'typesafe-actions'
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { Row, Col, Form, Button } from 'react-bootstrap'
+import { Row, Col, Form, Button, Overlay, OverlayProps, Card } from 'react-bootstrap'
 import { ActionCreators as UndoActionCreators } from 'redux-undo'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { UserRoles } from '../../../client_server/interfaces/User'
 import * as actions from '../actions'
@@ -16,6 +17,23 @@ import { MFormCalc } from '../models'
 import TT from '../../../components/tooltips'
 import { SummaryView } from './SummaryView'
 import { CalcView } from '../../../lib/fc-types'
+
+type SettingsProps = Omit<OverlayProps, 'children'>
+
+const SettingsOverlay = (props:OverlayProps) => {
+  return (
+    <Overlay
+      {...props}
+      rootClose={true}
+    >
+      <Card>
+        <Card.Body>
+          {props.children}
+        </Card.Body>
+      </Card>
+    </Overlay>
+  )
+}
 
 const mapStateToProps = (state: RootState) => ({
   formCalcs: selectors.getFormCalcs(state.formCalc),
@@ -41,16 +59,19 @@ type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps & FormCal
 type State = {
   fcId: string,
   debug: boolean,
+  showSettings: boolean,
   view: CalcView
 }
 
 class FormCalcPageBase extends React.Component<Props, State> {
+  private settingsTarget = React.createRef<HTMLDivElement>()
 
   constructor(props: Props) {
     super(props)
     this.state = {
       fcId: this.props.fcId,
       debug: false,
+      showSettings: false,
       view: 'calculator'
     }
     this.handleNameSubmit = this.handleNameSubmit.bind(this)
@@ -218,22 +239,51 @@ class FormCalcPageBase extends React.Component<Props, State> {
   }
 
   renderActions() {
-    const onDebugClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const onDebugClick = (e:any) => {
       this.setState({debug: !this.state.debug})
     }
+    // const debugButton = (
+    //   <Button
+    //     variant={this.state.debug ? "secondary" : "info"}
+    //     onClick={onDebugClick}
+    //   >Debug</Button>
+    // )
     const debugButton = (
-      <Button
-        variant={this.state.debug ? "secondary" : "info"}
-        onClick={onDebugClick}
-      >Debug</Button>
+      <Form.Check
+        type='checkbox'
+        id='set-db-cb'
+        checked={this.state.debug}
+        onChange={onDebugClick}
+        label='Debug'
+      />
     )
-    const dMsg = this.state.debug ? 'Hide Debug Info' : 'Show Debug Info'
+    const dMsg = 'Show Debug Info'
+    const onSettingsClick = (e:any) => {
+      console.log('CLICK!')
+      this.setState({showSettings: !this.state.showSettings})
+    }
+    const settingsButton = (
+      <Button
+        variant={this.state.showSettings ? "secondary" : "info"}
+        onClick={onSettingsClick}
+      ><FontAwesomeIcon icon='cog' /></Button>
+    )
     return (
-      <>
+      <div ref={this.settingsTarget }>
         {this.renderViewSelect()}
         &nbsp;&nbsp;&nbsp;
-        <TT tip={dMsg}>{debugButton}</TT>
-      </>
+        {settingsButton}
+        <SettingsOverlay
+          show={this.state.showSettings}
+          target={this.settingsTarget.current}
+          placement='bottom-end'
+          onHide={() => this.setState({showSettings: false})}
+        >
+          <>
+            <TT tip={dMsg}>{debugButton}</TT>
+          </>
+        </SettingsOverlay>
+      </div>
     )
   }
 
