@@ -54,7 +54,7 @@
     "http-status-codes": "^1.4.0",
     "js-yaml": "^3.14.0",
     "jsonwebtoken": "^8.5.1",
-    "knex": "^0.21.1",
+    "knex": "^2.4.0",
     "knex-db-manager": "^0.6.1",
     "module-alias": "^2.2.2",
     "morgan": "^1.10.0",
